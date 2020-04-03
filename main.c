@@ -1,42 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mach-o/nlist.h>
+#include <ft_printf.h>
 # include "mach-o/loader.h"
-# include "mach-o/nlist.h"
-# include "stdio.h"
 # include "sys/mman.h"
 # include "fcntl.h"
 # include "sys/stat.h"
 
-// look dans les nlist 64bits
-void print_out(int nsyms, int symoff, int stroff, char *ptr)
-{
-	char *stringtable;
-	struct nlist_64 *list;
+struct nlist_64 g_symtab[100];
+struct section_64 *g_section[100];
 
-	list = (void *)ptr + symoff;
-	stringtable = (void *)ptr + stroff;
-	for (int i = 0; i < nsyms; ++i)
-	{
-		printf("%s\n", stringtable + list[i].n_un.n_strx);
-	}
-}
 
 void symtab_handle(struct symtab_command *symtab_command, void *file_start)
 {
-	void *str_tab = file_start + symtab_command->stroff;
-	struct nlist *sym_tab = file_start + symtab_command->symoff;
+	char *str_tab = file_start + symtab_command->stroff;
+	struct nlist_64 *sym_tab = file_start + symtab_command->symoff;
 	uint32_t nsyms = symtab_command->nsyms;
 	uint32_t i = 0;
 
-	struct nlist *symbol;
+	struct nlist_64 *symbol;
+	struct section_64 *section_64;
 	char *sym_name;
 
 	while (i < nsyms)
 	{
 		symbol = sym_tab + i;
 		sym_name = str_tab + symbol->n_un.n_strx;
-		printf("%s \n", sym_name);
+		if (N_SECT == (N_TYPE & symbol->n_type))
+		{
+			section_64 = g_section[i];
+			printf("%s %llx \n", sym_name , symbol->n_value);
+		}
 		i++;
 	}
 }
@@ -44,13 +38,14 @@ void symtab_handle(struct symtab_command *symtab_command, void *file_start)
 void handle_segment(struct segment_command_64 *command)
 {
 	struct section_64 *section_64;
-	printf("--- %s\n", command->segname);
+	static int all_sec = 0;
 
 	section_64 = (void *)command + sizeof(struct segment_command_64);
-	for (int j = 0; j < command->nsects; ++j)
+	for (uint32_t j = 0; j < command->nsects; ++j)
 	{
-		printf(" -- %s\n", section_64->sectname);
+		g_section[all_sec] = section_64;
 		section_64 = (void *)section_64 + sizeof(struct section_64);
+		all_sec += 1;
 	}
 }
 
@@ -60,7 +55,7 @@ void handle_64(char *ptr)
 	int i;
 	struct mach_header_64 *header_64;
 	struct load_command *lc;
-	struct symtab_command *sym;
+//	struct symtab_command *sym;
 
 	// the cast convert from big to little ! :) awesome!
 	header_64 = (struct mach_header_64 *)ptr;
@@ -89,15 +84,23 @@ void nm(char *ptr)
 	// les 4 premiers octets donne l'architecture
 	// il va y avoir des fatbinary, ce sont des binaires qui contiennent plusieurs
 	// architectures.
-	int magic_number;
+	__uint32_t magic_number;
 
 	magic_number = *(int *)ptr;
 	if (magic_number == MH_MAGIC_64)
 		handle_64(ptr);
 }
 
+int open_and_map_file(char *path)
+{
+	(void)path;
+	ft_printf("bite");
+	return (0);
+}
+
 int main(int ac, char **av)
 {
+	(void)ac;
 	int fd;
 	char *ptr;
 	struct stat buf;

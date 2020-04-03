@@ -1,3 +1,0 @@
-/Users/adpusel/42/nm-otool/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/adpusel/42/nm-otool/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/adpusel/42/nm-otool/cmake-build-debug/CMakeFiles/nm_otool.dir
