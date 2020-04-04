@@ -44,6 +44,9 @@ bool build_segment_list(t_no *no);
 char get_symbol_letter(t_no *no, struct nlist_64 *sym);
 bool build_symbol_list(t_no *no, struct symtab_command *symtab_command);
 
+// utils
+t_no *get_no(void);
+
 void print_sym(t_no *no, struct nlist_64 *symbol);
 void print_list(t_no *no);
 
