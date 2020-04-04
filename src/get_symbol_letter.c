@@ -78,6 +78,8 @@ void print_sym(t_no *no, struct nlist_64 *symbol)
 
 	symbol_name = no->string_table + symbol->n_un.n_strx;
 	letter = get_symbol_letter(no, symbol);
+	if (letter == '-')
+		return;
 	if ((*symbol_name) == '\0')
 		return;
 	if (symbol->n_value)

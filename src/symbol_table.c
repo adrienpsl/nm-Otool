@@ -19,13 +19,15 @@ bool cmp_func(struct nlist_64 *l1, struct nlist_64 *l2)
 	char *string_table;
 	char *s1;
 	char *s2;
+	int res;
 
 	if (!l1 || !l2)
-		return (true);
+		return (false);
 	string_table = get_no()->string_table;
 	s1 = string_table + l1->n_un.n_strx;
 	s2 = string_table + l2->n_un.n_strx;
-	return (strcmp(s1, s2) == 0);
+	res = ft_strcmp(s1, s2) >= 0 ? true : false;
+	return res;
 }
 
 int get_end(void **current)
@@ -35,7 +37,7 @@ int get_end(void **current)
 	end = 0;
 	while (current[end])
 		end = end + 1;
-	return (end + 1);
+	return (end);
 }
 
 void sort_symbol_list(void **current)
@@ -47,10 +49,10 @@ void sort_symbol_list(void **current)
 
 	end = get_end(current);
 	i = 0;
-	while (i < end)
+	while (i < end - 1)
 	{
-		y = 0;
-		while (y < i)
+		y = 1;
+		while (y < end - i - 1)
 		{
 			if (cmp_func(current[y], current[y + 1]))
 			{
