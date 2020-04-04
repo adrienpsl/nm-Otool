@@ -10,13 +10,49 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <nm_otool.h>
-#include <ft_list.struct.h>
-# include "stdbool.h"
+#include "nm_otool.h"
+#include "ft_list.struct.h"
+
+int handle_segment(t_no *no, struct segment_command_64 *command_64)
+{
+	struct section_64 *section_64;
+	t_list *new;
+	uint32_t i;
+
+	i = 0;
+	section_64 = (void *)command_64 + sizeof(struct segment_command_64);
+	while (i < command_64->nsects)
+	{
+		if (NULL == (new = ft_lstnew(section_64, sizeof(*section_64))))
+			return (EXIT_FAILURE);
+		ft_lstadd(&no->section_list, new);
+		section_64 = (void *)section_64 + sizeof(struct section_64);
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
+
 
 bool build_segment_list(t_no *no)
 {
-	t_list *list;
+	uint32_t i;
+	struct mach_header_64 *header_64;
+	struct load_command *lc;
 
-
+	header_64 = no->map;
+	i = 0;
+	lc = no->map + sizeof(struct mach_header_64);
+	while (i < header_64->ncmds)
+	{
+		if (lc->cmd == LC_SEGMENT_64
+			&& handle_segment(no, (void *)lc))
+			return (EXIT_FAILURE);
+		if (lc->cmd == LC_SYMTAB)
+			no->symtab_command = lc;
+		lc = (void *)lc + lc->cmdsize;
+		i++;
+	}
+	ft_lst_reverse(&no->section_list);
+	return (EXIT_SUCCESS);
 }
+

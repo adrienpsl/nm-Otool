@@ -10,37 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef NM_OTOOL_H
-#define NM_OTOOL_H
+#include "nm_otool.h"
 
-# include "stdbool.h"
-# include "stdio.h"
-# include <sys/stat.h>
-# include <fcntl.h>
-#include <ft_printf.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <mach-o/nlist.h>
-#include <ft_list.struct.h>
-# include "mach-o/loader.h"
-# include "libft.h"
-
-# define NM_NAME "nm"
-
-typedef struct s_no
+bool print_section(t_list *list, void*p)
 {
-	void *map_end;
-	size_t map_size;
-	t_list *section_list;
-	void *symtab_command;
-	void *map;
-	void *string_table;
-} t_no;
+	struct section_64 *section_64;
+	(void)p;
 
+	section_64 = list->content;
+	printf("%s \n", section_64->sectname);
+	return (false);
+}
 
-int binary_map(char *path, t_no *no);
-bool build_segment_list(t_no *no);
-char get_symbol_letter(t_no *no, struct nlist_64 *sym);
-bool handle_symtab(t_no *no, struct symtab_command *symtab_command);
-
-#endif
+void print_section_list(t_list *list)
+{
+	ft_listfunc(list, print_section, NULL);
+}

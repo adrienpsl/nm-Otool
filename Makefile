@@ -15,6 +15,9 @@ SRCS =	main.c  \
 		binary_map.c \
         build_segment_list.c
 
+SRC = $(wildcard src/*.c)
+SRCS = $(SRC:src/%=%)
+
 OBJS = $(addprefix $(OBJSDIR),$(SRCS:.c=.o))
 
 

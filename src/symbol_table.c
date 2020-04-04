@@ -10,37 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef NM_OTOOL_H
-#define NM_OTOOL_H
+#include "nm_otool.h"
 
-# include "stdbool.h"
-# include "stdio.h"
-# include <sys/stat.h>
-# include <fcntl.h>
-#include <ft_printf.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <mach-o/nlist.h>
-#include <ft_list.struct.h>
-# include "mach-o/loader.h"
-# include "libft.h"
-
-# define NM_NAME "nm"
-
-typedef struct s_no
+void test(t_no *no, struct nlist_64* symbol)
 {
-	void *map_end;
-	size_t map_size;
-	t_list *section_list;
-	void *symtab_command;
-	void *map;
-	void *string_table;
-} t_no;
+	char *symbol_name;
+	char letter;
 
+	symbol_name = no->string_table + symbol->n_un.n_strx;
+	letter = get_symbol_letter(no, symbol);
+	printf("%c %s \n", letter, symbol_name);
+}
 
-int binary_map(char *path, t_no *no);
-bool build_segment_list(t_no *no);
-char get_symbol_letter(t_no *no, struct nlist_64 *sym);
-bool handle_symtab(t_no *no, struct symtab_command *symtab_command);
+bool handle_symtab(t_no *no, struct symtab_command *symtab_command)
+{
+	struct nlist_64 *symbol_table;
+	struct nlist_64 *symbol;
+	uint32_t i;
 
-#endif
+	no->string_table = no->map + symtab_command->stroff;
+	symbol_table = no->map + symtab_command->symoff;
+	i = 0;
+
+	while (i < symtab_command->nsyms)
+	{
+		symbol = symbol_table + i;
+		test(no, symbol);
+		i++;
+	}
+	return (true);
+}
+

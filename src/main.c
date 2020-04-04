@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <mach-o/nlist.h>
 #include <ft_printf.h>
+#include <mach-o/nlist.h>
+#include <nm_otool.h>
 # include "mach-o/loader.h"
 # include "sys/mman.h"
 # include "fcntl.h"
@@ -9,7 +10,6 @@
 
 struct nlist_64 g_symtab[100];
 struct section_64 *g_section[100];
-
 
 void symtab_handle(struct symtab_command *symtab_command, void *file_start)
 {
@@ -29,13 +29,13 @@ void symtab_handle(struct symtab_command *symtab_command, void *file_start)
 		if (N_SECT == (N_TYPE & symbol->n_type))
 		{
 			section_64 = g_section[i];
-			printf("%s %llx \n", sym_name , symbol->n_value);
+			printf("%s %llx \n", sym_name, symbol->n_value);
 		}
 		i++;
 	}
 }
 
-void handle_segment(struct segment_command_64 *command)
+static void handle_segment(struct segment_command_64 *command)
 {
 	struct section_64 *section_64;
 	static int all_sec = 0;
@@ -55,7 +55,7 @@ void handle_64(char *ptr)
 	int i;
 	struct mach_header_64 *header_64;
 	struct load_command *lc;
-//	struct symtab_command *sym;
+	//	struct symtab_command *sym;
 
 	// the cast convert from big to little ! :) awesome!
 	header_64 = (struct mach_header_64 *)ptr;
@@ -101,30 +101,9 @@ int open_and_map_file(char *path)
 int main(int ac, char **av)
 {
 	(void)ac;
-	int fd;
-	char *ptr;
-	struct stat buf;
-
-	// open the file.
-	if ((fd = open(av[1], O_RDONLY)) < 0)
-	{
-		perror("open");
+	t_no no = {};
+	if (EXIT_FAILURE == binary_map(av[1], &no))
 		return (EXIT_FAILURE);
-	}
-
-	if (fstat(fd, &buf) < 0)
-	{
-		perror("fstats");
-		return EXIT_FAILURE;
-	}
-	printf("%lld \n", buf.st_size);
-
-	if ((ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) ==
-		MAP_FAILED)
-	{
-		perror("mmap failed");
-		return EXIT_FAILURE;
-	}
-
-	nm(ptr);
+	build_segment_list(&no);
+	handle_symtab(&no, no.symtab_command);
 }
