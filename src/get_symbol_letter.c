@@ -85,11 +85,11 @@ void print_sym(t_no *no, struct nlist_64 *symbol)
 	if (symbol->n_value)
 	{
 		ft_printf("0000000%09llx", symbol->n_value);
-		printf(" %c %s\n", letter, symbol_name);
+		ft_printf(" %c %s\n", letter, symbol_name);
 	}
 	else
 	{
-		printf("                 %c %s\n", letter, symbol_name);
+		ft_printf("                 %c %s\n", letter, symbol_name);
 	}
 }
 
