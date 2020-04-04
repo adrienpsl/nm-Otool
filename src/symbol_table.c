@@ -12,6 +12,7 @@
 
 #include <mach-o/nlist.h>
 #include "nm_otool.h"
+# include "string.h"
 
 bool cmp_func(struct nlist_64 *l1, struct nlist_64 *l2)
 {
@@ -19,10 +20,12 @@ bool cmp_func(struct nlist_64 *l1, struct nlist_64 *l2)
 	char *s1;
 	char *s2;
 
+	if (!l1 || !l2)
+		return (true);
 	string_table = get_no()->string_table;
 	s1 = string_table + l1->n_un.n_strx;
 	s2 = string_table + l2->n_un.n_strx;
-	return (ft_strcmp(s1, s2));
+	return (strcmp(s1, s2) == 0);
 }
 
 int get_end(void **current)
@@ -30,9 +33,9 @@ int get_end(void **current)
 	int end;
 
 	end = 0;
-	while (current[end + 1])
+	while (current[end])
 		end = end + 1;
-	return (end);
+	return (end + 1);
 }
 
 void sort_symbol_list(void **current)
@@ -49,11 +52,11 @@ void sort_symbol_list(void **current)
 		y = 0;
 		while (y < i)
 		{
-			if (cmp_func(current[i], current[i + 1]))
+			if (cmp_func(current[y], current[y + 1]))
 			{
-				tmp = current[i];
-				current[i] = current[i + 1];
-				current[i + 1] = tmp;
+				tmp = current[y];
+				current[y] = current[y + 1];
+				current[y + 1] = tmp;
 			}
 			y += 1;
 		}
