@@ -19,6 +19,7 @@ bool print_section(t_list *list, void*p)
 
 	section_64 = list->content;
 	printf("%s \n", section_64->sectname);
+	printf("%s \n", section_64->segname);
 	return (false);
 }
 

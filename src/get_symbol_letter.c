@@ -14,22 +14,32 @@
 
 void *get_link_match_index(t_list *list, int index)
 {
-	while (index)
+	while (index && list)
 	{
 		list = list->next;
 		index = index - 1;
 	}
-	return list->content;
+	return (list ? list->content : list);
 }
 
 char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
 {
 	struct section_64 *section_64;
+	char ret;
 
-	section_64 = get_link_match_index(no->section_list, current_symbol->n_sect);
-	printf("%s %d -", section_64->segname, current_symbol->n_sect);
-//	printf("%s \n");
-	return '5';
+	section_64 = get_link_match_index(no->section_list,
+		current_symbol->n_sect - 1);
+	if (!ft_strcmp(section_64->sectname, SECT_TEXT))
+		ret = 'T';
+	else if (!ft_strcmp(section_64->sectname, SECT_DATA))
+		ret = 'D';
+	else if (!ft_strcmp(section_64->sectname, SECT_BSS))
+		ret = 'B';
+	else
+		ret = 'S';
+	if (!(current_symbol->n_type & N_EXT))
+		ret -= 'A' - 'a';
+	return (ret);
 }
 
 char get_symbol_letter(t_no *no, struct nlist_64 *sym)
@@ -59,4 +69,34 @@ char get_symbol_letter(t_no *no, struct nlist_64 *sym)
 		return 'I';
 	}
 	return ('1');
+}
+
+void print_sym(t_no *no, struct nlist_64 *symbol)
+{
+	char *symbol_name;
+	char letter;
+
+	symbol_name = no->string_table + symbol->n_un.n_strx;
+	letter = get_symbol_letter(no, symbol);
+	if (symbol->n_value)
+	{
+		ft_printf("0000000%09llx", symbol->n_value);
+		printf(" %c %s\n", letter, symbol_name);
+	}
+	else
+	{
+		printf("                 %c %s\n", letter, symbol_name);
+	}
+}
+
+void print_list(t_no *no)
+{
+	void **current;
+
+	current = no->symbol_list;
+	while ((*current))
+	{
+		print_sym(no, *current);
+		current += 1;
+	}
 }
