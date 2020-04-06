@@ -13,17 +13,19 @@
 #ifndef NM_OTOOL_H
 #define NM_OTOOL_H
 
-# include "stdbool.h"
-# include "stdio.h"
+# include "libft.h"
+# include "ft_printf.h"
+# include "ft_list.struct.h"
+
+# include <stdbool.h>
+# include <stdio.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-#include <ft_printf.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <mach-o/nlist.h>
-#include <ft_list.struct.h>
-# include "mach-o/loader.h"
-# include "libft.h"
+# include <stdlib.h>
+# include <sys/mman.h>
+# include <mach-o/nlist.h>
+# include <mach-o/loader.h>
+# include "mach-o/fat.h"
 
 # define NM_NAME "nm"
 
