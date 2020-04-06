@@ -73,4 +73,3 @@ bool build_segment_list(t_no *no)
 	ft_lst_reverse(&no->section_list);
 	return (EXIT_SUCCESS);
 }
-
