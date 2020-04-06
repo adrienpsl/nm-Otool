@@ -24,10 +24,20 @@ bool cmp_func(struct nlist_64 *l1, struct nlist_64 *l2)
 	if (!l1 || !l2)
 		return (false);
 	string_table = get_no()->string_table;
-	s1 = string_table + l1->n_un.n_strx;
-	s2 = string_table + l2->n_un.n_strx;
+	s1 = string_table + (
+		get_no()->header_64 ?
+		((struct nlist_64 *)l1)->n_un.n_strx
+							:
+		((struct nlist *)l1)->n_un.n_strx
+	);
+	s2 = string_table + (
+		get_no()->header_64 ?
+		((struct nlist_64 *)l2)->n_un.n_strx
+							:
+		((struct nlist *)l2)->n_un.n_strx
+	);
 	res = ft_strcmp(s1, s2) >= 0 ? true : false;
-	return res;
+	return (res);
 }
 
 int get_end(void **current)
@@ -68,23 +78,27 @@ void sort_symbol_list(void **current)
 
 bool build_symbol_list(t_no *no, struct symtab_command *symtab_command)
 {
-	struct nlist_64 *symbol_table;
 	uint32_t i;
+	struct nlist *nlist;
+	struct nlist_64 *nlist_64;
 
 	i = 0;
 	no->string_table = no->map + symtab_command->stroff;
-	symbol_table = no->map + symtab_command->symoff;
-
+	{
+		no->header_64 ?
+		(void)(nlist_64 = no->map + symtab_command->symoff) :
+		(void)(nlist = no->map + symtab_command->symoff);
+	}
 	if (NULL == (no->symbol_list = ft_memalloc(
 		sizeof(void *) * (symtab_command->nsyms + 1))))
 		return (false);
-
 	while (i < symtab_command->nsyms)
 	{
-		no->symbol_list[i] = (symbol_table + i);
+		no->symbol_list[i] = no->header_64 ?
+							 (void *)(nlist_64 + i) :
+							 (void *)(nlist + i);
 		i++;
 	}
 	sort_symbol_list(no->symbol_list);
 	return (true);
 }
-

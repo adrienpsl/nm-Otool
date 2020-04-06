@@ -19,8 +19,10 @@ void nm(char *ptr)
 	__uint32_t magic_number;
 
 	magic_number = *(int *)ptr;
-	//	if (magic_number == MH_MAGIC_64)
-	//		handle_64(ptr);
+		if (magic_number == MH_MAGIC_64)
+			;
+		if (magic_number == MH_MAGIC)
+			;
 }
 
 t_no *get_no(void)
@@ -36,6 +38,7 @@ int main(int ac, char **av)
 	t_no *no = get_no();
 	if (EXIT_FAILURE == binary_map(av[1], no))
 		return (EXIT_FAILURE);
+	no->header_64 = true;
 	build_segment_list(no);
 	build_symbol_list(no, no->symtab_command);
 	print_list(no);

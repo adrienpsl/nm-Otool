@@ -27,17 +27,24 @@
 
 # define NM_NAME "nm"
 
+typedef enum HEADER_TYPE
+{
+	HEADER,
+	HEADER_64
+} e_header_type;
+
 typedef struct s_no
 {
 	void *map_end;
 	size_t map_size;
 	t_list *section_list;
+	e_header_type header_type;
 	void **symbol_list;
+	bool header_64;
 	void *symtab_command;
 	void *map;
 	void *string_table;
 } t_no;
-
 
 int binary_map(char *path, t_no *no);
 bool build_segment_list(t_no *no);
