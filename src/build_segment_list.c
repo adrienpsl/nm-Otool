@@ -12,6 +12,8 @@
 
 #include "nm_otool.h"
 
+
+
 static void *setup_lc_start(void)
 {
 	void *p_lc;

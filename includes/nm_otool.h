@@ -23,9 +23,9 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <sys/mman.h>
+# include "mach-o/fat.h"
 # include <mach-o/nlist.h>
 # include <mach-o/loader.h>
-# include "mach-o/fat.h"
 
 # define NM_NAME "nm"
 
@@ -37,6 +37,8 @@ typedef enum HEADER_TYPE
 
 typedef struct s_no
 {
+	bool is_fat;
+	bool is_big;
 	void *map_end;
 	size_t map_size;
 	t_list *section_list;
