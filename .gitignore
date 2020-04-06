@@ -61,3 +61,4 @@ cmake-build-debug
 /test/cups-config
 /test/curl-config
 /1
+/test/
