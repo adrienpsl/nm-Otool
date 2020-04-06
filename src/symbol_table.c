@@ -94,9 +94,9 @@ bool build_symbol_list(t_no *no, struct symtab_command *symtab_command)
 		return (false);
 	while (i < symtab_command->nsyms)
 	{
-		no->symbol_list[i] = no->header_64 ?
-							 (void *)(nlist_64 + i) :
-							 (void *)(nlist + i);
+		no->symbol_list[i] = (no->header_64 ?
+							  (void *)(nlist_64 + i) :
+							  (void *)(nlist + i));
 		i++;
 	}
 	sort_symbol_list(no->symbol_list);
