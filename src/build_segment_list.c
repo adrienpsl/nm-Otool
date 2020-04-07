@@ -12,8 +12,6 @@
 
 #include "nm_otool.h"
 
-
-
 static void *setup_lc_start(void)
 {
 	void *p_lc;
@@ -41,18 +39,29 @@ static uint32_t get_ncmds()
 		:
 		((struct mach_header *)mmap)->ncmds
 	);
+	result = swapif32(result);
 	return (result);
 }
 
 static bool is_lc_segment(struct load_command *lc)
 {
 	bool result;
+	uint32_t cmd;
 
+	cmd = swapif32(lc->cmd);
 	if (get_no()->header_64)
-		result = lc->cmd == LC_SEGMENT_64;
+		result = cmd == LC_SEGMENT_64;
 	else
-		result = lc->cmd == LC_SEGMENT;
+		result = cmd == LC_SEGMENT;
 	return (result);
+}
+
+static void *next_command(struct load_command *lc)
+{
+	size_t cmd_size;
+
+	cmd_size = swapif32(lc->cmdsize);
+	return ((void *)lc + cmd_size);
 }
 
 bool build_segment_list(t_no *no)
@@ -67,9 +76,9 @@ bool build_segment_list(t_no *no)
 		if (is_lc_segment(lc)
 			&& add_link_sectionlst(no, (void *)lc))
 			return (EXIT_FAILURE);
-		if (lc->cmd == LC_SYMTAB)
+		if (swapif32(lc->cmd) == LC_SYMTAB)
 			no->symtab_command = lc;
-		lc = (void *)lc + lc->cmdsize;
+		lc = next_command(lc);
 		i++;
 	}
 	ft_lst_reverse(&no->section_list);

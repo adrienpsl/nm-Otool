@@ -12,7 +12,7 @@
 
 #include "nm_otool.h"
 
-bool print_section(t_list *list, void*p)
+bool print_section(t_list *list, void *p)
 {
 	struct section_64 *section_64;
 	(void)p;
@@ -27,3 +27,26 @@ void print_section_list(t_list *list)
 {
 	ft_listfunc(list, print_section, NULL);
 }
+
+uint32_t swapif32(uint32_t uint_32)
+{
+	return (
+		get_no()->is_big
+		?
+		ft_bswap_32(uint_32)
+		:
+		uint_32
+	);
+}
+
+uint64_t swapif64(uint64_t uint_64)
+{
+	return (
+		get_no()->is_big
+		?
+		ft_bswap_64(uint_64)
+		:
+		uint_64
+	);
+}
+

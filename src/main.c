@@ -7,72 +7,86 @@ t_no *get_no(void)
 	return &no;
 }
 
-
-#define bswap_16(value) \
-((((value) & 0xff) << 8) | ((value) >> 8))
-
-#define bswap_32(value) \
-(((uint32_t)bswap_16((uint16_t)((value) & 0xffff)) << 16) | \
-(uint32_t)bswap_16((uint16_t)((value) >> 16)))
-
-#define bswap_64(value) \
-(((uint64_t)bswap_32((uint32_t)((value) & 0xffffffff)) \
-<< 32) | \
-(uint64_t)bswap_32((uint32_t)((value) >> 32)))
-
-void print_fat_header(void *ptr)
+void set_header(char *ptr, t_no *no)
 {
-	struct fat_arch *fat_arch;
-
-	fat_arch = ptr;
-	ft_printf("Cpu type:    %d", fat_arch->cputype);
-	ft_printf("Cpu subtype: %d", fat_arch->cpusubtype);
-	ft_printf("offset:      %lu", fat_arch->offset);
-	ft_printf("size:        %lu", fat_arch->size);
-	ft_printf("align:       %lu", fat_arch->align);
-}
-
-void set_header(char *ptr)
-{
-	// les 4 premiers octets donne l'architecture
-	// il va y avoir des fatbinary, ce sont des binaires qui contiennent plusieurs
-	// architectures.
 	uint32_t magic_number;
 
 	magic_number = *(uint32_t *)ptr;
-	if (magic_number == MH_MAGIC_64)
-	{
-		ft_printf("64 bit \n");
-		get_no()->header_64 = true;
-	}
-	if (magic_number == MH_CIGAM_64)
-	{
-		ft_printf("64 bit little \n");
-		get_no()->header_64 = true;
-	}
+	printf("__%X__ \n", magic_number);
+	if (magic_number == MH_MAGIC_64
+		|| magic_number == MH_CIGAM_64
+		|| magic_number == FAT_MAGIC_64
+		|| magic_number == FAT_CIGAM_64)
+		no->header_64 = true;
 
-	if (magic_number == MH_MAGIC)
+	if (magic_number == MH_CIGAM
+		|| magic_number == MH_CIGAM_64
+		|| magic_number == FAT_CIGAM
+		|| magic_number == FAT_CIGAM_64)
 	{
-		ft_printf("32 bit \n");
+		ft_printf("big endian\n");
+		no->is_big = true;
 	}
-	if (magic_number == MH_CIGAM)
-	{
-		ft_printf("32 bits little");
-	}
+	else
+		no->is_big = false;
 
-	if (magic_number == FAT_MAGIC)
+	if (magic_number == FAT_MAGIC
+		|| magic_number == FAT_MAGIC_64
+		|| magic_number == FAT_CIGAM
+		|| magic_number == FAT_CIGAM_64)
+		no->is_fat = true;
+}
+
+void print_fat_header(t_no *no, struct fat_arch *fat_arch)
+{
+	if (no->fat_start == NULL)
+		no->fat_start = no->start_map + swapif32(fat_arch->offset);
+	ft_printf("    Cpu type:    %d\n", swapif32(fat_arch->cputype));
+	ft_printf("    Cpu subtype: %d\n", swapif32(fat_arch->cpusubtype));
+	ft_printf("    offset:      %lu\n", swapif32(fat_arch->offset));
+	ft_printf("    size:        %lu\n", swapif32(fat_arch->size));
+	ft_printf("    align:       %lu\n", swapif32(fat_arch->align));
+}
+
+void handle_fat_binaries(t_no *no)
+{
+	uint32_t arch_nb;
+	uint32_t i;
+
+	arch_nb = swapif32(((struct fat_header *)no->map)->nfat_arch);
+	i = 0;
+	no->map += sizeof(struct fat_header);
+	while (i < arch_nb)
 	{
-		ft_printf("fat fat big");
+		ft_printf("architecture %u\n", i);
+		print_fat_header(no, no->map);
+		no->map += sizeof(struct fat_arch);
+		i++;
 	}
-	uint32_t data;
-	if (magic_number == FAT_CIGAM)
+	no->map = no->fat_start;
+}
+
+void print_header(t_no *no)
+{
+	struct mach_header_64 *mach_header_64;
+	//	struct mach_header *mach_header;
+
+	ft_printf("Mach header\n");
+	if (no->header_64)
 	{
-		data = ((struct fat_header*)ptr)->nfat_arch;
-		data = bswap_32(data);
-		printf("%d", data);
-		get_no()->is_big = true;
-		get_no()->is_fat = true;
+		mach_header_64 = no->map;
+		ft_printf("-------------------- 64 bits\n");
+		ft_printf(" ");
+		ft_printf("0x%X ", mach_header_64->magic);
+		ft_printf("  %2d", mach_header_64->cputype);
+		ft_printf(" %d", mach_header_64->cpusubtype);
+		ft_printf(" 0x%x", mach_header_64->filetype);
+		ft_printf(" %u", mach_header_64->ncmds);
+		ft_printf(" %u", mach_header_64->sizeofcmds);
+		ft_printf(" 0x%x", mach_header_64->flags);
 	}
+	else
+		ft_printf("-------------------- 32 bits");
 }
 
 int main(int ac, char **av)
@@ -81,15 +95,14 @@ int main(int ac, char **av)
 	t_no *no = get_no();
 	if (EXIT_FAILURE == binary_map(av[1], no))
 		return (EXIT_FAILURE);
-	set_header(no->map);
-
-//	if (no->is_fat)
-//	{
-//		no->map = no->map + sizeof(struct fat_arch);
-//		set_header(no->map);
-//	}
-//
-//	build_segment_list(no);
-//	build_symbol_list(no, no->symtab_command);
-//	print_list(no);
+	set_header(no->map, no);
+	if (no->is_fat)
+	{
+		handle_fat_binaries(no);
+		set_header(no->map, no);
+	}
+	print_header(no);
+	build_segment_list(no);
+	//	build_symbol_list(no, no->symtab_command);
+	//	print_list(no);
 }

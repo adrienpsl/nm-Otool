@@ -37,6 +37,8 @@ typedef enum HEADER_TYPE
 
 typedef struct s_no
 {
+	void *fat_start;
+	void *start_map;
 	bool is_fat;
 	bool is_big;
 	void *map_end;
@@ -61,6 +63,11 @@ int add_link_sectionlst(t_no *no, struct segment_command_64 *p_command);
 // utils
 t_no *get_no(void);
 
+// utils
+uint32_t swapif32(uint32_t uint_32);
+uint64_t swapif64(uint64_t uint_64);
+
+// debug
 void print_sym(t_no *no, struct nlist_64 *symbol);
 void print_list(t_no *no);
 

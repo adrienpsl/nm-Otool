@@ -29,11 +29,12 @@ int binary_map(char *path, t_no *no)
 		return (EXIT_FAILURE);
 	}
 	if (MAP_FAILED ==
-		(no->map = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
+		(no->start_map = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
 	{
 		ft_dprintf(2, NM_NAME": mmap failed\n");
 		return (EXIT_FAILURE);
 	}
+	no->map = no->start_map;
 	no->map_size = buf.st_size;
 	no->map_end = no->map + buf.st_size;
 	return (EXIT_SUCCESS);
