@@ -30,3 +30,9 @@ in relation to performance: __TEXT & __DATA.
 
 
 
+to do : 
+make the fatbinary working,
+relaunch test with all program
+
+
+

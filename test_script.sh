@@ -13,4 +13,7 @@ for file in /usr/bin/*; do
   [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
 done
 
+cd test
+rm 2to3*
+
 

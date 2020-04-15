@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <mach-o/nlist.h>
+#include <mach-o/stab.h>
 #include "nm_otool.h"
 # include "string.h"
 
@@ -21,8 +22,6 @@ bool cmp_func(struct nlist_64 *l1, struct nlist_64 *l2)
 	char *s2;
 	int res;
 
-	if (!l1 || !l2)
-		return (false);
 	string_table = get_no()->string_table;
 	s1 = string_table + (
 		get_no()->header_64 ?
@@ -61,7 +60,7 @@ void sort_symbol_list(void **current)
 	i = 0;
 	while (i < end - 1)
 	{
-		y = 1;
+		y = 0;
 		while (y < end - i - 1)
 		{
 			if (cmp_func(current[y], current[y + 1]))

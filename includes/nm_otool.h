@@ -50,15 +50,20 @@ typedef struct s_no
 	void *symtab_command;
 	void *map;
 	void *string_table;
+	char *file_name;
 } t_no;
+
 
 int binary_map(char *path, t_no *no);
 bool build_segment_list(t_no *no);
 char get_symbol_letter(t_no *no, struct nlist_64 *sym);
 bool build_symbol_list(t_no *no, struct symtab_command *symtab_command);
 
+// print
+char get_debug_letter(uint16_t type);
+
 // build
-int add_link_sectionlst(t_no *no, struct segment_command_64 *p_command);
+int add_link_sectionlst(t_no *no, void *p_command);
 
 // utils
 t_no *get_no(void);

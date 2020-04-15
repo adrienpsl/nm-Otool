@@ -37,6 +37,7 @@ int binary_map(char *path, t_no *no)
 	no->map = no->start_map;
 	no->map_size = buf.st_size;
 	no->map_end = no->map + buf.st_size;
+	no->file_name = path;
 	return (EXIT_SUCCESS);
 }
 

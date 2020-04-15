@@ -14,8 +14,8 @@
 
 static void setup_start_section(
 	void *p_command,
-	struct section_64 **section_64,
-	struct section **section
+	void **section_64,
+	void **section
 )
 {
 	get_no()->header_64
@@ -40,26 +40,26 @@ static uint32_t get_nsects(void *p_command)
 }
 
 static void get_next_section(
-	struct section_64 **section_64,
-	struct section **section
+	void **section_64,
+	void **section
 )
 {
 	get_no()->header_64
 	?
-	(void)(*section_64 = (void *)section_64 + sizeof(struct section_64))
+	(void)(*section_64 = *section_64 + sizeof(struct section_64))
 	:
-	(void)(*section = (void *)section + sizeof(struct section));
+	(void)(*section = *section + sizeof(struct section));
 }
 
-int add_link_sectionlst(t_no *no, struct segment_command_64 *p_command)
+int add_link_sectionlst(t_no *no, void *p_command)
 {
-	struct section_64 *section_64;
-	struct section *section;
+	void *section_64;
+	void *section;
 	t_list *new;
 	uint32_t i;
 
 	i = 0;
-	setup_start_section(p_command, &section_64, &section);
+	setup_start_section(p_command, (void **)&section_64, &section);
 	while (i < get_nsects(p_command))
 	{
 		if (NULL == (new = ft_lstnew(section_64, 0)))

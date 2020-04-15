@@ -17,10 +17,9 @@ static void *setup_lc_start(void)
 	void *p_lc;
 
 	p_lc = (
-		get_no()->header_64
-		?
+		get_no()->header_64 ?
 		get_no()->map + sizeof(struct mach_header_64)
-		:
+							:
 		get_no()->map + sizeof(struct mach_header)
 	);
 	return (p_lc);
@@ -33,10 +32,9 @@ static uint32_t get_ncmds()
 
 	mmap = get_no()->map;
 	result = (
-		get_no()->header_64
-		?
+		get_no()->header_64 ?
 		((struct mach_header_64 *)mmap)->ncmds
-		:
+							:
 		((struct mach_header *)mmap)->ncmds
 	);
 	result = swapif32(result);

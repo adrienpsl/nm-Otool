@@ -19,7 +19,7 @@ void *get_link_match_index(t_list *list, int index)
 		list = list->next;
 		index = index - 1;
 	}
-	return (list ? list->content : list);
+	return (list ? list->content : NULL);
 }
 
 char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
@@ -45,7 +45,10 @@ char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
 char get_symbol_letter(t_no *no, struct nlist_64 *sym)
 {
 	if (N_STAB & sym->n_type)
-		return '-'; // Debug symbols
+	{
+		return 'x';
+		return get_debug_letter(sym->n_type);
+	}
 	else if ((N_TYPE & sym->n_type) == N_UNDF)
 	{
 		//		if (sym->name_not_found)
@@ -78,6 +81,8 @@ void print_sym(t_no *no, struct nlist_64 *symbol)
 
 	symbol_name = no->string_table + symbol->n_un.n_strx;
 	letter = get_symbol_letter(no, symbol);
+	if (letter == 'x')
+		return;
 	if (letter == '-')
 		return;
 	if ((*symbol_name) == '\0')
