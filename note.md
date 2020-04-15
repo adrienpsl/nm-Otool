@@ -29,10 +29,18 @@ There are several possible segment, but only two of them ar of interest
 in relation to performance: __TEXT & __DATA.
 
 
-
 to do : 
 make the fatbinary working,
 relaunch test with all program
 
+
+
+
+
+
+
+
+anwserthepublic pour avoir ce que les gens search.
+utiliser google alert with feedly
 
 

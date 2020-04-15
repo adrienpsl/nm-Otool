@@ -4,7 +4,9 @@
       <w>bswap</w>
       <w>debugsym</w>
       <w>nsects</w>
+      <w>preprocessing</w>
       <w>sectionlst</w>
+      <w>startproc</w>
       <w>symtab</w>
     </words>
   </dictionary>

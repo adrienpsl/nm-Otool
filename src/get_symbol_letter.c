@@ -46,7 +46,7 @@ char get_symbol_letter(t_no *no, struct nlist_64 *sym)
 {
 	if (N_STAB & sym->n_type)
 	{
-		return 'x';
+//		return 'x';
 		return get_debug_letter(sym->n_type);
 	}
 	else if ((N_TYPE & sym->n_type) == N_UNDF)

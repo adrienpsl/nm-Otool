@@ -6,7 +6,7 @@ rm -fr test
 mkdir test
 ##
 for file in /usr/bin/*; do
-  nm "$file" > real_nm 2>&1
+  nm -a "$file" > real_nm 2>&1
   ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
   res=$(diff real_nm my_nm)
   file_res=$(echo "$file" | sed -e "s/^\/usr\/bin\///")
