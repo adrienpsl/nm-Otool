@@ -56,6 +56,9 @@ typedef struct s_no
 // parse magic
 int test_parse_magic_number(t_no *no, void *ptr);
 
+// fat header
+void handle_fat_binaries(t_no *no);
+
 int binary_map(char *path, t_no *no);
 bool build_segment_list(t_no *no);
 char get_symbol_letter(t_no *no, struct nlist_64 *sym);

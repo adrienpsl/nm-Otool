@@ -15,6 +15,7 @@ for file in /usr/bin/*; do
 done
 
 cd test
+ls -l | wc -l
 rm 2to3*
 
 
