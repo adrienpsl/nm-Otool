@@ -12,107 +12,51 @@
 
 #include "nm_otool.h"
 
-void *get_link_match_index(t_list *list, int index)
+void print_debug(struct nlist_64 *symbol)
 {
-	while (index && list)
-	{
-		list = list->next;
-		index = index - 1;
-	}
-	return (list ? list->content : NULL);
-}
+	uint8_t debug_sym;
 
-char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
-{
-	struct section_64 *section_64;
-	char ret;
-
-	section_64 = get_link_match_index(no->section_list,
-		current_symbol->n_sect - 1);
-	if (!ft_strcmp(section_64->sectname, SECT_TEXT))
-		ret = 'T';
-	else if (!ft_strcmp(section_64->sectname, SECT_DATA))
-		ret = 'D';
-	else if (!ft_strcmp(section_64->sectname, SECT_BSS))
-		ret = 'B';
-	else
-		ret = 'S';
-	if (!(current_symbol->n_type & N_EXT))
-		ret -= 'A' - 'a';
-	return (ret);
-}
-
-char get_symbol_letter(t_no *no, struct nlist_64 *sym)
-{
-
-	if ((N_TYPE & sym->n_type) == N_UNDF)
-	{
-		//		if (sym->name_not_found)
-		//			return 'C';
-		//		else
-		if (sym->n_type & N_EXT)
-			return 'U';
-		else
-			return '?';
-	}
-	else if ((N_TYPE & sym->n_type) == N_SECT)
-	{
-		return get_symbol_section(no, sym);
-	}
-	else if ((N_TYPE & sym->n_type) == N_ABS)
-	{
-		return 'A';
-	}
-	else if ((N_TYPE & sym->n_type) == N_INDR)
-	{
-		return 'I';
-	}
-	return ('1');
+	debug_sym = get_debug_type(symbol->n_type);
+	//		if (letter == '-')
+	//		{
+	//			ft_printf(" %02d", symbol->n_desc);
+	//			ft_printf(" %04d", symbol->n_sect);
+	//			ft_printf(" %d ", debug_sym);
+	//		}
 }
 
 void print_sym(t_no *no, struct nlist_64 *symbol)
 {
 	char *symbol_name;
 	char letter;
-	uint8_t debug_sym;
+	struct nlist *n_list;
+
+	// no debug
+	if (N_STAB & symbol->n_type)
+		return;
 
 	symbol_name = no->string_table + symbol->n_un.n_strx;
 	letter = get_symbol_letter(no, symbol);
-	if (letter == 'x')
-		return;
-	if (N_STAB & symbol->n_type)
-	{
-		letter = '-';
-		debug_sym = get_debug_type(symbol->n_type);
-		return;
-	}
 	if ((*symbol_name) == '\0')
 		return;
-	if (symbol->n_value)
+	n_list = (void *)symbol;
+	if (no->header_64 ? symbol->n_value : n_list->n_value)
 	{
-		ft_printf("0000000%09llx", symbol->n_value);
-//		if (letter == '-')
-//		{
-//			ft_printf(" %02d", symbol->n_desc);
-//			ft_printf(" %04d", symbol->n_sect);
-//			ft_printf(" %d ", debug_sym);
-//		}
+		if (no->header_64)
+			ft_printf("0000000%09llx", symbol->n_value);
+		else
+			ft_printf("%08x", symbol->n_value);
 		ft_printf(" %c %s\n", letter, symbol_name);
 	}
 	else
 	{
-		ft_printf("                 %c %s\n", letter, symbol_name);
+		if (no->header_64)
+			ft_printf("                 %c %s\n", letter, symbol_name);
+		else
+			ft_printf("         %c %s\n", letter, symbol_name);
 	}
 }
 
-void print_list(t_no *no)
-{
-	void **current;
-
-	current = no->symbol_list;
-	while ((*current))
-	{
-		print_sym(no, *current);
-		current += 1;
-	}
-}
+// 000000029b500002b20
+// 			  00002b20
+//            00002b20
