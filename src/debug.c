@@ -12,9 +12,18 @@
 
 #include "nm_otool.h"
 
-t_no *get_no(void)
+bool print_section(t_list *list, void *p)
 {
-	static t_no no = {};
+	struct section_64 *section_64;
+	(void)p;
 
-	return &no;
+	section_64 = list->content;
+	printf("%s \n", section_64->sectname);
+	printf("%s \n", section_64->segname);
+	return (false);
+}
+
+void print_section_list(t_list *list)
+{
+	ft_listfunc(list, print_section, NULL);
 }

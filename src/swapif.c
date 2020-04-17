@@ -12,9 +12,23 @@
 
 #include "nm_otool.h"
 
-t_no *get_no(void)
+uint32_t swapif32(uint32_t uint_32)
 {
-	static t_no no = {};
-
-	return &no;
+	return (
+		get_no()->is_big ?
+		ft_bswap_32(uint_32)
+						 :
+		uint_32
+	);
 }
+
+uint64_t swapif64(uint64_t uint_64)
+{
+	return (
+		get_no()->is_big ?
+		ft_bswap_64(uint_64)
+						 :
+		uint_64
+	);
+}
+

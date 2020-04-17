@@ -53,6 +53,8 @@ typedef struct s_no
 	char *file_name;
 } t_no;
 
+// parse magic
+int test_parse_magic_number(t_no *no, void *ptr);
 
 int binary_map(char *path, t_no *no);
 bool build_segment_list(t_no *no);

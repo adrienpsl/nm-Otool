@@ -1,80 +1,5 @@
 #include "nm_otool.h"
 
-t_no *get_no(void)
-{
-	static t_no no = {};
-
-	return &no;
-}
-
-uint32_t g_64bits[] = {
-	MH_MAGIC_64,
-	MH_CIGAM_64,
-	FAT_MAGIC_64,
-	FAT_CIGAM_64,
-	0
-};
-
-uint32_t g_cigam[] = {
-	MH_CIGAM,
-	MH_CIGAM_64,
-	FAT_CIGAM,
-	FAT_CIGAM_64,
-	0
-};
-
-uint32_t g_fat[] = {
-	FAT_MAGIC,
-	FAT_MAGIC_64,
-	FAT_CIGAM,
-	FAT_CIGAM_64,
-	0
-};
-
-bool is_that(const uint32_t test[5], uint32_t magic)
-{
-	int i;
-
-	i = 0;
-	while (i < 5)
-	{
-		if (magic == test[i])
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-bool set_header(char *ptr, t_no *no)
-{
-	uint32_t magic_number;
-
-	magic_number = *(uint32_t *)ptr;
-
-	if (is_that(g_64bits, magic_number))
-		no->header_64 = true;
-
-	if (is_that(g_cigam, magic_number))
-		no->is_big = true;
-	else
-		no->is_big = false;
-
-	if (is_that(g_fat, magic_number))
-		no->is_fat = true;
-
-	if (is_that(g_64bits, magic_number));
-	else if (is_that(g_cigam, magic_number));
-	else if (is_that(g_fat, magic_number));
-	else
-	{
-		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
-				  " %s The file was not recognized as a valid object file\n\n",
-			no->file_name);
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
 void print_fat_header(t_no *no, struct fat_arch *fat_arch)
 {
 	if (no->fat_start == NULL)
@@ -135,14 +60,13 @@ int main(int ac, char **av)
 	t_no *no = get_no();
 	if (EXIT_FAILURE == binary_map(av[1], no))
 		return (EXIT_FAILURE);
-	if (set_header(no->map, no))
+	if (test_parse_magic_number(no, no->map))
 		return (EXIT_FAILURE);
 	if (no->is_fat)
 	{
 		handle_fat_binaries(no);
-		if (set_header(no->map, no))
+		if (test_parse_magic_number(no, no->map))
 			return (EXIT_FAILURE);
-		set_header(no->map, no);
 	}
 	//	print_header(no);
 	build_segment_list(no);
