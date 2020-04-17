@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <mach-o/nlist.h>
-#include <mach-o/stab.h>
 #include "nm_otool.h"
 # include "string.h"
 

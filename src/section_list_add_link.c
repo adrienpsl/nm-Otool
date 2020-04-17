@@ -44,14 +44,13 @@ static void get_next_section(
 	void **section
 )
 {
-	get_no()->header_64
-	?
+	get_no()->header_64 ?
 	(void)(*section_64 = *section_64 + sizeof(struct section_64))
-	:
+						:
 	(void)(*section = *section + sizeof(struct section));
 }
 
-int add_link_sectionlst(t_no *no, void *p_command)
+int add_link_section_list(t_no *no, void *p_command)
 {
 	void *section_64;
 	void *section;

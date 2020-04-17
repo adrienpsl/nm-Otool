@@ -62,7 +62,7 @@ static void *next_command(struct load_command *lc)
 	return ((void *)lc + cmd_size);
 }
 
-bool build_segment_list(t_no *no)
+bool build_section_list(t_no *no)
 {
 	uint32_t i;
 	struct load_command *lc;
@@ -72,7 +72,7 @@ bool build_segment_list(t_no *no)
 	while (i < get_ncmds())
 	{
 		if (is_lc_segment(lc)
-			&& add_link_sectionlst(no, (void *)lc))
+			&& add_link_section_list(no, (void *)lc))
 			return (EXIT_FAILURE);
 		if (swapif32(lc->cmd) == LC_SYMTAB)
 			no->symtab_command = lc;

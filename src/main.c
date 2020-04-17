@@ -18,7 +18,7 @@ int main(int ac, char **av)
 		if (test_parse_magic_number(no, no->map))
 			return (EXIT_FAILURE);
 	}
-	build_segment_list(no);
+	build_section_list(no);
 	build_symbol_list(no, no->symtab_command);
 	print_list(no);
 }

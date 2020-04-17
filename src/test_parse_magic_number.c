@@ -19,6 +19,13 @@ uint32_t g_64bits[] = {
 	FAT_CIGAM_64,
 };
 
+uint32_t g_32bits[] = {
+	MH_MAGIC,
+	0,
+	0,
+	0
+};
+
 uint32_t g_cigam[] = {
 	MH_CIGAM,
 	MH_CIGAM_64,
@@ -53,7 +60,8 @@ int is_valid_magic(t_no *no, uint32_t magic)
 
 	is = is_in(g_64bits, magic)
 		 || is_in(g_cigam, magic)
-		 || is_in(g_fat, magic);
+		 || is_in(g_fat, magic)
+		 || is_in(g_32bits, magic);
 	if (is == false)
 	{
 		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"

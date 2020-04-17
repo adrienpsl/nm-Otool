@@ -60,7 +60,7 @@ int test_parse_magic_number(t_no *no, void *ptr);
 void handle_fat_binaries(t_no *no);
 
 int binary_map(char *path, t_no *no);
-bool build_segment_list(t_no *no);
+bool build_section_list(t_no *no);
 char get_symbol_letter(t_no *no, struct nlist_64 *sym);
 bool build_symbol_list(t_no *no, struct symtab_command *symtab_command);
 
@@ -68,7 +68,7 @@ bool build_symbol_list(t_no *no, struct symtab_command *symtab_command);
 u_int8_t get_debug_type(uint16_t type);
 
 // build
-int add_link_sectionlst(t_no *no, void *p_command);
+int add_link_section_list(t_no *no, void *p_command);
 
 // utils
 t_no *get_no(void);
