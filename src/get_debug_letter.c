@@ -36,18 +36,16 @@ char g_debugsym[] = {
 	0
 };
 
-char get_debug_letter(uint16_t type)
+u_int8_t get_debug_type(uint16_t type)
 {
-	int i;
+	u_int8_t i;
 
 	i = 0;
-	while (g_debugsym[i])
+	while (0 != g_debugsym[i])
 	{
 		if (g_debugsym[i] == type)
-		{
 			return (g_debugsym[i]);
-		}
 		i++;
 	}
-	return ('-');
+	return (0);
 }

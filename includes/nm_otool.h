@@ -60,7 +60,7 @@ char get_symbol_letter(t_no *no, struct nlist_64 *sym);
 bool build_symbol_list(t_no *no, struct symtab_command *symtab_command);
 
 // print
-char get_debug_letter(uint16_t type);
+u_int8_t get_debug_type(uint16_t type);
 
 // build
 int add_link_sectionlst(t_no *no, void *p_command);

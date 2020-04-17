@@ -44,12 +44,8 @@ char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
 
 char get_symbol_letter(t_no *no, struct nlist_64 *sym)
 {
-	if (N_STAB & sym->n_type)
-	{
-//		return 'x';
-		return get_debug_letter(sym->n_type);
-	}
-	else if ((N_TYPE & sym->n_type) == N_UNDF)
+
+	if ((N_TYPE & sym->n_type) == N_UNDF)
 	{
 		//		if (sym->name_not_found)
 		//			return 'C';
@@ -78,18 +74,29 @@ void print_sym(t_no *no, struct nlist_64 *symbol)
 {
 	char *symbol_name;
 	char letter;
+	uint8_t debug_sym;
 
 	symbol_name = no->string_table + symbol->n_un.n_strx;
 	letter = get_symbol_letter(no, symbol);
 	if (letter == 'x')
 		return;
-	if (letter == '-')
+	if (N_STAB & symbol->n_type)
+	{
+		letter = '-';
+		debug_sym = get_debug_type(symbol->n_type);
 		return;
+	}
 	if ((*symbol_name) == '\0')
 		return;
 	if (symbol->n_value)
 	{
 		ft_printf("0000000%09llx", symbol->n_value);
+//		if (letter == '-')
+//		{
+//			ft_printf(" %02d", symbol->n_desc);
+//			ft_printf(" %04d", symbol->n_sect);
+//			ft_printf(" %d ", debug_sym);
+//		}
 		ft_printf(" %c %s\n", letter, symbol_name);
 	}
 	else
