@@ -14,27 +14,36 @@
 #include "nm_otool.h"
 # include "string.h"
 
-bool cmp_func(struct nlist_64 *l1, struct nlist_64 *l2)
+uint64_t get_size(void *list)
 {
-	char *string_table;
-	char *s1;
-	char *s2;
+	struct nlist *nlist;
+	struct nlist_64 *nlist_64;
+
+	nlist = list;
+	nlist_64 = list;
+	if (get_no()->header_64)
+		return nlist_64->n_value;
+	else
+		return (uint64_t)(nlist->n_value);
+}
+
+char *get_name(struct nlist *ptr)
+{
+	char *result;
+
+	result = get_no()->string_table +
+			 ((struct nlist *)ptr)->n_un.n_strx;
+	return (result);
+}
+
+bool cmp_func(void *l1, void *l2)
+{
 	int res;
 
-	string_table = get_no()->string_table;
-	s1 = string_table + (
-		get_no()->header_64 ?
-		((struct nlist_64 *)l1)->n_un.n_strx
-							:
-		((struct nlist *)l1)->n_un.n_strx
-	);
-	s2 = string_table + (
-		get_no()->header_64 ?
-		((struct nlist_64 *)l2)->n_un.n_strx
-							:
-		((struct nlist *)l2)->n_un.n_strx
-	);
-	res = ft_strcmp(s1, s2) >= 0 ? true : false;
+	res = ft_strcmp(
+		get_name(l1),
+		get_name(l2)
+	) > 0 ? true : false;
 	return (res);
 }
 
@@ -74,7 +83,7 @@ void sort_symbol_list(void **current)
 	}
 }
 
-bool build_symbol_list(t_no *no, struct symtab_command *symtab_command)
+bool build_sym_list(t_no *no, struct symtab_command *symtab_command)
 {
 	uint32_t i;
 	struct nlist *nlist;

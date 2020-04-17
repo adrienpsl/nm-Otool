@@ -19,6 +19,6 @@ int main(int ac, char **av)
 			return (EXIT_FAILURE);
 	}
 	build_section_list(no);
-	build_symbol_list(no, no->symtab_command);
+	build_sym_list(no, no->symtab_command);
 	print_list(no);
 }
