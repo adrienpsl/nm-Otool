@@ -30,17 +30,23 @@ in relation to performance: __TEXT & __DATA.
 
 
 to do : 
-make the fatbinary working,
-relaunch test with all program
+
+option that I will implement:
+-a : debbuger // faire test for the display of the data + write array
+     // compile with -g to put debug symbol
+-g : display global ? 
+-n : sort numerically and alph
+-o : add path before each archive
+-p : don't sort
+-r : reverse sort
+-u : display only undefined // witout padding
+-U : not undefined () // whith address
+-m : display all data, look again the man and test
+-x : display symbol table entry field in hexa
+-j : only symbol table
+ 
 
 
 
-
-
-
-
-
-anwserthepublic pour avoir ce que les gens search.
-utiliser google alert with feedly
 
 

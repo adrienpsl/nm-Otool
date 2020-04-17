@@ -29,11 +29,20 @@
 
 # define NM_NAME "nm"
 
-typedef enum HEADER_TYPE
+# define NM_OPTION_STR "agnopruUmxj"
+typedef struct s_options
 {
-	HEADER,
-	HEADER_64
-} e_header_type;
+	int a_debugger: 1;
+	int n_numeric_sort: 1;
+	int o_add_path: 1;
+	int p_no_sort: 1;
+	int r_rev_sort: 1;
+	int u_only_undef: 1;
+	int mu_only_no_undef: 1;
+	int m_display_all: 1;
+	int x_display_sym_hx: 1;
+	int j_only_sym: 1;
+} t_options;
 
 typedef struct s_no
 {
@@ -44,7 +53,6 @@ typedef struct s_no
 	void *map_end;
 	size_t map_size;
 	t_list *section_list;
-	e_header_type header_type;
 	void **symbol_list;
 	bool header_64;
 	void *symtab_command;
@@ -70,8 +78,12 @@ u_int8_t get_debug_type(uint16_t type);
 // build
 int add_link_section_list(t_no *no, void *p_command);
 
+// option parse
+int option_parser(char **av, int ac);
+
 // utils
 t_no *get_no(void);
+t_options *get_options(void);
 
 // utils
 uint32_t swapif32(uint32_t uint_32);

@@ -12,16 +12,43 @@
 
 #include "nm_otool.h"
 
-t_no *get_no(void)
+int search_in_available_option(char *options, char *user_input)
 {
-	static t_no no = {};
+	char *found;
+	long int position;
 
-	return &no;
+	while (*user_input != '\0')
+	{
+		found = ft_strchr(options, *user_input);
+		if (NULL == found)
+			return (EXIT_FAILURE);
+		position = found - options;
+		get_options() |= 1 << position;
+		user_input += 1;
+	}
+	return (EXIT_SUCCESS);
 }
 
-t_options *get_options(void)
+// loop on the element and add by matching with my str option
+// retun -1 if pb, the new loop if ok
+// # define NM_OPTION_STR " agnopruUmxj "
+int option_parser(char **av, int ac)
 {
-	static t_options op = {};
+	int i;
 
-	return (&op);
+	i = 1;
+	while (i < ac)
+	{
+		if (av[i][0] == '\0')
+			return (i);
+		if (av[i][0] != '-')
+			break;
+		if (search_in_available_option(NM_OPTION_STR, av[i] + 1))
+		{
+			ft_printf("usage bitch\n");
+			return (-1);
+		}
+		i++;
+	}
+	return (i);
 }
