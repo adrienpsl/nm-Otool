@@ -10,11 +10,12 @@ int main(int ac, char **av)
 
 	char *a[10] = {
 		"",
-		"-aj",
+		"-a",
+		"-jaoeu",
 		""
 	};
 
-	printf("%d \n", option_parser(a, sizeof(a) / sizeof(char *)));
+	printf("%d \n", option_parser(a, sizeof(a) / sizeof(char *) + 1));
 	t_options *op = get_options();
 	(void)op;
 	//	if (EXIT_FAILURE == binary_map(av[1], no))

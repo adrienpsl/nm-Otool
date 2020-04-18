@@ -34,7 +34,6 @@ to do :
 option that I will implement:
 -a : debbuger // faire test for the display of the data + write array
      // compile with -g to put debug symbol
--g : display global ? 
 -n : sort numerically and alph
 -o : add path before each archive
 -p : don't sort

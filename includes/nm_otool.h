@@ -29,19 +29,20 @@
 
 # define NM_NAME "nm"
 
-# define NM_OPTION_STR "agnopruUmxj"
+# define NM_OPTION_STR "anopruUmxj"
 typedef struct s_options
 {
-	int a_debugger: 1;
-	int n_numeric_sort: 1;
-	int o_add_path: 1;
-	int p_no_sort: 1;
-	int r_rev_sort: 1;
-	int u_only_undef: 1;
-	int mu_only_no_undef: 1;
-	int m_display_all: 1;
-	int x_display_sym_hx: 1;
-	int j_only_sym: 1;
+	u_int16_t a_debugger: 1;
+	u_int16_t n_numeric_sort: 1;
+	u_int16_t o_add_path: 1;
+	u_int16_t p_no_sort: 1;
+	u_int16_t r_rev_sort: 1;
+	u_int16_t u_only_undef: 1;
+	u_int16_t mu_only_no_undef: 1;
+	u_int16_t m_display_all: 1;
+	u_int16_t x_display_sym_hx: 1;
+	u_int16_t j_only_sym: 1;
+	u_int16_t padding: 6;
 } t_options;
 
 typedef struct s_no
