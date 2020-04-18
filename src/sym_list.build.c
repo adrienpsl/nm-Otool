@@ -38,7 +38,7 @@ bool cmp_func(void *l1, void *l2)
 	return (res);
 }
 
-int get_end(void **current)
+int get_size_array(void **current)
 {
 	int end;
 
@@ -48,14 +48,14 @@ int get_end(void **current)
 	return (end);
 }
 
-void sort_symbol_list(void **current)
+void bubble_sort_symbol_array(void **current)
 {
 	void *tmp;
 	int end;
 	int i;
 	int y;
 
-	end = get_end(current);
+	end = get_size_array(current);
 	i = 0;
 	while (i < end - 1)
 	{
@@ -97,6 +97,6 @@ bool build_sym_list(t_no *no, struct symtab_command *symtab_command)
 							  (void *)(nlist + i));
 		i++;
 	}
-	sort_symbol_list(no->symbol_list);
+	bubble_sort_symbol_array(no->symbol_list);
 	return (true);
 }
