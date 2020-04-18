@@ -31,15 +31,13 @@ void handle_fat_binaries(t_no *no)
 
 	if (no->is_fat == false)
 		return;
-	arch_nb = swapif32(((struct fat_header *)no->map)->nfat_arch);
 	i = 0;
+	arch_nb = swapif32(((struct fat_header *)no->map)->nfat_arch);
 	fat_arch = no->map + sizeof(struct fat_header);
 	while (i < arch_nb)
 	{
 		if (swapif32(fat_arch->cputype) == 16777223)
-		{
 			no->fat_start = no->start_map + swapif32(fat_arch->offset);
-		}
 		if (no->fat_start == NULL)
 			no->fat_start = no->start_map + swapif32(fat_arch->offset);
 		print_fat_header(no->map);

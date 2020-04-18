@@ -43,9 +43,17 @@ option that I will implement:
 -m : display all data, look again the man and test
 -x : display symbol table entry field in hexa
 -j : only symbol table
- 
 
-
+# otool : 
+-f fat header + all header inside
+-h mac-o headers
+-l display all load command
+-L display lib and version
+-t object dump of __TEXT, text
+-d object dumb of data
+-I indirect symbol table
+-v add humain reading
+-
 
 
 

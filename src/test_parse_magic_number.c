@@ -75,20 +75,14 @@ int is_valid_magic(t_no *no, uint32_t magic)
 void parse_magic_number(t_no *no, uint32_t magic)
 {
 	if (is_in(g_64bits, magic))
-	{
 		no->header_64 = true;
-	}
 	if (is_in(g_cigam, magic))
-	{
 		no->is_big = true;
-	}
 	else
-	{
 		no->is_big = false;
-	}
-	if (is_in(g_fat, magic))
 	{
-		no->is_fat = true;
+		if (is_in(g_fat, magic))
+			no->is_fat = true;
 	}
 }
 
