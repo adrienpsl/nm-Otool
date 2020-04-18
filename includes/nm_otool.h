@@ -74,7 +74,7 @@ char get_symbol_letter(t_no *no, struct nlist_64 *sym);
 bool build_sym_list(t_no *no, struct symtab_command *symtab_command);
 
 // print
-u_int8_t get_debug_type(uint16_t type);
+void print_debug(struct nlist_64 *symbol, char letter);
 
 // build
 int add_link_section_list(t_no *no, void *p_command);
@@ -82,9 +82,10 @@ int add_link_section_list(t_no *no, void *p_command);
 // option parse
 int option_parser(char **av, int ac);
 
-// utils
+// getters
 t_no *get_no(void);
 t_options *get_options(void);
+char *get_name(void *ptr);
 
 // utils
 uint32_t swapif32(uint32_t uint_32);
@@ -93,5 +94,6 @@ uint64_t swapif64(uint64_t uint_64);
 // debug
 void print_sym(t_no *no, struct nlist_64 *symbol);
 void print_list(t_no *no);
+char *get_debug_type(uint16_t type);
 
 #endif

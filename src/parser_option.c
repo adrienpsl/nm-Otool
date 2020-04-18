@@ -12,7 +12,7 @@
 
 #include "nm_otool.h"
 
-char *usage[] = {
+char *nm_usage[] = {
 	"ft_nm, look into other's stuff, you can't hide bitch!\n",
 	"USAGE: nm [options] <input files>\n\nOPTIONS:",
 	"-a" "\t" "Display  all symbol table entries,"
@@ -33,7 +33,7 @@ char *usage[] = {
 
 void print_usage(void)
 {
-	char **str = usage;
+	char **str = nm_usage;
 	while (*str)
 	{
 		ft_printf("%s\n", *str);
@@ -41,7 +41,7 @@ void print_usage(void)
 	}
 }
 
-int search_in_available_option(char *options, char *user_input)
+int search_in_available_options(char *options, const char *user_input)
 {
 	char *found;
 	long int position;
@@ -65,11 +65,11 @@ int option_parser(char **av, int ac)
 	i = 1;
 	while (i < ac)
 	{
-		if (av[i][0] == '\0')
+		if (av[i] == NULL || av[i][0] == '\0')
 			return (i);
 		if (av[i][0] != '-')
 			break;
-		if (search_in_available_option(NM_OPTION_STR, av[i] + 1))
+		if (search_in_available_options(NM_OPTION_STR, av[i] + 1))
 		{
 			print_usage();
 			return (-1);

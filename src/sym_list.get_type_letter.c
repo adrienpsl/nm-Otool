@@ -44,7 +44,9 @@ char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
 
 char get_symbol_letter(t_no *no, struct nlist_64 *sym)
 {
-	if ((N_TYPE & sym->n_type) == N_UNDF)
+	if (N_STAB & sym->n_type)
+		return ('-');
+	else if ((N_TYPE & sym->n_type) == N_UNDF)
 	{
 		//		if (sym->name_not_found)
 		//			return 'C';

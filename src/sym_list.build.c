@@ -27,15 +27,6 @@ uint64_t get_size(void *list)
 		return (uint64_t)(nlist->n_value);
 }
 
-char *get_name(struct nlist *ptr)
-{
-	char *result;
-
-	result = get_no()->string_table +
-			 ((struct nlist *)ptr)->n_un.n_strx;
-	return (result);
-}
-
 bool cmp_func(void *l1, void *l2)
 {
 	int res;

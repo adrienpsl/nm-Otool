@@ -25,3 +25,12 @@ t_options *get_options(void)
 
 	return (&op);
 }
+
+char *get_name(void *ptr)
+{
+	char *result;
+
+	result = get_no()->string_table +
+			 ((struct nlist *)ptr)->n_un.n_strx;
+	return (result ? result : "");
+}
