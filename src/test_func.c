@@ -12,4 +12,7 @@
 
 #include "nm_otool.h"
 
-
+bool is_64bits(void)
+{
+	return (get_no()->header_64);
+}

@@ -3,6 +3,7 @@
     <words>
       <w>bswap</w>
       <w>debugsym</w>
+      <w>nlist</w>
       <w>nsects</w>
       <w>preprocessing</w>
       <w>sectionlst</w>

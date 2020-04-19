@@ -4,21 +4,13 @@ int main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
+	int i;
 	t_no *no;
 
 	no = get_no();
+	i = option_parser(av, ac);
 
-	//	char *a[10] = {
-	//		"",
-	//		"-a",
-	//		"-jaoeu",
-	//		""
-	//	};
-
-	//	printf("%d \n", option_parser(a, sizeof(a) / sizeof(char *) + 1));
-	//	t_options *op = get_options();
-	//	(void)op;
-	if (EXIT_FAILURE == binary_map(av[1], no))
+	if (EXIT_FAILURE == binary_map(av[i], no))
 		return (EXIT_FAILURE);
 
 	if (test_parse_magic_number(no, no->map))
@@ -30,6 +22,6 @@ int main(int ac, char **av)
 			return (EXIT_FAILURE);
 	}
 	build_section_list(no);
-	build_sym_list(no, no->symtab_command);
-	print_list(no);
+	build_sym_array(no, no->symtab_command);
+	print_sym_array(no);
 }

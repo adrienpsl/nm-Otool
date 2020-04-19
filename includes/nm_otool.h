@@ -54,7 +54,7 @@ typedef struct s_no
 	void *map_end;
 	size_t map_size;
 	t_list *section_list;
-	void **symbol_list;
+	void **symbol_array;
 	bool header_64;
 	void *symtab_command;
 	void *map;
@@ -71,7 +71,7 @@ void handle_fat_binaries(t_no *no);
 int binary_map(char *path, t_no *no);
 bool build_section_list(t_no *no);
 char get_symbol_letter(t_no *no, struct nlist_64 *sym);
-bool build_sym_list(t_no *no, struct symtab_command *symtab_command);
+bool build_sym_array(t_no *no, struct symtab_command *symtab_command);
 
 // print
 void print_debug(struct nlist_64 *symbol, char letter);
@@ -87,13 +87,22 @@ t_no *get_no(void);
 t_options *get_options(void);
 char *get_name(void *ptr);
 
+// sort
+void bubble_sort_symbol_array(void **current);
+
+// setter
+void set_string_table(void);
+
+// test func
+bool is_64bits(void);
+
 // utils
 uint32_t swapif32(uint32_t uint_32);
 uint64_t swapif64(uint64_t uint_64);
 
 // debug
 void print_sym(t_no *no, struct nlist_64 *symbol);
-void print_list(t_no *no);
+void print_sym_array(t_no *no);
 char *get_debug_type(uint16_t type);
 
 #endif
