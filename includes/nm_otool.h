@@ -23,9 +23,12 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <sys/mman.h>
-# include "mach-o/fat.h"
+
+# include <mach-o/fat.h>
 # include <mach-o/nlist.h>
 # include <mach-o/loader.h>
+#include <mach-o/stab.h>
+#include <ar.h>
 
 # define NM_NAME "nm"
 
@@ -48,6 +51,7 @@ typedef struct s_no
 {
 	void *fat_start;
 	void *start_map;
+	bool is_ar;
 	bool is_fat;
 	bool is_big;
 	void *map_end;
@@ -61,7 +65,7 @@ typedef struct s_no
 	char *file_name;
 } t_no;
 
-typedef  struct s_stabname
+typedef struct s_stabname
 {
 	unsigned char n_type;
 	char *name;
@@ -73,7 +77,7 @@ int test_parse_magic_number(t_no *no, void *ptr);
 // fat header
 void handle_fat_binaries(t_no *no);
 
-int binary_map(char *path, t_no *no);
+int create_mmap(char *path, t_no *no);
 bool build_section_list(t_no *no);
 char get_symbol_type(t_no *no, struct nlist_64 *sym);
 int build_sym_array(t_no *no, struct symtab_command *symtab_command);
@@ -99,7 +103,7 @@ void set_string_table(void);
 
 // test func
 bool is_64bits(void);
-bool is_in_mmap(void *ptr);
+bool is_overflow(void *ptr);
 
 //
 int nm_exit(int error);

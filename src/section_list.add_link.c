@@ -22,7 +22,7 @@ static void setup_start_section(
 	(void)(*section_64 = p_command + sizeof(struct segment_command_64))
 						:
 	(void)(*section = p_command + sizeof(struct segment_command));
-	is_in_mmap(p_command);
+	is_overflow(p_command);
 }
 
 static uint32_t get_nsects(void *p_command)

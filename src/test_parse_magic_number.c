@@ -91,7 +91,12 @@ int test_parse_magic_number(t_no *no, void *ptr)
 	uint32_t magic;
 
 	magic = *(uint32_t *)ptr;
-	if (is_valid_magic(no, magic))
+	if (EXIT_SUCCESS == ft_strncmp(ptr, ARMAG, SARMAG))
+	{
+		no->is_ar = true;
+		return (EXIT_SUCCESS);
+	}
+	else if (is_valid_magic(no, magic))
 		return (EXIT_FAILURE);
 	parse_magic_number(no, magic);
 	return (EXIT_SUCCESS);

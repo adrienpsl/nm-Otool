@@ -33,7 +33,7 @@ bool is_64bits(void)
 	return (get_no()->header_64);
 }
 
-bool is_in_mmap(void *ptr)
+bool is_overflow(void *ptr)
 {
 	t_no *no;
 	bool result;

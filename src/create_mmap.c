@@ -13,7 +13,7 @@
 # include <nm_otool.h>
 
 // open file and display error if needed
-int binary_map(char *path, t_no *no)
+int create_mmap(char *path, t_no *no)
 {
 	int fd;
 	struct stat buf;

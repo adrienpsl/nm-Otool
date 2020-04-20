@@ -20,7 +20,7 @@ static void *setup_lc_start(void)
 	size = is_64bits() ?
 		   sizeof(struct mach_header_64) : sizeof(struct mach_header);
 	start = get_no()->map + size;
-	is_in_mmap(start);
+	is_overflow(start);
 	return (start);
 }
 
@@ -60,7 +60,7 @@ static void *next_command(struct load_command *lc)
 
 	cmd_size = swapif32(lc->cmdsize);
 	next = (void *)lc + cmd_size;
-	is_in_mmap(next);
+	is_overflow(next);
 	return (next);
 }
 
