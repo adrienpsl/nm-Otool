@@ -18,11 +18,11 @@ static void setup_start_section(
 	void **section
 )
 {
-	get_no()->header_64
-	?
+	get_no()->header_64 ?
 	(void)(*section_64 = p_command + sizeof(struct segment_command_64))
-	:
+						:
 	(void)(*section = p_command + sizeof(struct segment_command));
+	is_in_mmap(p_command);
 }
 
 static uint32_t get_nsects(void *p_command)
@@ -30,10 +30,9 @@ static uint32_t get_nsects(void *p_command)
 	uint32_t result;
 
 	result = (
-		get_no()->header_64
-		?
+		get_no()->header_64 ?
 		((struct segment_command_64 *)p_command)->nsects
-		:
+							:
 		((struct segment_command *)p_command)->nsects
 	);
 	return (result);

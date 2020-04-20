@@ -15,24 +15,36 @@
 uint32_t swapif32(uint32_t uint_32)
 {
 	return (
-		get_no()->is_big ?
-		ft_bswap_32(uint_32)
-						 :
-		uint_32
+		get_no()->is_big ? ft_bswap_32(uint_32)
+						 : uint_32
 	);
 }
 
 uint64_t swapif64(uint64_t uint_64)
 {
 	return (
-		get_no()->is_big ?
-		ft_bswap_64(uint_64)
-						 :
-		uint_64
+		get_no()->is_big ? ft_bswap_64(uint_64)
+						 : uint_64
 	);
 }
 
 bool is_64bits(void)
 {
 	return (get_no()->header_64);
+}
+
+bool is_in_mmap(void *ptr)
+{
+	t_no *no;
+	bool result;
+
+	no = get_no();
+	result = (ptr >= no->start_map
+			  && ptr < (no->map_end - sizeof(uint64_t)));
+	if (result == false)
+	{
+		ft_printf("error binary\n");
+		return (nm_exit(1));
+	}
+	return (true);
 }

@@ -21,26 +21,31 @@ void set_string_table(void)
 	no = get_no();
 	no->string_table = no->map
 					   + ((struct symtab_command *)no->symtab_command)->stroff;
+	is_in_mmap(no->string_table);
 }
 
 void fill_array_element(t_no *no, uint32_t symoff, int i)
 {
 	void *nlist;
 	uint32_t nlist_size;
+	void *name_ptr;
 
 	nlist_size = is_64bits() ? sizeof(struct nlist_64) : sizeof(struct nlist);
 	nlist = no->map + symoff;
-	no->symbol_array[i] = nlist + (i * nlist_size);
+	is_in_mmap(nlist);
+	name_ptr = nlist + (i * nlist_size);
+	is_in_mmap(name_ptr);
+	no->symbol_array[i] = name_ptr;
 }
 
-bool build_sym_array(t_no *no, struct symtab_command *symtab_command)
+int build_sym_array(t_no *no, struct symtab_command *symtab_command)
 {
 	uint32_t i;
 
 	set_string_table();
 	if (NULL == (no->symbol_array = ft_memalloc(
 		sizeof(void *) * (symtab_command->nsyms + 1))))
-		return (false);
+		return (EXIT_FAILURE);
 	i = 0;
 	while (i < symtab_command->nsyms)
 	{
@@ -49,5 +54,5 @@ bool build_sym_array(t_no *no, struct symtab_command *symtab_command)
 	}
 	if (!get_options()->p_no_sort)
 		bubble_sort_symbol_array(no->symbol_array);
-	return (true);
+	return (EXIT_SUCCESS);
 }

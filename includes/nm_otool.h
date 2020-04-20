@@ -46,12 +46,10 @@ typedef struct s_options
 
 typedef struct s_no
 {
-	int max_debug_name;
 	void *fat_start;
 	void *start_map;
 	bool is_fat;
 	bool is_big;
-	struct section_64 *section;
 	void *map_end;
 	size_t map_size;
 	t_list *section_list;
@@ -63,6 +61,12 @@ typedef struct s_no
 	char *file_name;
 } t_no;
 
+typedef  struct s_stabname
+{
+	unsigned char n_type;
+	char *name;
+} t_stabname;
+
 // parse magic
 int test_parse_magic_number(t_no *no, void *ptr);
 
@@ -72,7 +76,7 @@ void handle_fat_binaries(t_no *no);
 int binary_map(char *path, t_no *no);
 bool build_section_list(t_no *no);
 char get_symbol_type(t_no *no, struct nlist_64 *sym);
-bool build_sym_array(t_no *no, struct symtab_command *symtab_command);
+int build_sym_array(t_no *no, struct symtab_command *symtab_command);
 
 // print
 
@@ -95,6 +99,10 @@ void set_string_table(void);
 
 // test func
 bool is_64bits(void);
+bool is_in_mmap(void *ptr);
+
+//
+int nm_exit(int error);
 
 // utils
 uint32_t swapif32(uint32_t uint_32);

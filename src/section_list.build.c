@@ -15,10 +15,13 @@
 static void *setup_lc_start(void)
 {
 	uint32_t size;
+	void *start;
 
 	size = is_64bits() ?
 		   sizeof(struct mach_header_64) : sizeof(struct mach_header);
-	return (get_no()->map + size);
+	start = get_no()->map + size;
+	is_in_mmap(start);
+	return (start);
 }
 
 static uint32_t get_ncmds()
@@ -53,9 +56,12 @@ static bool is_lc_segment(struct load_command *lc)
 static void *next_command(struct load_command *lc)
 {
 	size_t cmd_size;
+	void *next;
 
 	cmd_size = swapif32(lc->cmdsize);
-	return ((void *)lc + cmd_size);
+	next = (void *)lc + cmd_size;
+	is_in_mmap(next);
+	return (next);
 }
 
 bool build_section_list(t_no *no)

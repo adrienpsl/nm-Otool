@@ -2,47 +2,8 @@
 #include "nm_otool.h"
 #include "mach-o/stab.h"
 
-char g_debugsym[] = {
-	N_GSYM,
-	N_FNAME,
-	N_FUN,
-	N_STSYM,
-	N_LCSYM,
-	N_BNSYM,
-	N_AST,
-	N_OPT,
-	N_RSYM,
-	N_SLINE,
-	N_ENSYM,
-	N_SSYM,
-	N_SO,
-	N_OSO,
-	N_LSYM,
-	N_BINCL,
-	N_SOL,
-	N_PARAMS,
-	N_VERSION,
-	N_OLEVEL,
-	N_PSYM,
-	N_EINCL,
-	N_ENTRY,
-	N_LBRAC,
-	N_EXCL,
-	N_RBRAC,
-	N_BCOMM,
-	N_ECOMM,
-	N_ECOML,
-	N_LENG,
-	0
-};
 
-struct stabnames
-{
-	unsigned char n_type;
-	char *name;
-};
-
-static const struct stabnames stabnames[] = {
+static const t_stabname g_stabname[] = {
 	{ N_GSYM,    "GSYM" },
 	{ N_FNAME,   "FNAME" },
 	{ N_FUN,     "FUN" },
@@ -76,29 +37,15 @@ static const struct stabnames stabnames[] = {
 	{ 0,         0 }
 };
 
-static void set_max_debug_name(char *str)
-{
-	int size;
-	t_no *no;
-
-	no = get_no();
-	size = ft_strlen(str);
-	if (no->max_debug_name < size)
-		no->max_debug_name = size;
-}
-
 char *get_debug_str(uint16_t type)
 {
 	u_int8_t i;
 
 	i = 0;
-	while (0 != stabnames[i].n_type)
+	while (0 != g_stabname[i].n_type)
 	{
-		if (stabnames[i].n_type == type)
-		{
-			set_max_debug_name(stabnames[i].name);
-			return (stabnames[i].name);
-		}
+		if (g_stabname[i].n_type == type)
+			return (g_stabname[i].name);
 		i++;
 	}
 	return ("");
