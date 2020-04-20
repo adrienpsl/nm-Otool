@@ -32,3 +32,7 @@ uint64_t swapif64(uint64_t uint_64)
 	);
 }
 
+bool is_64bits(void)
+{
+	return (get_no()->header_64);
+}

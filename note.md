@@ -32,17 +32,17 @@ in relation to performance: __TEXT & __DATA.
 to do : 
 
 option that I will implement:
--a : debbuger // faire test for the display of the data + write array
+x -a : debbuger // faire test for the display of the data + write array
      // compile with -g to put debug symbol
--n : sort numerically and alph
--o : add path before each archive
--p : don't sort
--r : reverse sort
--u : display only undefined // witout padding
--U : not undefined () // whith address
+x -n : sort numerically and alph 
+x -p : don't sort
+x -r : reverse sort
+x -u : display only undefined // witout padding
+x -U : not undefined () // whith address
 -m : display all data, look again the man and test
 -x : display symbol table entry field in hexa
 -j : only symbol table
+-o : add path before each archive
 
 # otool : 
 -f fat header + all header inside

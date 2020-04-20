@@ -12,33 +12,47 @@
 
 #include "nm_otool.h"
 
+void
+print_local_and_debug(struct nlist_64 *symbol, char *symbol_name, char type)
+{
+	is_64bits() ? ft_printf("%016llx", symbol->n_value)
+				: ft_printf("%08x", symbol->n_value);
+	if (type == '-' && get_options()->a_debugger)
+		ft_printf(" %02d" " %04d" " %5s",
+			symbol->n_sect,
+			symbol->n_desc,
+			get_debug_str(symbol->n_type));
+	ft_printf(" %c", type);
+	ft_printf(" %s\n", symbol_name);
+}
+
+void print_op_u(struct nlist_64 *symbol, char *symbol_name, char type)
+{
+	if (!get_options()->a_debugger && type == '-')
+		return;
+	else if (get_options()->u_only_undef && type == 'U')
+		ft_printf(" %s\n", symbol_name);
+	else if (get_options()->mu_only_no_undef && type != 'U')
+		print_local_and_debug(symbol, symbol_name, type);
+
+	print_local_and_debug(symbol, symbol_name, type);
+}
+
 void print_sym(t_no *no, struct nlist_64 *symbol)
 {
 	char *symbol_name;
-	char letter;
-	struct nlist *n_list;
+	char type;
 
 	symbol_name = get_name(symbol);
-	letter = get_symbol_letter(no, symbol);
-	if (letter == '-' && !get_options()->a_debugger)
-		return;
-	n_list = (void *)symbol;
-	if ((no->header_64 ? symbol->n_value : n_list->n_value) || letter == '-')
-	{
-		if (no->header_64)
-			ft_printf("0000000%09llx", symbol->n_value);
-		else
-			ft_printf("%08x", symbol->n_value);
-		print_debug(symbol, letter);
-		ft_printf(" %c %s\n", letter, symbol_name);
-	}
+	type = get_symbol_type(no, symbol);
+	if ((is_64bits() ? symbol->n_value : ((struct nlist *)symbol)->n_value)
+		|| type == '-')
+		print_op_u(symbol, symbol_name, type);
 	else
 	{
-		print_debug(symbol, letter);
-		if (no->header_64)
-			ft_printf("                 %c %s\n", letter, symbol_name);
-		else
-			ft_printf("         %c %s\n", letter, symbol_name);
+		is_64bits() ?
+		ft_printf("%18c %s\n", type, symbol_name) :
+		ft_printf("%10c %s\n", type, symbol_name);
 	}
 }
 

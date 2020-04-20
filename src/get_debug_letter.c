@@ -76,7 +76,18 @@ static const struct stabnames stabnames[] = {
 	{ 0,         0 }
 };
 
-char * get_debug_type(uint16_t type)
+static void set_max_debug_name(char *str)
+{
+	int size;
+	t_no *no;
+
+	no = get_no();
+	size = ft_strlen(str);
+	if (no->max_debug_name < size)
+		no->max_debug_name = size;
+}
+
+char *get_debug_str(uint16_t type)
 {
 	u_int8_t i;
 
@@ -84,7 +95,10 @@ char * get_debug_type(uint16_t type)
 	while (0 != stabnames[i].n_type)
 	{
 		if (stabnames[i].n_type == type)
+		{
+			set_max_debug_name(stabnames[i].name);
 			return (stabnames[i].name);
+		}
 		i++;
 	}
 	return ("");

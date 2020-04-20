@@ -25,17 +25,29 @@ uint64_t get_size(void *list)
 		return (uint64_t)(nlist->n_value);
 }
 
+int str_cmp(void *l1, void *l2)
+{
+	return (ft_strcmp(
+		get_name(l1),
+		get_name(l2)
+	));
+}
+
 bool cmp_func(void *l1, void *l2)
 {
 	int res;
 
-	res = ft_strcmp(
-		get_name(l1),
-		get_name(l2)
-	);
-	if (res == 0)
-	res = get_size(l1) > get_size(l2);
-	res = res > 0 ? true : false;
+	if (get_options()->n_numeric_sort)
+		res = get_size(l1) > get_size(l2);
+	else
+	{
+		res = str_cmp(l1, l2);
+		if (res == 0)
+			res = get_size(l1) > get_size(l2);
+		res = res > 0 ? true : false;
+	}
+	if (get_options()->r_rev_sort)
+		res = !res;
 	return (res);
 }
 

@@ -29,7 +29,7 @@
 
 # define NM_NAME "nm"
 
-# define NM_OPTION_STR "anopruUmxj"
+# define NM_OPTION_STR "anopruUxj"
 typedef struct s_options
 {
 	u_int16_t a_debugger: 1;
@@ -39,18 +39,19 @@ typedef struct s_options
 	u_int16_t r_rev_sort: 1;
 	u_int16_t u_only_undef: 1;
 	u_int16_t mu_only_no_undef: 1;
-	u_int16_t m_display_all: 1;
 	u_int16_t x_display_sym_hx: 1;
 	u_int16_t j_only_sym: 1;
-	u_int16_t padding: 6;
+	u_int16_t padding: 7;
 } t_options;
 
 typedef struct s_no
 {
+	int max_debug_name;
 	void *fat_start;
 	void *start_map;
 	bool is_fat;
 	bool is_big;
+	struct section_64 *section;
 	void *map_end;
 	size_t map_size;
 	t_list *section_list;
@@ -70,11 +71,10 @@ void handle_fat_binaries(t_no *no);
 
 int binary_map(char *path, t_no *no);
 bool build_section_list(t_no *no);
-char get_symbol_letter(t_no *no, struct nlist_64 *sym);
+char get_symbol_type(t_no *no, struct nlist_64 *sym);
 bool build_sym_array(t_no *no, struct symtab_command *symtab_command);
 
 // print
-void print_debug(struct nlist_64 *symbol, char letter);
 
 // build
 int add_link_section_list(t_no *no, void *p_command);
@@ -103,6 +103,6 @@ uint64_t swapif64(uint64_t uint_64);
 // debug
 void print_sym(t_no *no, struct nlist_64 *symbol);
 void print_sym_array(t_no *no);
-char *get_debug_type(uint16_t type);
+char *get_debug_str(uint16_t type);
 
 #endif

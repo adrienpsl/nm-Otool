@@ -14,7 +14,6 @@
 #include "nm_otool.h"
 # include "string.h"
 
-
 void set_string_table(void)
 {
 	t_no *no;
@@ -48,6 +47,7 @@ bool build_sym_array(t_no *no, struct symtab_command *symtab_command)
 		fill_array_element(no, symtab_command->symoff, i);
 		i++;
 	}
-	bubble_sort_symbol_array(no->symbol_array);
+	if (!get_options()->p_no_sort)
+		bubble_sort_symbol_array(no->symbol_array);
 	return (true);
 }
