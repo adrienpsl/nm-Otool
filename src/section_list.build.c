@@ -24,14 +24,12 @@ static e_ret setup_lc_start(void **ptr)
 	return (is_overflow(start));
 }
 
-static uint32_t get_ncmds()
+static uint32_t get_ncmds(void *ptr)
 {
 	uint32_t result;
-	void *mmap;
 
-	mmap = get_no()->map;
-	result = is_64bits() ? ((struct mach_header_64 *)mmap)->ncmds
-						 : ((struct mach_header *)mmap)->ncmds;
+	result = is_64bits() ? ((struct mach_header_64 *)ptr)->ncmds
+						 : ((struct mach_header *)ptr)->ncmds;
 	result = swapif_u32(result);
 	return (result);
 }
@@ -47,35 +45,37 @@ static bool is_lc_segment(struct load_command *lc)
 	return (result);
 }
 
-static void *next_command(struct load_command *lc)
+static uint8_t next_command(void **p_lc)
 {
 	size_t cmd_size;
-	void *next;
+	t_lc *next;
 
-	cmd_size = swapif_u32(lc->cmdsize);
-	next = (void *)lc + cmd_size;
-	is_overflow(next);
-	return (next);
+	next = *p_lc;
+	cmd_size = swapif_u32(next->cmdsize);
+	next = (void *)next + cmd_size;
+	*p_lc = next;
+	return (is_overflow(next));
 }
 
 bool build_section_list(t_no *no)
 {
+	void *lc;
 	uint32_t i;
-	struct load_command *lc;
 
 	i = 0;
-	if (KO == setup_lc_start((void**)&lc))
-		return (false);
-	while (i < get_ncmds())
+	if (KO == setup_lc_start(&lc))
+		return (KO);
+	while (i < get_ncmds(no->map))
 	{
 		if (is_lc_segment(lc)
-			&& add_link_section_list(no, (void *)lc))
-			return (EXIT_FAILURE);
-		if (swapif_u32(lc->cmd) == LC_SYMTAB)
+			&& add_link_section_list(no, lc))
+			return (KO);
+		if (swapif_u32(((t_lc *)lc)->cmd) == LC_SYMTAB)
 			no->symtab_command = lc;
-		lc = next_command(lc);
+		if (KO == next_command(&lc))
+			return (KO);
 		i++;
 	}
 	ft_lst_reverse(&no->section_list);
-	return (EXIT_SUCCESS);
+	return (OK);
 }

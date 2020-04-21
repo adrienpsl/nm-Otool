@@ -56,19 +56,30 @@ typedef struct s_no
 {
 	void *fat_start;
 	void *start_map;
+	size_t map_size;
 	bool is_ar;
 	bool is_fat;
 	bool is_big;
+	bool header_64;
 	void *map_end;
-	size_t map_size;
 	t_list *section_list;
 	void **symbol_array;
-	bool header_64;
 	void *symtab_command;
 	void *map;
 	void *string_table;
 	char *file_name;
 } t_no;
+
+typedef struct		s_binary
+{
+	void *start;
+	void *ent;
+	void **symbols;
+	void *symtab_command;
+	void *ptr;
+	void *string_table;
+} 					t_binary;
+
 
 typedef struct s_stabname
 {
