@@ -31,6 +31,7 @@
 #include <ar.h>
 
 # define NM_NAME "nm"
+# define ARCH
 typedef enum
 {
 	OK,
@@ -52,8 +53,24 @@ typedef struct s_options
 	u_int16_t padding: 7;
 } t_options;
 
+typedef struct		s_binary
+{
+	void *ptr;
+	void *start;
+	void *end;
+	void **symbols;
+	t_list *sections;
+	void *symtab_command;
+	void *string_table;
+	bool is_ar;
+	bool is_fat;
+	bool is_big;
+	bool header_64;
+} 					t_binary;
+
 typedef struct s_no
 {
+	t_binary binary;
 	void *fat_start;
 	void *start_map;
 	size_t map_size;
@@ -70,16 +87,6 @@ typedef struct s_no
 	char *file_name;
 } t_no;
 
-typedef struct		s_binary
-{
-	void *start;
-	void *ent;
-	void **symbols;
-	void *symtab_command;
-	void *ptr;
-	void *string_table;
-} 					t_binary;
-
 
 typedef struct s_stabname
 {
@@ -93,7 +100,7 @@ e_ret parse_magic_number(t_no *no, void *ptr);
 // fat header
 void handle_fat_binaries(t_no *no);
 
-int create_mmap(char *path, t_no *no);
+e_ret create_mmap(char *path, t_no *no);
 bool build_section_list(t_no *no);
 char get_symbol_type(t_no *no, struct nlist_64 *sym);
 int build_sym_array(t_no *no, struct symtab_command *symtab_command);

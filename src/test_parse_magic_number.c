@@ -72,7 +72,7 @@ int is_valid_magic(t_no *no, uint32_t magic)
 	return (OK);
 }
 
-void parse_maco_magic(t_no *no, uint32_t magic)
+void parse_magic_maco(t_no *no, uint32_t magic)
 {
 	if (is_in(g_64bits, magic))
 		no->header_64 = true;
@@ -84,26 +84,14 @@ void parse_maco_magic(t_no *no, uint32_t magic)
 		no->is_fat = true;
 }
 
-bool is_archive(t_no *no, void *ptr)
-{
-	if (OK == ft_strncmp(ptr, ARMAG, SARMAG))
-	{
-		no->is_ar = true;
-		return (true);
-	}
-	return (false);
-}
-
 e_ret parse_magic_number(t_no *no, void *ptr)
 {
 	uint32_t magic;
 
 	magic = *(uint32_t *)ptr;
-	if (true == is_archive(no, ptr))
-		return (OK);
-	else if (is_valid_magic(no, magic))
+	if (is_valid_magic(no, magic))
 		return (KO);
-	parse_maco_magic(no, magic);
+	parse_magic_maco(no, magic);
 	return (OK);
 }
 

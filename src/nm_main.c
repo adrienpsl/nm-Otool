@@ -15,11 +15,12 @@ int nm_exit(int error)
 	return (0);
 }
 
-int handle(t_no *no)
+e_ret handle(t_no *no)
 {
 	if (parse_magic_number(no, no->map))
-		return (nm_exit(1));
-	handle_fat_binaries(no);
+		return (KO);
+	if (no->is_fat)
+		handle_fat_binaries(no);
 	if (parse_magic_number(no, no->map))
 		return (nm_exit(1));
 	// will be out
@@ -57,6 +58,16 @@ void ar(t_no *no)
 	}
 }
 
+bool is_archive(t_no *no, void *ptr)
+{
+	if (OK == ft_strncmp(ptr, ARMAG, SARMAG))
+	{
+		no->is_ar = true;
+		return (true);
+	}
+	return (false);
+}
+
 int main(int ac, char **av)
 {
 	int i;
@@ -67,14 +78,23 @@ int main(int ac, char **av)
 
 	// is archive? -> loop on the header
 	// pas archive -> loop on the file
-	if (create_mmap(av[i], no)
-		|| parse_magic_number(no, no->map))
+	if (KO == create_mmap(av[i], no))
 		return (nm_exit(1));
 
-	if (no->is_ar)
-		ar(no);
+//	if (parse_magic_number(no, no->map))
+//		return (KO);
+
+	// is arch ?
+	if (true == is_archive(no, no->map))
+		return (OK);
 
 	handle(no);
+
+	//	if (no->is_ar)
+	// start arch parsing
+	//		ar(no);
+	// fill binary
+
 
 	nm_exit(0);
 }

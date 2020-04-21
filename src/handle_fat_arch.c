@@ -23,14 +23,13 @@ void print_fat_header(struct fat_arch *fat_arch)
 	ft_printf("    align:       %lu\n", swapif_u32(fat_arch->align));
 }
 
+// set the first, and loop to find the good for that arch.
 void handle_fat_binaries(t_no *no)
 {
 	uint32_t arch_nb;
 	uint32_t i;
 	struct fat_arch *fat_arch;
 
-	if (no->is_fat == false)
-		return;
 	i = 0;
 	arch_nb = swapif_u32(((struct fat_header *)no->map)->nfat_arch);
 	fat_arch = no->map + sizeof(struct fat_header);
