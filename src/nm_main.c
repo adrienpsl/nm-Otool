@@ -17,6 +17,8 @@ int nm_exit(int error)
 
 int handle(t_no *no)
 {
+	if (test_parse_magic_number(no, no->map))
+		return (nm_exit(1));
 	handle_fat_binaries(no);
 	if (test_parse_magic_number(no, no->map))
 		return (nm_exit(1));
@@ -28,9 +30,31 @@ int handle(t_no *no)
 	return (0);
 }
 
-void ar()
+void ar(t_no *no)
 {
-	// loop on archive and print each element
+	t_ar_hdr *ar_hdr;
+	void *ptr;
+	int name_size;
+
+	if (!no->is_ar)
+		return;
+	name_size = 0;
+	ptr = no->map + SARMAG;
+	ar_hdr = ptr;
+	ptr += ft_atoi(ar_hdr->ar_size) + sizeof(t_ar_hdr);
+	while (no->map < no->map_end)
+	{
+		ar_hdr = ptr;
+		if (!ft_strncmp(ptr, AR_EFMT1, ft_strlen(AR_EFMT1)))
+			name_size = ft_atoi(ar_hdr->ar_name + ft_strlen(AR_EFMT1));
+
+		ptr += sizeof(t_ar_hdr);
+		no->map = ptr + name_size;
+		handle(no);
+		no->map -= name_size;
+		ft_printf("%s\n", ar_hdr);
+		ptr += ft_atoi(ar_hdr->ar_size);
+	}
 }
 
 int main(int ac, char **av)
@@ -48,7 +72,7 @@ int main(int ac, char **av)
 		return (nm_exit(1));
 
 	if (no->is_ar)
-		ar();
+		ar(no);
 
 	handle(no);
 

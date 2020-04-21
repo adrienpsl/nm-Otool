@@ -31,6 +31,8 @@
 #include <ar.h>
 
 # define NM_NAME "nm"
+# define OK 0
+# define KO 1
 
 # define NM_OPTION_STR "anopruUxj"
 typedef struct s_options
@@ -82,7 +84,10 @@ bool build_section_list(t_no *no);
 char get_symbol_type(t_no *no, struct nlist_64 *sym);
 int build_sym_array(t_no *no, struct symtab_command *symtab_command);
 
+typedef struct ar_hdr t_ar_hdr;
+typedef struct load_command t_lc;
 // print
+
 
 // build
 int add_link_section_list(t_no *no, void *p_command);
@@ -109,7 +114,7 @@ bool is_overflow(void *ptr);
 int nm_exit(int error);
 
 // utils
-uint32_t swapif32(uint32_t uint_32);
+uint32_t swapif_u32(uint32_t uint_32);
 uint64_t swapif64(uint64_t uint_64);
 
 // debug

@@ -80,10 +80,8 @@ void parse_magic_number(t_no *no, uint32_t magic)
 		no->is_big = true;
 	else
 		no->is_big = false;
-	{
-		if (is_in(g_fat, magic))
-			no->is_fat = true;
-	}
+	if (is_in(g_fat, magic))
+		no->is_fat = true;
 }
 
 int test_parse_magic_number(t_no *no, void *ptr)

@@ -12,7 +12,7 @@
 
 #include "nm_otool.h"
 
-uint32_t swapif32(uint32_t uint_32)
+uint32_t swapif_u32(uint32_t uint_32)
 {
 	return (
 		get_no()->is_big ? ft_bswap_32(uint_32)
@@ -41,10 +41,5 @@ bool is_overflow(void *ptr)
 	no = get_no();
 	result = (ptr >= no->start_map
 			  && ptr < (no->map_end - sizeof(uint64_t)));
-	if (result == false)
-	{
-		ft_printf("error binary\n");
-		return (nm_exit(1));
-	}
-	return (true);
+	return (result);
 }
