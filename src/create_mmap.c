@@ -29,13 +29,13 @@ e_ret create_mmap(char *path, t_no *no)
 		return (KO);
 	}
 	if (MAP_FAILED ==
-		(no->start_map = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
+		(no->mmap_start = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
 	{
 		ft_dprintf(2, NM_NAME": mmap failed\n");
 		return (KO);
 	}
-	no->map = no->start_map;
-	no->map_size = buf.st_size;
+	no->map = no->mmap_start;
+	no->mmap_size = buf.st_size;
 	no->map_end = no->map + buf.st_size;
 	no->file_name = path;
 	return (OK);

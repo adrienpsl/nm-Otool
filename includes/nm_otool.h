@@ -53,7 +53,7 @@ typedef struct s_options
 	u_int16_t padding: 7;
 } t_options;
 
-typedef struct		s_binary
+typedef struct s_binary
 {
 	void *ptr;
 	void *start;
@@ -62,31 +62,18 @@ typedef struct		s_binary
 	t_list *sections;
 	void *symtab_command;
 	void *string_table;
-	bool is_ar;
 	bool is_fat;
 	bool is_big;
 	bool header_64;
-} 					t_binary;
+} t_ofile;
 
 typedef struct s_no
 {
-	t_binary binary;
-	void *fat_start;
-	void *start_map;
-	size_t map_size;
-	bool is_ar;
-	bool is_fat;
-	bool is_big;
-	bool header_64;
-	void *map_end;
-	t_list *section_list;
-	void **symbol_array;
-	void *symtab_command;
-	void *map;
-	void *string_table;
+	void *mmap_start;
+	size_t mmap_size;
 	char *file_name;
+	bool is_ar;
 } t_no;
-
 
 typedef struct s_stabname
 {
@@ -95,7 +82,7 @@ typedef struct s_stabname
 } t_stabname;
 
 // parse magic
-e_ret parse_magic_number(t_no *no, void *ptr);
+e_ret parse_magic_number(t_ofile *ofile);
 
 // fat header
 void handle_fat_binaries(t_no *no);
@@ -120,6 +107,7 @@ int option_parser(char **av, int ac);
 t_no *get_no(void);
 t_options *get_options(void);
 char *get_name(void *ptr);
+t_ofile *get_ofile(void);
 
 // sort
 void bubble_sort_symbol_array(void **current);

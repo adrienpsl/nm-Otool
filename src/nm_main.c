@@ -5,23 +5,36 @@ int nm_exit(int error)
 	t_no *no;
 
 	no = get_no();
-	if (no->map)
-		munmap(no->start_map, no->map_size);
-	if (no->symbol_array)
-		free(no->symbol_array);
-	ft_lstdel(no->section_list, NULL);
-	if (error)
-		exit(EXIT_FAILURE);
+	if (no->mmap_start)
+		munmap(no->mmap_start, no->mmap_size);
+	//	if (no->symbol_array)
+	//		free(no->symbol_array);
+	//	ft_lstdel(no->section_list, NULL);
+	//	if (error)
+	//		exit(EXIT_FAILURE);
 	return (0);
+}
+
+void fill_ofile(void *start, size_t size, t_ofile *ofile)
+{
+	ft_bzero(ofile, sizeof(t_ofile));
+	ofile->start = start;
+	ofile->end = start + size;
+	ofile->ptr = start;
 }
 
 e_ret handle(t_no *no)
 {
-	if (parse_magic_number(no, no->map))
+	t_ofile *ofile;
+
+	ofile = get_ofile();
+	fill_ofile(no->mmap_start, no->mmap_size, ofile);
+
+	if (parse_magic_number(ofile))
 		return (KO);
 	if (no->is_fat)
 		handle_fat_binaries(no);
-	if (parse_magic_number(no, no->map))
+	if (parse_magic_number(no))
 		return (nm_exit(1));
 	// will be out
 	if (build_section_list(no)
@@ -31,32 +44,32 @@ e_ret handle(t_no *no)
 	return (0);
 }
 
-void ar(t_no *no)
-{
-	t_ar_hdr *ar_hdr;
-	void *ptr;
-	int name_size;
-
-	if (!no->is_ar)
-		return;
-	name_size = 0;
-	ptr = no->map + SARMAG;
-	ar_hdr = ptr;
-	ptr += ft_atoi(ar_hdr->ar_size) + sizeof(t_ar_hdr);
-	while (no->map < no->map_end)
-	{
-		ar_hdr = ptr;
-		if (!ft_strncmp(ptr, AR_EFMT1, ft_strlen(AR_EFMT1)))
-			name_size = ft_atoi(ar_hdr->ar_name + ft_strlen(AR_EFMT1));
-
-		ptr += sizeof(t_ar_hdr);
-		no->map = ptr + name_size;
-		handle(no);
-		no->map -= name_size;
-		ft_printf("%s\n", ar_hdr);
-		ptr += ft_atoi(ar_hdr->ar_size);
-	}
-}
+//void ar(t_no *no)
+//{
+//	t_ar_hdr *ar_hdr;
+//	void *ptr;
+//	int name_size;
+//
+//	if (!no->is_ar)
+//		return;
+//	name_size = 0;
+//	ptr = no->map + SARMAG;
+//	ar_hdr = ptr;
+//	ptr += ft_atoi(ar_hdr->ar_size) + sizeof(t_ar_hdr);
+//	while (no->map < no->map_end)
+//	{
+//		ar_hdr = ptr;
+//		if (!ft_strncmp(ptr, AR_EFMT1, ft_strlen(AR_EFMT1)))
+//			name_size = ft_atoi(ar_hdr->ar_name + ft_strlen(AR_EFMT1));
+//
+//		ptr += sizeof(t_ar_hdr);
+//		no->map = ptr + name_size;
+//		handle(no);
+//		no->map -= name_size;
+//		ft_printf("%s\n", ar_hdr);
+//		ptr += ft_atoi(ar_hdr->ar_size);
+//	}
+//}
 
 bool is_archive(t_no *no, void *ptr)
 {
@@ -67,6 +80,8 @@ bool is_archive(t_no *no, void *ptr)
 	}
 	return (false);
 }
+
+
 
 int main(int ac, char **av)
 {
@@ -81,12 +96,12 @@ int main(int ac, char **av)
 	if (KO == create_mmap(av[i], no))
 		return (nm_exit(1));
 
-//	if (parse_magic_number(no, no->map))
-//		return (KO);
+	//	if (parse_magic_number(no, no->map))
+	//		return (KO);
 
 	// is arch ?
-	if (true == is_archive(no, no->map))
-		return (OK);
+	//	if (true == is_archive(no, no->map))
+	//		return (OK);
 
 	handle(no);
 

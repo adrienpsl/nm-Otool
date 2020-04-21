@@ -19,6 +19,13 @@ t_no *get_no(void)
 	return &no;
 }
 
+t_ofile *get_ofile(void)
+{
+	static t_ofile ofile = {};
+
+	return (&ofile);
+}
+
 t_options *get_options(void)
 {
 	static t_options op = {};

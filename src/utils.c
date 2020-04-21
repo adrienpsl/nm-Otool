@@ -35,7 +35,7 @@ e_ret is_overflow(void *ptr)
 	uint8_t result;
 
 	no = get_no();
-	result = (ptr < no->start_map
+	result = (ptr < no->mmap_start
 			  || ptr > (no->map_end - sizeof(uint64_t)));
 	return (result);
 }
