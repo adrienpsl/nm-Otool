@@ -12,16 +12,16 @@
 
 #include "nm_otool.h"
 
-static void *setup_lc_start(void)
+static e_ret setup_lc_start(void **ptr)
 {
 	uint32_t size;
 	void *start;
 
-	size = is_64bits() ?
-		   sizeof(struct mach_header_64) : sizeof(struct mach_header);
+	size = is_64bits() ? sizeof(struct mach_header_64)
+					   : sizeof(struct mach_header);
 	start = get_no()->map + size;
-	is_overflow(start);
-	return (start);
+	*ptr = start;
+	return (is_overflow(start));
 }
 
 static uint32_t get_ncmds()
@@ -30,13 +30,9 @@ static uint32_t get_ncmds()
 	void *mmap;
 
 	mmap = get_no()->map;
-	result = (
-		is_64bits() ?
-		((struct mach_header_64 *)mmap)->ncmds
-					:
-		((struct mach_header *)mmap)->ncmds
-	);
-	result = swapif32(result);
+	result = is_64bits() ? ((struct mach_header_64 *)mmap)->ncmds
+						 : ((struct mach_header *)mmap)->ncmds;
+	result = swapif_u32(result);
 	return (result);
 }
 
@@ -45,11 +41,9 @@ static bool is_lc_segment(struct load_command *lc)
 	bool result;
 	uint32_t cmd;
 
-	cmd = swapif32(lc->cmd);
-	if (is_64bits())
-		result = cmd == LC_SEGMENT_64;
-	else
-		result = cmd == LC_SEGMENT;
+	cmd = swapif_u32(lc->cmd);
+	result = is_64bits() ? cmd == LC_SEGMENT_64
+						 : cmd == LC_SEGMENT;
 	return (result);
 }
 
@@ -58,7 +52,7 @@ static void *next_command(struct load_command *lc)
 	size_t cmd_size;
 	void *next;
 
-	cmd_size = swapif32(lc->cmdsize);
+	cmd_size = swapif_u32(lc->cmdsize);
 	next = (void *)lc + cmd_size;
 	is_overflow(next);
 	return (next);
@@ -70,13 +64,14 @@ bool build_section_list(t_no *no)
 	struct load_command *lc;
 
 	i = 0;
-	lc = setup_lc_start();
+	if (KO == setup_lc_start((void**)&lc))
+		return (false);
 	while (i < get_ncmds())
 	{
 		if (is_lc_segment(lc)
 			&& add_link_section_list(no, (void *)lc))
 			return (EXIT_FAILURE);
-		if (swapif32(lc->cmd) == LC_SYMTAB)
+		if (swapif_u32(lc->cmd) == LC_SYMTAB)
 			no->symtab_command = lc;
 		lc = next_command(lc);
 		i++;
