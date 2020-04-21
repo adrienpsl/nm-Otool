@@ -88,7 +88,7 @@ typedef struct s_stabname
 } t_stabname;
 
 // parse magic
-int test_parse_magic_number(t_no *no, void *ptr);
+e_ret parse_magic_number(t_no *no, void *ptr);
 
 // fat header
 void handle_fat_binaries(t_no *no);

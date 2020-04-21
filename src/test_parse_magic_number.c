@@ -67,12 +67,12 @@ int is_valid_magic(t_no *no, uint32_t magic)
 		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
 				  " %s The file was not recognized as a valid object file\n\n",
 			no->file_name);
-		return (EXIT_FAILURE);
+		return (KO);
 	}
-	return (EXIT_SUCCESS);
+	return (OK);
 }
 
-void parse_magic_number(t_no *no, uint32_t magic)
+void parse_maco_magic(t_no *no, uint32_t magic)
 {
 	if (is_in(g_64bits, magic))
 		no->header_64 = true;
@@ -84,19 +84,26 @@ void parse_magic_number(t_no *no, uint32_t magic)
 		no->is_fat = true;
 }
 
-int test_parse_magic_number(t_no *no, void *ptr)
+bool is_archive(t_no *no, void *ptr)
+{
+	if (OK == ft_strncmp(ptr, ARMAG, SARMAG))
+	{
+		no->is_ar = true;
+		return (true);
+	}
+	return (false);
+}
+
+e_ret parse_magic_number(t_no *no, void *ptr)
 {
 	uint32_t magic;
 
 	magic = *(uint32_t *)ptr;
-	if (EXIT_SUCCESS == ft_strncmp(ptr, ARMAG, SARMAG))
-	{
-		no->is_ar = true;
-		return (EXIT_SUCCESS);
-	}
+	if (true == is_archive(no, ptr))
+		return (OK);
 	else if (is_valid_magic(no, magic))
-		return (EXIT_FAILURE);
-	parse_magic_number(no, magic);
-	return (EXIT_SUCCESS);
+		return (KO);
+	parse_maco_magic(no, magic);
+	return (OK);
 }
 

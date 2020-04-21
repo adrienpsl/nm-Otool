@@ -3,6 +3,7 @@
     <words>
       <w>bswap</w>
       <w>debugsym</w>
+      <w>maco</w>
       <w>nlist</w>
       <w>nsects</w>
       <w>preprocessing</w>

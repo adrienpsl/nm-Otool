@@ -17,10 +17,10 @@ int nm_exit(int error)
 
 int handle(t_no *no)
 {
-	if (test_parse_magic_number(no, no->map))
+	if (parse_magic_number(no, no->map))
 		return (nm_exit(1));
 	handle_fat_binaries(no);
-	if (test_parse_magic_number(no, no->map))
+	if (parse_magic_number(no, no->map))
 		return (nm_exit(1));
 	// will be out
 	if (build_section_list(no)
@@ -68,7 +68,7 @@ int main(int ac, char **av)
 	// is archive? -> loop on the header
 	// pas archive -> loop on the file
 	if (create_mmap(av[i], no)
-		|| test_parse_magic_number(no, no->map))
+		|| parse_magic_number(no, no->map))
 		return (nm_exit(1));
 
 	if (no->is_ar)

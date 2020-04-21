@@ -56,4 +56,29 @@ x -U : not undefined () // whith address
 -
 
 
+- create mmap_binary
+- test magic number
+- magic number also handle fat
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
