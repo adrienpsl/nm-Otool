@@ -32,7 +32,7 @@ e_ret handle(t_no *no)
 
 	if (parse_magic_number(ofile))
 		return (KO);
-	if (no->is_fat)
+	if (ofile->is_fat)
 		handle_fat_binaries(no);
 	if (parse_magic_number(no))
 		return (nm_exit(1));

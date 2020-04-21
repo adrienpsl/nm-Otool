@@ -85,15 +85,20 @@ typedef struct s_stabname
 e_ret parse_magic_number(t_ofile *ofile);
 
 // fat header
-void handle_fat_binaries(t_no *no);
+e_ret handle_fat_binaries(t_ofile *ofile);
 
 e_ret create_mmap(char *path, t_no *no);
 bool build_section_list(t_no *no);
 char get_symbol_type(t_no *no, struct nlist_64 *sym);
 int build_sym_array(t_no *no, struct symtab_command *symtab_command);
 
+
+
+// my type
 typedef struct ar_hdr t_ar_hdr;
-typedef struct load_command t_lc;
+typedef struct load_command t_load_command;
+typedef struct fat_arch t_fat_arch;
+typedef struct fat_header t_fat_header;
 // print
 
 
@@ -117,7 +122,7 @@ void set_string_table(void);
 
 // test func
 bool is_64bits(void);
-e_ret is_overflow(void *ptr);
+e_ret is_overflow(void *ptr, size_t next);
 
 //
 int nm_exit(int error);

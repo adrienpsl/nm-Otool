@@ -21,7 +21,7 @@ void set_string_table(void)
 	no = get_no();
 	no->string_table = no->map
 					   + ((struct symtab_command *)no->symtab_command)->stroff;
-	is_overflow(no->string_table);
+	is_overflow(no->string_table, 0);
 }
 
 void fill_array_element(t_no *no, uint32_t symoff, int i)
@@ -32,9 +32,9 @@ void fill_array_element(t_no *no, uint32_t symoff, int i)
 
 	nlist_size = is_64bits() ? sizeof(struct nlist_64) : sizeof(struct nlist);
 	nlist = no->map + symoff;
-	is_overflow(nlist);
+	is_overflow(nlist, 0);
 	name_ptr = nlist + (i * nlist_size);
-	is_overflow(name_ptr);
+	is_overflow(name_ptr, 0);
 	no->symbol_array[i] = name_ptr;
 }
 

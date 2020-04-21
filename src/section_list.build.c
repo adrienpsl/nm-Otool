@@ -21,7 +21,7 @@ static e_ret setup_lc_start(void **ptr)
 					   : sizeof(struct mach_header);
 	start = get_no()->map + size;
 	*ptr = start;
-	return (is_overflow(start));
+	return (is_overflow(start, 0));
 }
 
 static uint32_t get_ncmds(void *ptr)
@@ -48,13 +48,13 @@ static bool is_lc_segment(struct load_command *lc)
 static uint8_t next_command(void **p_lc)
 {
 	size_t cmd_size;
-	t_lc *next;
+	t_load_command *next;
 
 	next = *p_lc;
 	cmd_size = swapif_u32(next->cmdsize);
 	next = (void *)next + cmd_size;
 	*p_lc = next;
-	return (is_overflow(next));
+	return (is_overflow(next, 0));
 }
 
 bool build_section_list(t_no *no)
@@ -70,7 +70,7 @@ bool build_section_list(t_no *no)
 		if (is_lc_segment(lc)
 			&& add_link_section_list(no, lc))
 			return (KO);
-		if (swapif_u32(((t_lc *)lc)->cmd) == LC_SYMTAB)
+		if (swapif_u32(((t_load_command *)lc)->cmd) == LC_SYMTAB)
 			no->symtab_command = lc;
 		if (KO == next_command(&lc))
 			return (KO);
