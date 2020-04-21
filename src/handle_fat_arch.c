@@ -48,12 +48,13 @@ e_ret handle_fat_binaries(t_ofile *ofile)
 		if (true == is_overflow(p_arch, sizeof(t_fat_arch)))
 			return (KO);
 		if (i == 0
-			|| swapif_u32(p_arch->cputype) & CPU_TYPE_X86_64)
+			|| swapif_u32(p_arch->cputype) == 16777223)
 			save_start_maco(ofile, p_arch);
 		p_arch = (void *)p_arch + sizeof(t_fat_arch);
 		i++;
 	}
 	if (is_overflow(ofile->ptr, 0))
 		return (KO);
+	ofile->start = ofile->ptr;
 	return (parse_magic_number(ofile));
 }

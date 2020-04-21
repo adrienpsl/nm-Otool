@@ -68,8 +68,8 @@ int is_valid_magic(t_ofile *ofile, uint32_t magic)
 		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
 				  " %s The file was not recognized as a valid object file\n\n",
 			// todo rename here
-//			ofile->file_name);
-		"bite");
+			get_no()->file_name);
+//		"bite");
 		return (KO);
 	}
 	return (OK);

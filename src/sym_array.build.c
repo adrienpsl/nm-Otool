@@ -29,7 +29,6 @@ void fill_array_element(t_ofile *ofile, uint32_t symoff, int i)
 
 	nlist_size = is_64bits() ? sizeof(struct nlist_64) : sizeof(struct nlist);
 	nlist = ofile->ptr + symoff;
-	is_overflow(nlist, 0);
 	name_ptr = nlist + (i * nlist_size);
 	is_overflow(name_ptr, 0);
 	ofile->symbols[i] = name_ptr;

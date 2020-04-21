@@ -34,7 +34,6 @@ void print_op_u(struct nlist_64 *symbol, char *symbol_name, char type)
 		ft_printf(" %s\n", symbol_name);
 	else if (get_options()->mu_only_no_undef && type != 'U')
 		print_local_and_debug(symbol, symbol_name, type);
-
 	print_local_and_debug(symbol, symbol_name, type);
 }
 
