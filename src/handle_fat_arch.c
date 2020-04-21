@@ -28,9 +28,9 @@ uint32_t get_arch_nb(t_fat_header *fh)
 	return (swapif_u32(fh->nfat_arch));
 }
 
-void set_start_maco(t_ofile *ofile, t_fat_arch *fat_arch)
+void save_start_maco(t_ofile *ofile, t_fat_arch *fat_arch)
 {
-	ofile->start = ofile->start + swapif_u32(fat_arch->offset);
+	ofile->ptr = ofile->start + swapif_u32(fat_arch->offset);
 }
 
 // set the first, and loop to find the good for that arch.
@@ -38,22 +38,22 @@ e_ret handle_fat_binaries(t_ofile *ofile)
 {
 	uint32_t arch_nb;
 	uint32_t i;
-	t_fat_arch *fat_arch;
+	t_fat_arch *p_arch;
 
 	arch_nb = get_arch_nb(ofile->ptr);
-	fat_arch = ofile->ptr + sizeof(struct fat_header);
+	p_arch = ofile->ptr + sizeof(struct fat_header);
 	i = 0;
 	while (i < arch_nb)
 	{
-		if (true == is_overflow(fat_arch, sizeof(t_fat_arch)))
+		if (true == is_overflow(p_arch, sizeof(t_fat_arch)))
 			return (KO);
 		if (i == 0
-			|| swapif_u32(fat_arch->cputype) & CPU_TYPE_X86_64)
-			set_start_maco(ofile, fat_arch);
-		fat_arch = (void *)fat_arch + sizeof(t_fat_arch);
+			|| swapif_u32(p_arch->cputype) & CPU_TYPE_X86_64)
+			save_start_maco(ofile, p_arch);
+		p_arch = (void *)p_arch + sizeof(t_fat_arch);
 		i++;
 	}
-	if (is_overflow(ofile->start, 0))
+	if (is_overflow(ofile->ptr, 0))
 		return (KO);
 	return (parse_magic_number(ofile));
 }
