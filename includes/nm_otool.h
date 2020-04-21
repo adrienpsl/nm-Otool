@@ -31,8 +31,11 @@
 #include <ar.h>
 
 # define NM_NAME "nm"
-# define OK 0
-# define KO 1
+typedef enum
+{
+	OK,
+	KO
+} e_ret;
 
 # define NM_OPTION_STR "anopruUxj"
 typedef struct s_options
@@ -108,7 +111,7 @@ void set_string_table(void);
 
 // test func
 bool is_64bits(void);
-bool is_overflow(void *ptr);
+e_ret is_overflow(void *ptr);
 
 //
 int nm_exit(int error);
