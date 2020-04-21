@@ -18,7 +18,7 @@ static void setup_start_section(
 	void **section
 )
 {
-	get_no()->header_64 ?
+	get_ofile()->header_64 ?
 	(void)(*section_64 = p_command + sizeof(struct segment_command_64))
 						:
 	(void)(*section = p_command + sizeof(struct segment_command));
@@ -30,7 +30,7 @@ static uint32_t get_nsects(void *p_command)
 	uint32_t result;
 
 	result = (
-		get_no()->header_64 ?
+		get_ofile()->header_64 ?
 		((struct segment_command_64 *)p_command)->nsects
 							:
 		((struct segment_command *)p_command)->nsects
@@ -43,13 +43,13 @@ static void get_next_section(
 	void **section
 )
 {
-	get_no()->header_64 ?
+	get_ofile()->header_64 ?
 	(void)(*section_64 = *section_64 + sizeof(struct section_64))
 						:
 	(void)(*section = *section + sizeof(struct section));
 }
 
-int add_link_section_list(t_no *no, void *p_command)
+e_ret add_link_section_list(t_ofile *ofile, void *p_command)
 {
 	void *section_64;
 	void *section;
@@ -61,12 +61,12 @@ int add_link_section_list(t_no *no, void *p_command)
 	while (i < get_nsects(p_command))
 	{
 		if (NULL == (new = ft_lstnew(section_64, 0)))
-			return (EXIT_FAILURE);
-		new->content = (no->header_64 ? (void *)section_64 : (void *)section);
-		ft_lstadd(&no->section_list, new);
+			return (KO);
+		new->content = (ofile->header_64 ? (void *)section_64 : (void *)section);
+		ft_lstadd(&ofile->sections, new);
 		get_next_section(&section_64, &section);
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (OK);
 }
 

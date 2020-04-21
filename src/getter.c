@@ -37,7 +37,7 @@ char *get_name(void *ptr)
 {
 	char *result;
 
-	result = get_no()->string_table +
+	result = get_ofile()->string_table +
 			 ((struct nlist *)ptr)->n_un.n_strx;
 	return (result ? result : "");
 }

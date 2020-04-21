@@ -12,6 +12,7 @@ int nm_exit(int error)
 	//	ft_lstdel(no->section_list, NULL);
 	//	if (error)
 	//		exit(EXIT_FAILURE);
+	(void)error;
 	return (0);
 }
 
@@ -32,15 +33,14 @@ e_ret handle(t_no *no)
 
 	if (parse_magic_number(ofile))
 		return (KO);
-	if (ofile->is_fat)
-		handle_fat_binaries(no);
-	if (parse_magic_number(no))
-		return (nm_exit(1));
+	if (ofile->is_fat
+		&& KO == handle_fat_binaries(ofile))
+		return (KO);
 	// will be out
-	if (build_section_list(no)
-		|| build_sym_array(no, no->symtab_command))
+	if (build_section_list(ofile)
+		|| build_sym_array(ofile, ofile->symtab_command))
 		return (nm_exit(1));
-	print_sym_array(no);
+	print_sym_array(ofile);
 	return (0);
 }
 
@@ -80,8 +80,6 @@ bool is_archive(t_no *no, void *ptr)
 	}
 	return (false);
 }
-
-
 
 int main(int ac, char **av)
 {

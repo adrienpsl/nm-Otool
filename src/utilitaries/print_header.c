@@ -14,23 +14,24 @@
 
 void print_header(t_no *no)
 {
-	struct mach_header_64 *mach_header_64;
-	//	struct mach_header *mach_header;
-
-	ft_printf("Mach header\n");
-	if (no->header_64)
-	{
-		mach_header_64 = no->map;
-		ft_printf("-------------------- 64 bits\n");
-		ft_printf(" ");
-		ft_printf("0x%X ", mach_header_64->magic);
-		ft_printf("  %2d", mach_header_64->cputype);
-		ft_printf(" %d", mach_header_64->cpusubtype);
-		ft_printf(" 0x%x", mach_header_64->filetype);
-		ft_printf(" %u", mach_header_64->ncmds);
-		ft_printf(" %u", mach_header_64->sizeofcmds);
-		ft_printf(" 0x%x", mach_header_64->flags);
-	}
-	else
-		ft_printf("-------------------- 32 bits");
+	(void)no;
+//	struct mach_header_64 *mach_header_64;
+//	//	struct mach_header *mach_header;
+//
+//	ft_printf("Mach header\n");
+//	if (no->header_64)
+//	{
+//		mach_header_64 = no->map;
+//		ft_printf("-------------------- 64 bits\n");
+//		ft_printf(" ");
+//		ft_printf("0x%X ", mach_header_64->magic);
+//		ft_printf("  %2d", mach_header_64->cputype);
+//		ft_printf(" %d", mach_header_64->cpusubtype);
+//		ft_printf(" 0x%x", mach_header_64->filetype);
+//		ft_printf(" %u", mach_header_64->ncmds);
+//		ft_printf(" %u", mach_header_64->sizeofcmds);
+//		ft_printf(" 0x%x", mach_header_64->flags);
+//	}
+//	else
+//		ft_printf("-------------------- 32 bits");
 }

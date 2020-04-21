@@ -62,6 +62,7 @@ int is_valid_magic(t_ofile *ofile, uint32_t magic)
 		 || is_in(g_cigam, magic)
 		 || is_in(g_fat, magic)
 		 || is_in(g_32bits, magic);
+	(void)ofile;
 	if (is == false)
 	{
 		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"

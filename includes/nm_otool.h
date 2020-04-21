@@ -88,9 +88,9 @@ e_ret parse_magic_number(t_ofile *ofile);
 e_ret handle_fat_binaries(t_ofile *ofile);
 
 e_ret create_mmap(char *path, t_no *no);
-bool build_section_list(t_no *no);
-char get_symbol_type(t_no *no, struct nlist_64 *sym);
-int build_sym_array(t_no *no, struct symtab_command *symtab_command);
+e_ret build_section_list(t_ofile *ofile);
+char get_symbol_type(t_list *sections, struct nlist_64 *sym);
+int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command);
 
 
 
@@ -103,7 +103,7 @@ typedef struct fat_header t_fat_header;
 
 
 // build
-int add_link_section_list(t_no *no, void *p_command);
+e_ret add_link_section_list(t_ofile *ofile, void *p_command);
 
 // option parse
 int option_parser(char **av, int ac);
@@ -117,8 +117,6 @@ t_ofile *get_ofile(void);
 // sort
 void bubble_sort_symbol_array(void **current);
 
-// setter
-void set_string_table(void);
 
 // test func
 bool is_64bits(void);
@@ -132,8 +130,8 @@ uint32_t swapif_u32(uint32_t uint_32);
 uint64_t swapif64(uint64_t uint_64);
 
 // debug
-void print_sym(t_no *no, struct nlist_64 *symbol);
-void print_sym_array(t_no *no);
+void print_sym(t_ofile *ofile, struct nlist_64 *symbol);
+void print_sym_array(t_ofile *file);
 char *get_debug_str(uint16_t type);
 
 #endif

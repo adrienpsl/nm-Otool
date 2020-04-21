@@ -14,45 +14,42 @@
 #include "nm_otool.h"
 # include "string.h"
 
-void set_string_table(void)
+e_ret set_string_table(t_ofile *ofile)
 {
-	t_no *no;
-
-	no = get_no();
-	no->string_table = no->map
-					   + ((struct symtab_command *)no->symtab_command)->stroff;
-	is_overflow(no->string_table, 0);
+	ofile->string_table = ofile->start
+						  + ((struct symtab_command *)ofile->symtab_command)->stroff;
+	return (is_overflow(ofile->string_table, 0) ? KO : OK);
 }
 
-void fill_array_element(t_no *no, uint32_t symoff, int i)
+void fill_array_element(t_ofile *ofile, uint32_t symoff, int i)
 {
 	void *nlist;
 	uint32_t nlist_size;
 	void *name_ptr;
 
 	nlist_size = is_64bits() ? sizeof(struct nlist_64) : sizeof(struct nlist);
-	nlist = no->map + symoff;
+	nlist = ofile->ptr + symoff;
 	is_overflow(nlist, 0);
 	name_ptr = nlist + (i * nlist_size);
 	is_overflow(name_ptr, 0);
-	no->symbol_array[i] = name_ptr;
+	ofile->symbols[i] = name_ptr;
 }
 
-int build_sym_array(t_no *no, struct symtab_command *symtab_command)
+int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command)
 {
 	uint32_t i;
 
-	set_string_table();
-	if (NULL == (no->symbol_array = ft_memalloc(
+	set_string_table(ofile);
+	if (NULL == (ofile->symbols = ft_memalloc(
 		sizeof(void *) * (symtab_command->nsyms + 1))))
-		return (EXIT_FAILURE);
+		return (KO);
 	i = 0;
 	while (i < symtab_command->nsyms)
 	{
-		fill_array_element(no, symtab_command->symoff, i);
+		fill_array_element(ofile, symtab_command->symoff, i);
 		i++;
 	}
 	if (!get_options()->p_no_sort)
-		bubble_sort_symbol_array(no->symbol_array);
-	return (EXIT_SUCCESS);
+		bubble_sort_symbol_array(ofile->symbols);
+	return (OK);
 }

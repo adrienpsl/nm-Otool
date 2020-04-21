@@ -19,7 +19,7 @@ static e_ret setup_lc_start(void **ptr)
 
 	size = is_64bits() ? sizeof(struct mach_header_64)
 					   : sizeof(struct mach_header);
-	start = get_no()->map + size;
+	start = get_ofile()->ptr + size;
 	*ptr = start;
 	return (is_overflow(start, 0));
 }
@@ -57,25 +57,27 @@ static uint8_t next_command(void **p_lc)
 	return (is_overflow(next, 0));
 }
 
-bool build_section_list(t_no *no)
+e_ret build_section_list(t_ofile *ofile)
 {
 	void *lc;
 	uint32_t i;
+	uint32_t ncmds;
 
 	i = 0;
 	if (KO == setup_lc_start(&lc))
 		return (KO);
-	while (i < get_ncmds(no->map))
+	ncmds = get_ncmds(ofile->start);
+	while (i < ncmds)
 	{
 		if (is_lc_segment(lc)
-			&& add_link_section_list(no, lc))
+			&& add_link_section_list(ofile, lc))
 			return (KO);
 		if (swapif_u32(((t_load_command *)lc)->cmd) == LC_SYMTAB)
-			no->symtab_command = lc;
+			ofile->symtab_command = lc;
 		if (KO == next_command(&lc))
 			return (KO);
 		i++;
 	}
-	ft_lst_reverse(&no->section_list);
+	ft_lst_reverse(&ofile->sections);
 	return (OK);
 }

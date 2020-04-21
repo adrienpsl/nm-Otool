@@ -22,12 +22,12 @@ void *get_link_match_index(t_list *list, int index)
 	return (list ? list->content : NULL);
 }
 
-char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
+char get_symbol_section(t_list *sections, struct nlist_64 *current_symbol)
 {
 	struct section_64 *section_64;
 	char ret;
 
-	section_64 = get_link_match_index(no->section_list,
+	section_64 = get_link_match_index(sections,
 		current_symbol->n_sect - 1);
 	if (!ft_strcmp(section_64->sectname, SECT_TEXT))
 		ret = 'T';
@@ -42,7 +42,7 @@ char get_symbol_section(t_no *no, struct nlist_64 *current_symbol)
 	return (ret);
 }
 
-char get_symbol_type(t_no *no, struct nlist_64 *sym)
+char get_symbol_type(t_list *sections, struct nlist_64 *sym)
 {
 	if (N_STAB & sym->n_type)
 		return ('-');
@@ -57,7 +57,7 @@ char get_symbol_type(t_no *no, struct nlist_64 *sym)
 			return '?';
 	}
 	else if ((N_TYPE & sym->n_type) == N_SECT)
-		return get_symbol_section(no, sym);
+		return get_symbol_section(sections, sym);
 	else if ((N_TYPE & sym->n_type) == N_ABS)
 		return 'A';
 	else if ((N_TYPE & sym->n_type) == N_INDR)

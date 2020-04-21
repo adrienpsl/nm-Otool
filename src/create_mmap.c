@@ -34,9 +34,7 @@ e_ret create_mmap(char *path, t_no *no)
 		ft_dprintf(2, NM_NAME": mmap failed\n");
 		return (KO);
 	}
-	no->map = no->mmap_start;
 	no->mmap_size = buf.st_size;
-	no->map_end = no->map + buf.st_size;
 	no->file_name = path;
 	return (OK);
 }

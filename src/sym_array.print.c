@@ -38,13 +38,13 @@ void print_op_u(struct nlist_64 *symbol, char *symbol_name, char type)
 	print_local_and_debug(symbol, symbol_name, type);
 }
 
-void print_sym(t_no *no, struct nlist_64 *symbol)
+void print_sym(t_ofile *ofile, struct nlist_64 *symbol)
 {
 	char *symbol_name;
 	char type;
 
 	symbol_name = get_name(symbol);
-	type = get_symbol_type(no, symbol);
+	type = get_symbol_type(ofile->sections, symbol);
 	if ((is_64bits() ? symbol->n_value : ((struct nlist *)symbol)->n_value)
 		|| type == '-')
 		print_op_u(symbol, symbol_name, type);
@@ -56,14 +56,14 @@ void print_sym(t_no *no, struct nlist_64 *symbol)
 	}
 }
 
-void print_sym_array(t_no *no)
+void print_sym_array(t_ofile *file)
 {
 	void **current;
 
-	current = no->symbol_array;
+	current = file->symbols;
 	while ((*current))
 	{
-		print_sym(no, *current);
+		print_sym(file, *current);
 		current += 1;
 	}
 }
