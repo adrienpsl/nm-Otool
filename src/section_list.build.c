@@ -69,6 +69,7 @@ e_ret build_section_list(t_ofile *ofile)
 	ncmds = get_ncmds(ofile->start);
 	while (i < ncmds)
 	{
+		printf("%d \n", i);
 		if (is_lc_segment(lc)
 			&& add_link_section_list(ofile, lc))
 			return (KO);
@@ -78,6 +79,7 @@ e_ret build_section_list(t_ofile *ofile)
 			return (KO);
 		i++;
 	}
+	ft_printf(" out ");
 	ft_lst_reverse(&ofile->sections);
 	return (OK);
 }
