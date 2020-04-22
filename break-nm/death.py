@@ -35,7 +35,7 @@ def diff_dir(prog, directory):
 
 def diff_file(prog, f):
     sysprog = "nm" if prog == "ft_nm" else "otool -t"
-    r = subprocess.run(["../" + prog, f], capture_output=True)
+    r = subprocess.run([prog, f], capture_output=True)
     sys_r = subprocess.run([sysprog, f], capture_output=True)
     if r.stdout != sys_r.stdout:
         print(Fore.RED + f"KO for {f}" + Fore.RESET)
@@ -46,6 +46,6 @@ if __name__ == "__main__":
     kill("/Users/adpusel/42/nm-otool/cmake-build-debug/nm_otool")
     # kill("ft_otool")
     # diff("ft_nm", "/bin/")
-    # diff_file("ft_nm", "../libft/libft.a")
+    # diff_file("/Users/adpusel/42/nm-otool/cmake-build-debug/nm_otool", "/bin")
     # diff_file("ft_nm", "weird_archive/libO3.a")
     # diff_dir("ft_nm", "feed_the_nm")

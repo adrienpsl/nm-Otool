@@ -51,7 +51,7 @@ e_ret handle_archive(t_no *no)
 
 		ft_printf("\n%s(%s):\n", no->file_name, ptr + sizeof(t_ar_hdr));
 
-		handle_ofile(ptr + sizeof(t_ar_hdr) + name_size,
+		handle_ofile(get_ofile(), ptr + sizeof(t_ar_hdr) + name_size,
 			ft_atoi(ar_hdr->ar_size)
 		);
 

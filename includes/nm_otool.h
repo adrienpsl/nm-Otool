@@ -27,11 +27,12 @@
 # include <mach-o/fat.h>
 # include <mach-o/nlist.h>
 # include <mach-o/loader.h>
-#include <mach-o/stab.h>
-#include <ar.h>
+# include <mach-o/stab.h>
+# include <ar.h>
 
 # define NM_NAME "nm"
 # define ERROR_FD 1
+# define NM_ERROR_START "/Library/Developer/CommandLineTools/usr/bin/nm: "
 # define ARCH
 typedef enum
 {
@@ -104,7 +105,7 @@ typedef struct fat_header t_fat_header;
 e_ret handle_archive(t_no *no);
 
 // binary
-e_ret handle_ofile(void *start, size_t size);
+e_ret handle_ofile(t_ofile *ofile, void *start, size_t size);
 
 
 // build

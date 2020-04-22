@@ -20,26 +20,28 @@ void fill_ofile(void *start, size_t size, t_ofile *ofile)
 	ofile->ptr = start;
 }
 
-// get information from no and add that to the function file
-e_ret handle_ofile(void *start, size_t size)
+void free_ofile(t_ofile *ofile)
 {
-	t_ofile *ofile;
+	if (ofile->sections)
+		ft_lstdel(ofile->sections, NULL);
+	if (ofile->symbols)
+		free(ofile->symbols);
+}
 
-	// there is no free of the element.
+e_ret handle_ofile(t_ofile *ofile, void *start, size_t size)
+{
+	int result;
 
-	ofile = get_ofile();
+	result = OK;
 	fill_ofile(start, size, ofile);
-	if (parse_magic_number(ofile))
-		return (KO);
-	if (ofile->is_fat
-		&& KO == handle_fat_binaries(ofile))
-		return (KO);
-	if (build_section_list(ofile))
-		return (KO);
-	if (!ofile->symtab_command)
-		return (OK);
-	if (build_sym_array(ofile, ofile->symtab_command))
-		return (KO);
-	print_sym_array(ofile);
-	return (OK);
+	if (parse_magic_number(ofile)
+		|| (ofile->is_fat && KO == handle_fat_binaries(ofile))
+		|| build_section_list(ofile)
+		|| !ofile->symtab_command
+		|| build_sym_array(ofile, ofile->symtab_command))
+		result = KO;
+	else
+		print_sym_array(ofile);
+	free_ofile(ofile);
+	return (result);
 }

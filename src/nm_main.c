@@ -16,7 +16,6 @@ int nm_exit(int error)
 	return (0);
 }
 
-
 bool is_archive(t_no *no, void *ptr)
 {
 	if (OK == ft_strncmp(ptr, ARMAG, SARMAG))
@@ -27,7 +26,6 @@ bool is_archive(t_no *no, void *ptr)
 	return (false);
 }
 
-
 int main(int ac, char **av)
 {
 	int i;
@@ -35,29 +33,11 @@ int main(int ac, char **av)
 
 	no = get_no();
 	i = option_parser(av, ac);
-
-	// is archive? -> loop on the header
-	// pas archive -> loop on the file
 	if (KO == create_mmap(av[i], no))
 		return (nm_exit(1));
-
-	//	if (parse_magic_number(no, no->map))
-	//		return (KO);
-
-	// is arch ?
 	if (true == is_archive(no, no->mmap_start))
-	{
 		handle_archive(no);
-		return (OK);
-	}
-
-	handle_ofile(no->mmap_start, no->mmap_size);
-
-	//	if (no->is_ar)
-	// start arch parsing
-	//		ar(no);
-	// fill binary
-
-
+	else
+		handle_ofile(get_ofile(), no->mmap_start, no->mmap_size);
 	nm_exit(0);
 }
