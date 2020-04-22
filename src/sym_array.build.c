@@ -45,7 +45,6 @@ int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command)
 	i = 0;
 	while (i < symtab_command->nsyms)
 	{
-		ft_printf(" -- %d ", i);
 		fill_array_element(ofile, symtab_command->symoff, i);
 		i++;
 	}

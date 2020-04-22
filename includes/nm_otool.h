@@ -108,7 +108,7 @@ e_ret handle_ofile(void *start, size_t size);
 
 
 // build
-e_ret add_link_section_list(t_ofile *ofile, void *p_command);
+e_ret add_link_section_list(t_ofile *ofile, void *start);
 
 // option parse
 int option_parser(char **av, int ac);

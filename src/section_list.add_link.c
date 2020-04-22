@@ -10,61 +10,50 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <nm_otool.h>
+#include "nm_otool.h"
 
-static void setup_start_section(
-	void *p_command,
-	void **section_64,
-	void **section
-)
+static e_ret setup_start_section(void *start, void **p_section)
 {
-	get_ofile()->header_64 ?
-	(void)(*section_64 = p_command + sizeof(struct segment_command_64))
-						:
-	(void)(*section = p_command + sizeof(struct segment_command));
-	no_overflow_no_goback(p_command);
+	is_64bits() ? (*p_section = start + sizeof(struct segment_command_64))
+				: (*p_section = start + sizeof(struct segment_command));
+	return (no_overflow_no_goback(*p_section));
 }
 
 static uint32_t get_nsects(void *p_command)
 {
 	uint32_t result;
 
-	result = (
-		get_ofile()->header_64 ?
-		((struct segment_command_64 *)p_command)->nsects
-							:
-		((struct segment_command *)p_command)->nsects
-	);
+	is_64bits() ? (result = ((struct segment_command_64 *)p_command)->nsects)
+				: (result = ((struct segment_command *)p_command)->nsects);
 	return (result);
 }
 
-static void get_next_section(
-	void **section_64,
-	void **section
-)
+static e_ret get_next_section(void **section)
 {
-	get_ofile()->header_64 ?
-	(void)(*section_64 = *section_64 + sizeof(struct section_64))
-						:
-	(void)(*section = *section + sizeof(struct section));
+	is_64bits() ? (*section = *section + sizeof(struct section_64))
+				: (*section = *section + sizeof(struct section));
+	return (no_overflow_no_goback(*section));
 }
 
-e_ret add_link_section_list(t_ofile *ofile, void *p_command)
+e_ret add_link_section_list(t_ofile *ofile, void *start)
 {
-	void *section_64;
 	void *section;
 	t_list *new;
 	uint32_t i;
+	uint32_t nsects;
 
 	i = 0;
-	setup_start_section(p_command, (void **)&section_64, &section);
-	while (i < get_nsects(p_command))
+	nsects = get_nsects(start);
+	if (setup_start_section(start, &section))
+		return (KO);
+	while (i < nsects)
 	{
-		if (NULL == (new = ft_lstnew(section_64, 0)))
+		if (NULL == (new = ft_lstnew(section, 0)))
 			return (KO);
-		new->content = (ofile->header_64 ? (void *)section_64 : (void *)section);
+		new->content = section;
 		ft_lstadd(&ofile->sections, new);
-		get_next_section(&section_64, &section);
+		if (get_next_section(&section))
+			return (KO);
 		i++;
 	}
 	return (OK);
