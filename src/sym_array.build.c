@@ -16,22 +16,26 @@
 
 e_ret set_string_table(t_ofile *ofile)
 {
-	ofile->string_table = ofile->start
-						  + ((struct symtab_command *)ofile->symtab_command)->stroff;
-	return (no_overflow_no_goback(ofile->string_table) ? KO : OK);
+	ofile->string_table =
+		ofile->start
+		+ ((struct symtab_command *)ofile->symtab_command)->stroff;
+	return (no_overflow_no_goback(ofile->string_table));
 }
 
-void fill_array_element(t_ofile *ofile, uint32_t symoff, int i)
+static e_ret fill_array_element(t_ofile *ofile, uint32_t symoff, int i)
 {
 	void *nlist;
-	uint32_t nlist_size;
 	void *name_ptr;
+	uint32_t nlist_size;
 
-	nlist_size = is_64bits() ? sizeof(struct nlist_64) : sizeof(struct nlist);
+	nlist_size = is_64bits() ? sizeof(struct nlist_64)
+							 : sizeof(struct nlist);
 	nlist = ofile->ptr + symoff;
 	name_ptr = nlist + (i * nlist_size);
-	no_overflow_no_goback(name_ptr);
+	if (no_overflow_no_goback(name_ptr))
+		return (KO);
 	ofile->symbols[i] = name_ptr;
+	return (OK);
 }
 
 int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command)
@@ -45,7 +49,8 @@ int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command)
 	i = 0;
 	while (i < symtab_command->nsyms)
 	{
-		fill_array_element(ofile, symtab_command->symoff, i);
+		if (fill_array_element(ofile, symtab_command->symoff, i))
+			return (KO);
 		i++;
 	}
 	if (!get_options()->p_no_sort)
