@@ -134,6 +134,7 @@ int nm_exit(int error);
 uint32_t swapif_u32(uint32_t uint_32);
 uint64_t swapif64(uint64_t uint_64);
 e_ret no_overflow(void *ptr);
+void ft_putstr_lim(char *str);
 
 // debug
 void print_sym(t_ofile *ofile, struct nlist_64 *symbol);

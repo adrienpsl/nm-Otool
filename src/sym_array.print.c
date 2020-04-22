@@ -25,7 +25,7 @@ print_local(struct nlist_64 *symbol, char *symbol_name, char type)
 			symbol->n_desc,
 			get_debug_str(symbol->n_type));
 	ft_printf(" %c", type);
-	ft_printf(" %s\n", symbol_name);
+	ft_putstr_lim(symbol_name);
 }
 
 void print_sym(t_ofile *ofile, struct nlist_64 *symbol)
@@ -33,10 +33,11 @@ void print_sym(t_ofile *ofile, struct nlist_64 *symbol)
 	char *symbol_name;
 	char type;
 
+	// with the name I take the last element?
 	symbol_name = get_name(symbol);
 	type = get_symbol_type(ofile->sections, symbol);
 	if (get_options()->u_only_undef && type == 'U')
-		ft_printf(" %s\n", symbol_name);
+		ft_putstr_lim(symbol_name);
 	else if (type != 'U')
 		print_local(symbol, symbol_name, type);
 	else
