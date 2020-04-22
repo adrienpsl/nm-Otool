@@ -12,16 +12,14 @@
 
 #include "nm_otool.h"
 
-static e_ret setup_lc_start(void **ptr)
+static e_ret setup_lc_start(void **p_start)
 {
 	uint32_t size;
-	void *start;
 
 	size = is_64bits() ? sizeof(struct mach_header_64)
 					   : sizeof(struct mach_header);
-	start = get_ofile()->ptr + size;
-	*ptr = start;
-	return (no_overflow_no_goback(start));
+	*p_start  = get_ofile()->ptr + size;
+	return (no_overflow_no_goback(*p_start));
 }
 
 static uint32_t get_ncmds(void *ptr)
@@ -45,16 +43,10 @@ static bool is_lc_segment(struct load_command *lc)
 	return (result);
 }
 
-static uint8_t next_command(void **p_lc)
+static e_ret next_command(void **p_lc)
 {
-	size_t cmd_size;
-	t_load_command *next;
-
-	next = *p_lc;
-	cmd_size = swapif_u32(next->cmdsize);
-	next = (void *)next + cmd_size;
-	*p_lc = next;
-	return (no_overflow_no_goback(next));
+	*p_lc = *p_lc + swapif_u32(((t_load_command*)(*p_lc))->cmdsize);
+	return (no_overflow_no_goback(*p_lc));
 }
 
 e_ret build_section_list(t_ofile *ofile)
@@ -74,7 +66,7 @@ e_ret build_section_list(t_ofile *ofile)
 			return (KO);
 		if (swapif_u32(((t_load_command *)lc)->cmd) == LC_SYMTAB)
 			ofile->symtab_command = lc;
-		if (KO == next_command(&lc))
+		if (KO == next_command((void *)&lc))
 			return (KO);
 		i++;
 	}
