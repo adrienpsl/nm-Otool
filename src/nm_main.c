@@ -33,11 +33,15 @@ int main(int ac, char **av)
 
 	no = get_no();
 	i = option_parser(av, ac);
-	if (KO == create_mmap(av[i], no))
-		return (nm_exit(1));
-	if (true == is_archive(no, no->mmap_start))
-		handle_archive(no);
-	else
-		handle_ofile(get_ofile(), no->mmap_start, no->mmap_size);
+	while (i < ac)
+	{
+		if (KO == create_mmap(av[i], no))
+			return (nm_exit(1));
+		if (true == is_archive(no, no->mmap_start))
+			handle_archive(no);
+		else
+			handle_ofile(get_ofile(), no->mmap_start, no->mmap_size);
+	    i++;
+	}
 	nm_exit(0);
 }
