@@ -10,32 +10,36 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <nm_otool.h>
+#include "nm_otool.h"
 
-// open file and display error if needed
-e_ret create_mmap(char *path, t_no *no)
+void fill_ofile(void *start, size_t size, t_ofile *ofile)
 {
-	int fd;
-	struct stat buf;
-
-	if (0 > (fd = open(path, O_RDONLY)))
-	{
-		ft_dprintf(ERROR_FD, NM_NAME": fd open error\n");
-		return (KO);
-	}
-	if (0 > fstat(fd, &buf))
-	{
-		ft_dprintf(ERROR_FD, NM_NAME": fstats < 0\n");
-		return (KO);
-	}
-	if (MAP_FAILED ==
-		(no->mmap_start = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
-	{
-		ft_dprintf(ERROR_FD, NM_NAME": mmap failed\n");
-		return (KO);
-	}
-	no->mmap_size = buf.st_size;
-	no->file_name = path;
-	return (OK);
+	ft_bzero(ofile, sizeof(t_ofile));
+	ofile->start = start;
+	ofile->end = start + size;
+	ofile->ptr = start;
 }
 
+// get information from no and add that to the function file
+e_ret handle_ofile(void *start, size_t size)
+{
+	t_ofile *ofile;
+
+	// there is no free of the element.
+
+	ofile = get_ofile();
+	fill_ofile(start, size, ofile);
+	if (parse_magic_number(ofile))
+		return (KO);
+	if (ofile->is_fat
+		&& KO == handle_fat_binaries(ofile))
+		return (KO);
+	if (build_section_list(ofile))
+		return (KO);
+	if (!ofile->symtab_command)
+		return (OK);
+	if (build_sym_array(ofile, ofile->symtab_command))
+		return (KO);
+	print_sym_array(ofile);
+	return (OK);
+}

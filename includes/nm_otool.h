@@ -31,6 +31,7 @@
 #include <ar.h>
 
 # define NM_NAME "nm"
+# define ERROR_FD 1
 # define ARCH
 typedef enum
 {
@@ -93,13 +94,17 @@ char get_symbol_type(t_list *sections, struct nlist_64 *sym);
 int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command);
 
 
-
 // my type
 typedef struct ar_hdr t_ar_hdr;
 typedef struct load_command t_load_command;
 typedef struct fat_arch t_fat_arch;
 typedef struct fat_header t_fat_header;
-// print
+
+// archive
+e_ret handle_archive(t_no *no);
+
+// binary
+e_ret handle_ofile(void *start, size_t size);
 
 
 // build
@@ -120,7 +125,7 @@ void bubble_sort_symbol_array(void **current);
 
 // test func
 bool is_64bits(void);
-e_ret is_overflow(void *ptr, size_t next);
+e_ret no_overflow_no_goback(void *ptr);
 
 //
 int nm_exit(int error);
@@ -128,6 +133,7 @@ int nm_exit(int error);
 // utils
 uint32_t swapif_u32(uint32_t uint_32);
 uint64_t swapif64(uint64_t uint_64);
+e_ret no_overflow(void *ptr);
 
 // debug
 void print_sym(t_ofile *ofile, struct nlist_64 *symbol);

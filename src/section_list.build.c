@@ -21,7 +21,7 @@ static e_ret setup_lc_start(void **ptr)
 					   : sizeof(struct mach_header);
 	start = get_ofile()->ptr + size;
 	*ptr = start;
-	return (is_overflow(start, 0));
+	return (no_overflow_no_goback(start));
 }
 
 static uint32_t get_ncmds(void *ptr)
@@ -54,7 +54,7 @@ static uint8_t next_command(void **p_lc)
 	cmd_size = swapif_u32(next->cmdsize);
 	next = (void *)next + cmd_size;
 	*p_lc = next;
-	return (is_overflow(next, 0));
+	return (no_overflow_no_goback(next));
 }
 
 e_ret build_section_list(t_ofile *ofile)

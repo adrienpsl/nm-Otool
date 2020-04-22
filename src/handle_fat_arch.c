@@ -45,7 +45,7 @@ e_ret handle_fat_binaries(t_ofile *ofile)
 	i = 0;
 	while (i < arch_nb)
 	{
-		if (true == is_overflow(p_arch, sizeof(t_fat_arch)))
+		if (true == no_overflow(p_arch))
 			return (KO);
 		if (i == 0
 			|| swapif_u32(p_arch->cputype) == 16777223)
@@ -53,7 +53,7 @@ e_ret handle_fat_binaries(t_ofile *ofile)
 		p_arch = (void *)p_arch + sizeof(t_fat_arch);
 		i++;
 	}
-	if (is_overflow(ofile->ptr, 0))
+	if (no_overflow_no_goback(ofile->ptr))
 		return (KO);
 	ofile->start = ofile->ptr;
 	return (parse_magic_number(ofile));

@@ -29,7 +29,9 @@ char get_symbol_section(t_list *sections, struct nlist_64 *current_symbol)
 
 	section_64 = get_link_match_index(sections,
 		current_symbol->n_sect - 1);
-	if (!ft_strcmp(section_64->sectname, SECT_TEXT))
+	if (NULL == section_64)
+		ret = 'S';
+	else if (!ft_strcmp(section_64->sectname, SECT_TEXT))
 		ret = 'T';
 	else if (!ft_strcmp(section_64->sectname, SECT_DATA))
 		ret = 'D';

@@ -30,8 +30,6 @@ void print_op_u(struct nlist_64 *symbol, char *symbol_name, char type)
 {
 	if (!get_options()->a_debugger && type == '-')
 		return;
-	else if (get_options()->u_only_undef && type == 'U')
-		ft_printf(" %s\n", symbol_name);
 	else if (get_options()->mu_only_no_undef && type != 'U')
 		print_local_and_debug(symbol, symbol_name, type);
 	print_local_and_debug(symbol, symbol_name, type);
@@ -44,8 +42,9 @@ void print_sym(t_ofile *ofile, struct nlist_64 *symbol)
 
 	symbol_name = get_name(symbol);
 	type = get_symbol_type(ofile->sections, symbol);
-	if ((is_64bits() ? symbol->n_value : ((struct nlist *)symbol)->n_value)
-		|| type == '-')
+	if (get_options()->u_only_undef && type == 'U')
+		ft_printf(" %s\n", symbol_name);
+	else if (type != 'U')
 		print_op_u(symbol, symbol_name, type);
 	else
 	{
