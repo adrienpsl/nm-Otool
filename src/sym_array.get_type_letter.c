@@ -50,9 +50,6 @@ char get_symbol_type(t_list *sections, struct nlist_64 *sym)
 		return ('-');
 	else if ((N_TYPE & sym->n_type) == N_UNDF)
 	{
-		//		if (sym->name_not_found)
-		//			return 'C';
-		//		else
 		if (sym->n_type & N_EXT)
 			return 'U';
 		else
@@ -64,5 +61,5 @@ char get_symbol_type(t_list *sections, struct nlist_64 *sym)
 		return 'A';
 	else if ((N_TYPE & sym->n_type) == N_INDR)
 		return 'I';
-	return ('1');
+	return ('?');
 }

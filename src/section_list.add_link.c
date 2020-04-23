@@ -16,7 +16,7 @@ static e_ret setup_start_section(void *start, void **p_section)
 {
 	is_64bits() ? (*p_section = start + sizeof(struct segment_command_64))
 				: (*p_section = start + sizeof(struct segment_command));
-	return (no_overflow_no_goback(*p_section));
+	return (no_overflow_no_goback(*p_section, 0));
 }
 
 static uint32_t get_nsects(void *p_command)
@@ -32,7 +32,7 @@ static e_ret get_next_section(void **section)
 {
 	is_64bits() ? (*section = *section + sizeof(struct section_64))
 				: (*section = *section + sizeof(struct section));
-	return (no_overflow_no_goback(*section));
+	return (no_overflow_no_goback(*section, 0));
 }
 
 e_ret add_link_section_list(t_ofile *ofile, void *start)

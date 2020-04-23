@@ -12,13 +12,7 @@
 
 #include "nm_otool.h"
 
-void fill_ofile(void *start, size_t size, t_ofile *ofile)
-{
-	ft_bzero(ofile, sizeof(t_ofile));
-	ofile->start = start;
-	ofile->end = start + size;
-	ofile->ptr = start;
-}
+
 
 void free_ofile(t_ofile *ofile)
 {
@@ -28,18 +22,20 @@ void free_ofile(t_ofile *ofile)
 		free(ofile->symbols);
 }
 
-e_ret handle_ofile(t_ofile *ofile, void *start, size_t size)
+e_ret handle_ofile(t_ofile *ofile)
 {
 	int result;
 
 	result = OK;
-	fill_ofile(start, size, ofile);
-	if (parse_magic_number(ofile)
-		|| (ofile->is_fat && KO == handle_fat_binaries(ofile))
-		|| build_section_list(ofile)
+	if (build_section_list(ofile)
 		|| !ofile->symtab_command
 		|| build_sym_array(ofile, ofile->symtab_command))
+	{
+		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
+				  " %s The file was not recognized as a valid object file\n\n",
+			get_no()->file_name);
 		result = KO;
+	}
 	else
 		print_sym_array(ofile);
 	free_ofile(ofile);

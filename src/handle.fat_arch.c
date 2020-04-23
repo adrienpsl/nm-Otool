@@ -28,12 +28,16 @@ uint32_t get_arch_nb(t_fat_header *fh)
 	return (swapif_u32(fh->nfat_arch));
 }
 
-void save_start_maco(t_ofile *ofile, t_fat_arch *fat_arch)
+int save_start_maco(t_ofile *ofile, t_fat_arch *fat_arch)
 {
 	ofile->ptr = ofile->start + swapif_u32(fat_arch->offset);
+	ofile->start = ofile->ptr;
+	return (1);
 }
 
 // set the first, and loop to find the good for that arch.
+// recall with option to call on all element.
+// sinon des que j'ai le bon processeur, je lance le print :).
 e_ret handle_fat_binaries(t_ofile *ofile)
 {
 	uint32_t arch_nb;
@@ -47,14 +51,19 @@ e_ret handle_fat_binaries(t_ofile *ofile)
 	{
 		if (true == no_overflow(p_arch))
 			return (KO);
-		if (i == 0
-			|| swapif_u32(p_arch->cputype) == 16777223)
-			save_start_maco(ofile, p_arch);
+		// if nm -> print that
+		if (swapif_u32(p_arch->cputype) == 16777223
+			&& save_start_maco(ofile, p_arch))
+			break;
+		// if otools loop on all?
 		p_arch = (void *)p_arch + sizeof(t_fat_arch);
 		i++;
 	}
-	if (no_overflow_no_goback(ofile->ptr))
+	// no element -> loop on the arch and print all
+	// if no ofile start,
+	// print all and get the architecture for both.
+	// that include print the arch type.
+	if (no_overflow_no_goback(ofile->ptr, 0))
 		return (KO);
-	ofile->start = ofile->ptr;
 	return (parse_magic_number(ofile));
 }

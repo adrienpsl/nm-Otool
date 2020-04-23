@@ -1,3 +1,12 @@
+// main
+-> mmap
+  -> archive
+    -> macho
+      -> ofile
+      >> free malloc
+>> free mmap 
+
+
 # video
 
 macoview from sourceforge did not working, use that :

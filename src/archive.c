@@ -28,7 +28,7 @@ e_ret next_ar(void **p_ar, t_ar_hdr *ar_hdr)
 
 	next = (*p_ar) + ft_atoi(ar_hdr->ar_size) + sizeof(t_ar_hdr);
 	*p_ar = next;
-	return (no_overflow_no_goback(next));
+	return (no_overflow_no_goback(next, 0));
 }
 
 e_ret handle_archive(t_no *no)

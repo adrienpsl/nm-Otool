@@ -32,7 +32,7 @@ bool is_64bits(void)
 	return (ofile->header_64);
 }
 
-e_ret no_overflow_no_goback(void *ptr)
+e_ret no_overflow_no_goback(void *ptr, int print)
 {
 	// todo put in static
 	t_no *no;
@@ -41,9 +41,9 @@ e_ret no_overflow_no_goback(void *ptr)
 	no = get_no();
 	result = ptr < get_ofile()->ptr
 			 || ptr > no->mmap_start + no->mmap_size;
-	if (result)
+	if (result && print)
 		ft_printf(
-			"/Library/Developer/CommandLineTools/usr/bin/nm: %s truncated or malformed object (load command 0 extends past end of file)\n\n",
+			"/Library/Developer/CommandLineTools/usr/bin/nm: %s truncated or malformed object\n\n",
 			get_no()->file_name);
 	return (result);
 }
@@ -59,7 +59,7 @@ e_ret no_overflow(void *ptr)
 			 || ptr > no->mmap_start + no->mmap_size;
 	if (result)
 		ft_printf(
-			"/Library/Developer/CommandLineTools/usr/bin/nm: %s truncated or malformed object (load command 0 extends past end of file)\n\n",
+			"/Library/Developer/CommandLineTools/usr/bin/nm: %s truncated or malformed object\n\n",
 			get_no()->file_name);
 	return (result);
 }

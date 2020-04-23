@@ -54,7 +54,7 @@ bool is_in(const uint32_t *test, uint32_t magic)
 	return (false);
 }
 
-int is_valid_magic(t_ofile *ofile, uint32_t magic)
+int is_valid_magic(uint32_t magic)
 {
 	bool is;
 
@@ -62,16 +62,8 @@ int is_valid_magic(t_ofile *ofile, uint32_t magic)
 		 || is_in(g_cigam, magic)
 		 || is_in(g_fat, magic)
 		 || is_in(g_32bits, magic);
-	(void)ofile;
 	if (is == false)
-	{
-		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
-				  " %s The file was not recognized as a valid object file\n\n",
-			// todo rename here
-			get_no()->file_name);
-//		"bite");
 		return (KO);
-	}
 	return (OK);
 }
 
@@ -87,14 +79,11 @@ void parse_magic_maco(t_ofile *ofile, uint32_t magic)
 		ofile->is_fat = true;
 }
 
-e_ret parse_magic_number(t_ofile *ofile)
+e_ret parse_magic_number(t_ofile *ofile, const uint32_t *magic)
 {
-	uint32_t magic;
-
-	magic = *(uint32_t *)ofile->ptr;
-	if (is_valid_magic(ofile, magic))
+	if (is_valid_magic(*magic))
 		return (KO);
-	parse_magic_maco(ofile, magic);
+	parse_magic_maco(ofile, *magic);
 	return (OK);
 }
 

@@ -19,7 +19,7 @@ static e_ret setup_lc_start(void **p_start)
 	size = is_64bits() ? sizeof(struct mach_header_64)
 					   : sizeof(struct mach_header);
 	*p_start  = get_ofile()->ptr + size;
-	return (no_overflow_no_goback(*p_start));
+	return (no_overflow_no_goback(*p_start, 0));
 }
 
 static uint32_t get_ncmds(void *ptr)
@@ -46,7 +46,7 @@ static bool is_lc_segment(struct load_command *lc)
 static e_ret next_command(void **p_lc)
 {
 	*p_lc = *p_lc + swapif_u32(((t_load_command*)(*p_lc))->cmdsize);
-	return (no_overflow_no_goback(*p_lc));
+	return (no_overflow_no_goback(*p_lc, 0));
 }
 
 e_ret build_section_list(t_ofile *ofile)

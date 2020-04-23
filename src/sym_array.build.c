@@ -19,7 +19,7 @@ e_ret set_string_table(t_ofile *ofile)
 	ofile->string_table =
 		ofile->start
 		+ ((struct symtab_command *)ofile->symtab_command)->stroff;
-	return (no_overflow_no_goback(ofile->string_table));
+	return (no_overflow_no_goback(ofile->string_table, 0));
 }
 
 static e_ret fill_array_element(t_ofile *ofile, uint32_t symoff, int i)
@@ -32,7 +32,7 @@ static e_ret fill_array_element(t_ofile *ofile, uint32_t symoff, int i)
 							 : sizeof(struct nlist);
 	nlist = ofile->ptr + symoff;
 	name_ptr = nlist + (i * nlist_size);
-	if (no_overflow_no_goback(name_ptr))
+	if (no_overflow_no_goback(name_ptr, 0))
 		return (KO);
 	ofile->symbols[i] = name_ptr;
 	return (OK);

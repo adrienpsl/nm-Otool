@@ -26,6 +26,29 @@ bool is_archive(t_no *no, void *ptr)
 	return (false);
 }
 
+void fill_ofile(void *start, size_t size, t_ofile *ofile)
+{
+	ft_bzero(ofile, sizeof(t_ofile));
+	ofile->start = start;
+	ofile->end = start + size;
+	ofile->ptr = start;
+}
+
+// parse magic
+e_ret handle_header(t_no *no, void *start)
+{
+	t_ofile *ofile;
+
+	ofile = get_ofile();
+	fill_ofile(start, no->mmap_size, ofile);
+	if (KO == parse_magic_number(ofile, start))
+		return (KO);
+	if (ofile->is_fat)
+		return (handle_fat_binaries(ofile));
+	else
+		return (handle_ofile(ofile));
+}
+
 int main(int ac, char **av)
 {
 	int i;
@@ -40,8 +63,8 @@ int main(int ac, char **av)
 		if (true == is_archive(no, no->mmap_start))
 			handle_archive(no);
 		else
-			handle_ofile(get_ofile(), no->mmap_start, no->mmap_size);
-	    i++;
+			handle_ofile(get_ofile());
+		i++;
 	}
 	nm_exit(0);
 }

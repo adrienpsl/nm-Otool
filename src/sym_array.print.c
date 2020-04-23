@@ -19,12 +19,12 @@ print_local(struct nlist_64 *symbol, char *symbol_name, char type)
 		return;
 	is_64bits() ? ft_printf("%016llx", symbol->n_value)
 				: ft_printf("%08x", symbol->n_value);
+	ft_printf(" %c", type);
 	if (type == '-' && get_options()->a_debugger)
 		ft_printf(" %02d" " %04d" " %5s",
 			symbol->n_sect,
 			symbol->n_desc,
 			get_debug_str(symbol->n_type));
-	ft_printf(" %c", type);
 	ft_putstr_lim(symbol_name);
 }
 
@@ -42,7 +42,7 @@ void print_sym(t_ofile *ofile, struct nlist_64 *symbol)
 		return (print_local(symbol, symbol_name, type));
 	is_64bits() ? ft_printf("%18c %s", type, symbol_name)
 				: ft_printf("%10c %s", type, symbol_name);
-	if(type == 'I')
+	if (type == 'I')
 		ft_printf(" (indirect for %s)", symbol_name);
 	ft_putchar('\n');
 }

@@ -84,7 +84,7 @@ typedef struct s_stabname
 } t_stabname;
 
 // parse magic
-e_ret parse_magic_number(t_ofile *ofile);
+e_ret parse_magic_number(t_ofile *ofile, const uint32_t *magic);
 
 // fat header
 e_ret handle_fat_binaries(t_ofile *ofile);
@@ -105,7 +105,7 @@ typedef struct fat_header t_fat_header;
 e_ret handle_archive(t_no *no);
 
 // binary
-e_ret handle_ofile(t_ofile *ofile, void *start, size_t size);
+e_ret handle_ofile(t_ofile *ofile);
 
 
 // build
@@ -126,7 +126,7 @@ void bubble_sort_symbol_array(void **current);
 
 // test func
 bool is_64bits(void);
-e_ret no_overflow_no_goback(void *ptr);
+e_ret no_overflow_no_goback(void *ptr, int print);
 
 //
 int nm_exit(int error);

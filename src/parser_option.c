@@ -24,7 +24,6 @@ char *nm_usage[] = {
 	"-r" "\t" "Sort in reverse order.",
 	"-u" "\t" "Display only undefined symbols.",
 	"-U" "\t" "Don't display undefined symbols.",
-	"-m" "\t" "Display all data.",
 	"-x" "\t" "Display  the symbol table entry's fields in hexadecimal,"
 	" along with the name as a string",
 	"-j" "\t" "Just display the symbol names (no value or type).",
