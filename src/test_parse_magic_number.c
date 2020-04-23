@@ -67,23 +67,23 @@ int is_valid_magic(uint32_t magic)
 	return (OK);
 }
 
-void parse_magic_maco(t_ofile *ofile, uint32_t magic)
+void parse_magic_maco(t_header_type *hp, uint32_t magic)
 {
 	if (is_in(g_64bits, magic))
-		ofile->header_64 = true;
+		hp->header_64 = true;
 	if (is_in(g_cigam, magic))
-		ofile->is_big = true;
+		hp->is_big = true;
 	else
-		ofile->is_big = false;
+		hp->is_big = false;
 	if (is_in(g_fat, magic))
-		ofile->is_fat = true;
+		hp->is_fat = true;
 }
 
-e_ret parse_magic_number(t_ofile *ofile, const uint32_t *magic)
+e_ret parse_magic_number(t_header_type *ht, const uint32_t *magic)
 {
 	if (is_valid_magic(*magic))
 		return (KO);
-	parse_magic_maco(ofile, *magic);
+	parse_magic_maco(ht, *magic);
 	return (OK);
 }
 

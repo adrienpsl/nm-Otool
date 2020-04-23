@@ -14,13 +14,19 @@
 
 uint32_t swapif_u32(uint32_t uint_32)
 {
-	return (get_ofile()->is_big ? ft_bswap_32(uint_32)
+	return (get_ofile()->ht.is_big ? ft_bswap_32(uint_32)
+								: uint_32);
+}
+
+uint32_t swapby_u32(uint32_t uint_32, t_header_type *ht)
+{
+	return (ht->is_big ? ft_bswap_32(uint_32)
 								: uint_32);
 }
 
 uint64_t swapif64(uint64_t uint_64)
 {
-	return (get_ofile()->is_big ? ft_bswap_64(uint_64)
+	return (get_ofile()->ht.is_big ? ft_bswap_64(uint_64)
 								: uint_64);
 }
 
@@ -29,7 +35,7 @@ bool is_64bits(void)
 	t_ofile *ofile;
 
 	ofile = get_ofile();
-	return (ofile->header_64);
+	return (ofile->ht.header_64);
 }
 
 e_ret no_overflow_no_goback(void *ptr, int print)

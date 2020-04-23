@@ -55,7 +55,15 @@ typedef struct s_options
 	u_int16_t padding: 7;
 } t_options;
 
-typedef struct s_binary
+typedef struct		s_header_type
+{
+	bool is_fat;
+	bool is_big;
+	bool header_64;
+} 					t_header_type;
+
+
+typedef struct s_ofile
 {
 	void *ptr;
 	void *start;
@@ -64,9 +72,7 @@ typedef struct s_binary
 	t_list *sections;
 	void *symtab_command;
 	void *string_table;
-	bool is_fat;
-	bool is_big;
-	bool header_64;
+	t_header_type ht;
 } t_ofile;
 
 typedef struct s_no
@@ -84,16 +90,18 @@ typedef struct s_stabname
 } t_stabname;
 
 // parse magic
-e_ret parse_magic_number(t_ofile *ofile, const uint32_t *magic);
+e_ret parse_magic_number(t_header_type *ht, const uint32_t *magic);
 
+uint32_t swapby_u32(uint32_t uint_32, t_header_type *ht);
 // fat header
-e_ret handle_fat_binaries(t_ofile *ofile);
+e_ret handle_fat_binaries(void *start, int print_all);
 
 e_ret create_mmap(char *path, t_no *no);
 e_ret build_section_list(t_ofile *ofile);
 char get_symbol_type(t_list *sections, struct nlist_64 *sym);
 int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command);
 
+e_ret handle_maco(void *start, size_t size);
 
 // my type
 typedef struct ar_hdr t_ar_hdr;

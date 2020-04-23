@@ -12,45 +12,26 @@
 
 #include "nm_otool.h"
 
-int ar_header_size(void *ptr, char *ar_name)
+void fill_ofile(void *start, size_t size, t_ofile *ofile)
 {
-	int size;
-
-	size = 0;
-	if (!ft_strncmp(ptr, AR_EFMT1, ft_strlen(AR_EFMT1)))
-		size = ft_atoi(ar_name + ft_strlen(AR_EFMT1));
-	return (size);
+	ft_bzero(ofile, sizeof(t_ofile));
+	ofile->start = start;
+	ofile->end = start + size;
+	ofile->ptr = start;
 }
 
-e_ret next_ar(void **p_ar, t_ar_hdr *ar_hdr)
+// mac o not share same option that the file
+e_ret handle_maco(void *start, size_t size)
 {
-	void *next;
+	t_ofile *ofile;
 
-	next = (*p_ar) + ft_atoi(ar_hdr->ar_size) + sizeof(t_ar_hdr);
-	*p_ar = next;
-	return (no_overflow_no_goback(next, 0));
-}
+	ofile = get_ofile();
 
-e_ret handle_archive(t_no *no)
-{
-	t_ar_hdr *ar_hdr;
-	void *ptr;
-	int name_size;
-
-	ptr = no->mmap_start + SARMAG;
-	if (next_ar(&ptr, ptr))
+	fill_ofile(start, size, ofile);
+	if (KO == parse_magic_number(&ofile->ht, start))
 		return (KO);
-	while (ptr < no->mmap_start + no->mmap_size)
-	{
-		ar_hdr = ptr;
-		name_size = ar_header_size(ptr, ar_hdr->ar_name);
-		ft_printf("\n%s(%s):\n", no->file_name, ptr + sizeof(t_ar_hdr));
-
-//		handle_ofile(get_ofile(), ptr + sizeof(t_ar_hdr) + name_size,
-//			ft_atoi(ar_hdr->ar_size)
-//		);
-		if (next_ar(&ptr, ptr))
-			return (KO);
-	}
-	return (OK);
+	// parse magic informaition go into the mmap option,
+	if (ofile->ht.is_fat)
+		return (handle_fat_binaries(ofile, 0));
+	return (handle_ofile(ofile));
 }
