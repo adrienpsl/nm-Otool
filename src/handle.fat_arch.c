@@ -28,43 +28,41 @@ uint32_t get_arch_nb(t_fat_header *fh)
 	return (swapif_u32(fh->nfat_arch));
 }
 
-int save_start_maco(t_ofile *ofile, t_fat_arch *fat_arch)
+e_ret launch_macho(void *start, t_fat_arch *p_arch, t_header_type *ht)
 {
-	ofile->ptr = ofile->start + swapif_u32(fat_arch->offset);
-	ofile->start = ofile->ptr;
-	return (1);
+	int result;
+	void *start_maco;
+
+	start_maco = start + swapby_u32(p_arch->offset, ht);
+	if (true == no_overflow(start_maco))
+		return (KO);
+	result = handle_maco(start_maco, swapby_u32(p_arch->size, ht));
+	return (result);
 }
 
-// set the first, and loop to find the good for that arch.
-// recall with option to call on all element.
-// sinon des que j'ai le bon processeur, je lance le print :).
 e_ret handle_fat_binaries(void *start, int print_all)
 {
-	uint32_t arch_nb;
 	uint32_t i;
 	t_fat_arch *p_arch;
 	t_header_type ht;
+	int result;
 
 	ft_bzero(&ht, sizeof(t_header_type));
-	if (KO == parse_magic_number(&ht, start))
-		return (KO);
-	arch_nb = get_arch_nb(start);
+	parse_magic_number(&ht, start);
 	p_arch = start + sizeof(struct fat_header);
 	i = 0;
-	while (i < arch_nb)
+	while (i < get_arch_nb(start))
 	{
 		if (true == no_overflow(p_arch))
 			return (KO);
-		if (print_all || swapby_u32(p_arch->cputype, &ht) == 16777223)
-			handle_maco(start + swapby_u32(p_arch->offset, &ht),
-				swapby_u32(p_arch->size, &ht));
-		if (swapby_u32(p_arch->cputype, &ht) == 16777223)
-			break;
+		if (print_all) // print somme shit in function
+			result = launch_macho(start, p_arch, &ht);
+		else if (swapby_u32(p_arch->cputype, &ht) == 16777223)
+			return (launch_macho(start, p_arch, &ht));
+		if (result == KO)
+			return (result);
 		p_arch = (void *)p_arch + sizeof(t_fat_arch);
 		i++;
 	}
-	// recall himself if no corresponding value
-	//	if (no_overflow_no_goback(ofile->ptr, 0))
-	//		return (KO);
-	return (OK);
+	return (print_all ? OK : handle_fat_binaries(start, 1));
 }

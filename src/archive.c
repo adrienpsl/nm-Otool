@@ -45,10 +45,8 @@ e_ret handle_archive(t_no *no)
 		ar_hdr = ptr;
 		name_size = ar_header_size(ptr, ar_hdr->ar_name);
 		ft_printf("\n%s(%s):\n", no->file_name, ptr + sizeof(t_ar_hdr));
-
-//		handle_ofile(get_ofile(), ptr + sizeof(t_ar_hdr) + name_size,
-//			ft_atoi(ar_hdr->ar_size)
-//		);
+		handle_maco(ptr + sizeof(t_ar_hdr) + name_size,
+			ft_atoi(ar_hdr->ar_size));
 		if (next_ar(&ptr, ptr))
 			return (KO);
 	}

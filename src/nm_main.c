@@ -40,7 +40,7 @@ int main(int ac, char **av)
 		if (true == is_archive(no, no->mmap_start))
 			handle_archive(no);
 		else
-			handle_ofile(get_ofile());
+			handle_maco(no->mmap_start, no->mmap_size);
 		i++;
 	}
 	nm_exit(0);

@@ -26,12 +26,10 @@ e_ret handle_maco(void *start, size_t size)
 	t_ofile *ofile;
 
 	ofile = get_ofile();
-
 	fill_ofile(start, size, ofile);
 	if (KO == parse_magic_number(&ofile->ht, start))
 		return (KO);
-	// parse magic informaition go into the mmap option,
 	if (ofile->ht.is_fat)
-		return (handle_fat_binaries(ofile, 0));
+		return (handle_fat_binaries(start, 0));
 	return (handle_ofile(ofile));
 }
