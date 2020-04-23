@@ -8,6 +8,7 @@ mkdir test
 
 ## debug option
 for file in /usr/bin/*; do
+  echo "$file"
   nm  "$file" > real_nm 2>&1
 #  nm  "$file" > real_nm 2>&1
   ./cmake-build-debug/nm_otool  "$file" > my_nm 2>&1

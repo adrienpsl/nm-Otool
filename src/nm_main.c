@@ -7,12 +7,8 @@ int nm_exit(int error)
 	no = get_no();
 	if (no->mmap_start)
 		munmap(no->mmap_start, no->mmap_size);
-	//	if (no->symbol_array)
-	//		free(no->symbol_array);
-	//	ft_lstdel(no->section_list, NULL);
-	//	if (error)
-	//		exit(EXIT_FAILURE);
-	(void)error;
+	if (error)
+		ft_dprintf(ERROR_FD, NM_NAME": %s\n", ft_errno(NULL));
 	return (0);
 }
 
@@ -36,7 +32,10 @@ int main(int ac, char **av)
 	while (i < ac)
 	{
 		if (KO == create_mmap(av[i], no))
-			return (nm_exit(1));
+		{
+			i++;
+			continue;
+		}
 		if (true == is_archive(no, no->mmap_start))
 			handle_archive(no);
 		else

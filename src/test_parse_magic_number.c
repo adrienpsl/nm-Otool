@@ -82,7 +82,12 @@ void parse_magic_maco(t_header_type *hp, uint32_t magic)
 e_ret parse_magic_number(t_header_type *ht, const uint32_t *magic)
 {
 	if (is_valid_magic(*magic))
+	{
+		ft_printf(
+			"/Library/Developer/CommandLineTools/usr/bin/nm: %s The file was not recognized as a valid object file\n\n",
+			get_no()->file_name);
 		return (KO);
+	}
 	parse_magic_maco(ht, *magic);
 	return (OK);
 }

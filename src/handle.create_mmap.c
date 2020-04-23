@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <nm_otool.h>
+# include "nm_otool.h"
 
-// open file and display error if needed
 e_ret create_mmap(char *path, t_no *no)
 {
 	int fd;
