@@ -81,6 +81,7 @@ typedef struct s_no
 	size_t mmap_size;
 	char *file_name;
 	bool is_ar;
+	int is_print;
 	int mode;
 } t_no;
 

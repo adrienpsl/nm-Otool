@@ -28,9 +28,14 @@ e_ret otool_print(t_ofile *ofile, void *section)
 						 : (uint64_t)swapif_u32(((t_sec *)section)->offset);
 	//	printf("-------- %llx \n", end);
 
-	uint64_t padding = is_64bits() ? 0x100000000 : 0x1000;
-	start = start - padding;
-	ptr = ofile->start + start;
+	//	uint64_t padding = is_64bits() ? 0x100000000 : 0x1000;
+	//	start = start - padding;
+	ptr = ofile->start + offset;
+//	if (ofile->ht.is_big)
+//		ptr = ptr - 4;
+
+
+
 
 	//	printf("start File %10p \n", ofile->start);
 	//	printf("end File   %10p \n", ofile->end);
@@ -40,18 +45,24 @@ e_ret otool_print(t_ofile *ofile, void *section)
 			  "Contents of (__TEXT,__text) section\n", get_no()->file_name);
 
 	uint64_t y;
-	while (i < end)
-	{
-		y = 0;
-		is_64bits() ? ft_printf("%016llx\t", start + y + i + padding)
-					: ft_printf("%08llx\t\t", start + y + i + padding);
-		while (y < 16 && (i + y) < end)
+	if (!ofile->ht.is_big) {
+		while (i < end)
 		{
-			ft_printf("%02x ", (unsigned char)ptr[y + i]);
-			y++;
+			y = 0;
+			is_64bits() ? ft_printf("%016llx\t", start + y + i)
+						: ft_printf("%08llx\t", start + y + i);
+			while (y < 16 && (i + y) < end)
+			{
+				if (true == no_overflow(ptr + i))
+					return (KO);
+				ft_printf("%02x ", (unsigned char)ptr[y + i]);
+				y++;
+			}
+			ft_printf("\n");
+			i += 16;
 		}
-		ft_printf("\n");
-		i += 16;
+//		ft_printf("\n");
+//		i += 16;
 	}
 	return (OK);
 

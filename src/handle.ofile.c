@@ -24,8 +24,7 @@ e_ret handle_ofile(t_ofile *ofile)
 {
 	int result;
 
-	result = OK;
-	if (build_section_list(ofile)
+	if ((result = build_section_list(ofile))
 		|| get_no()->mode
 		|| !ofile->symtab_command
 		|| build_sym_array(ofile, ofile->symtab_command))
@@ -34,7 +33,12 @@ e_ret handle_ofile(t_ofile *ofile)
 			ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
 					  " %s The file was not recognized as a valid object file\n\n",
 				get_no()->file_name);
-		result = KO;
+		else if (result != OK)
+			ft_printf("/Library/Developer/CommandLineTools/usr/bin/objdump:"
+					  " '%s': truncated or malformed object (load command 0 extends past end of file)\n",
+				get_no()->file_name);
+		else
+			result = OK;
 	}
 	else
 		print_sym_array(ofile);
