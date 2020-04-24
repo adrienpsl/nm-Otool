@@ -58,6 +58,7 @@ mkdir test
 ##
 
 for file in ./break-nm/feed_the_nm/*; do
+  echo "$file"
   otool -t "$file" > real_nm 2>&1
 #  nm  "$file" > real_nm 2>&1
   ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1

@@ -41,8 +41,10 @@ e_ret otool_print(t_ofile *ofile, void *section)
 	//	printf("end File   %10p \n", ofile->end);
 	//	printf("ptr        %10p \n", ptr);
 	//	printf("addr %016llx    \n", start);
-	ft_printf("%s:\n"
-			  "Contents of (__TEXT,__text) section\n", get_no()->file_name);
+	//	printf("offset %016llx    \n", offset);
+	if (!get_no()->is_ar && !get_no()->is_print)
+		ft_printf("%s:\n", get_no()->file_name);
+	ft_printf("Contents of (__TEXT,__text) section\n");
 
 	uint64_t y;
 	if (!ofile->ht.is_big) {

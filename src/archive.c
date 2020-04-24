@@ -40,11 +40,15 @@ e_ret handle_archive(t_no *no)
 	ptr = no->mmap_start + SARMAG;
 	if (next_ar(&ptr, ptr))
 		return (KO);
+	if (no->mode)
+		ft_printf("Archive : %s\n", no->file_name);
 	while (ptr < no->mmap_start + no->mmap_size)
 	{
 		ar_hdr = ptr;
 		name_size = ar_header_size(ptr, ar_hdr->ar_name);
-		ft_printf("\n%s(%s):\n", no->file_name, ptr + sizeof(t_ar_hdr));
+		if (!no->mode)
+			ft_putchar('\n');
+		ft_printf("%s(%s):\n", no->file_name, ptr + sizeof(t_ar_hdr));
 		if (handle_maco(ptr + sizeof(t_ar_hdr) + name_size,
 			ft_atoi(ar_hdr->ar_size), 0))
 			return (KO);
