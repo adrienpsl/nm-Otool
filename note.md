@@ -1,10 +1,7 @@
-// main
--> mmap
-  -> archive
-    -> macho
-      -> ofile
-      >> free malloc
->> free mmap 
+
+
+// parse magic number
+// if error -> print error and out.
 
 
 # video

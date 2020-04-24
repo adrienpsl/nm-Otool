@@ -12,26 +12,46 @@
 
 #include "nm_otool.h"
 
-void print_header(t_no *no)
+typedef struct s_test
 {
-	(void)no;
-//	struct mach_header_64 *mach_header_64;
-//	//	struct mach_header *mach_header;
-//
-//	ft_printf("Mach header\n");
-//	if (no->header_64)
-//	{
-//		mach_header_64 = no->map;
-//		ft_printf("-------------------- 64 bits\n");
-//		ft_printf(" ");
-//		ft_printf("0x%X ", mach_header_64->magic);
-//		ft_printf("  %2d", mach_header_64->cputype);
-//		ft_printf(" %d", mach_header_64->cpusubtype);
-//		ft_printf(" 0x%x", mach_header_64->filetype);
-//		ft_printf(" %u", mach_header_64->ncmds);
-//		ft_printf(" %u", mach_header_64->sizeofcmds);
-//		ft_printf(" 0x%x", mach_header_64->flags);
-//	}
-//	else
-//		ft_printf("-------------------- 32 bits");
+	uint32_t magic;
+	t_ofile ofile;
+} t_test;
+
+#define MAGIC_NUMBER_ARRAY_LIMIT 9
+
+t_test g_test[MAGIC_NUMBER_ARRAY_LIMIT] = {
+	{ MH_MAGIC,     {}},
+	{ MH_MAGIC_64,  { .x64 = true }},
+	{ MH_CIGAM,     { .big_endian = true }},
+	{ MH_CIGAM_64,  { .x64 = true, .big_endian = true }},
+	{ FAT_MAGIC,    { .fat_header = true }},
+	{ FAT_CIGAM,    { .big_endian = true, .fat_header = true }},
+	{ FAT_MAGIC_64, { .x64 = true, .fat_header = true }},
+	{ FAT_CIGAM_64, { .x64 = true, .big_endian = true, .fat_header = true }},
+	{ 0,            { .archive = true }},
+};
+
+bool handle_magic_number(t_ofile *ofile, uint32_t *magic)
+{
+	uint8_t i;
+	static int first = 1;
+
+	if (first)
+	{
+		first = 0;
+		g_test[8].magic = *(uint32_t *)ARMAG;
+	}
+	i = 0;
+	while (i < MAGIC_NUMBER_ARRAY_LIMIT)
+	{
+		if (*magic == g_test[i].magic)
+		{
+			(*ofile) = g_test[i].ofile;
+			return (true);
+		}
+		i++;
+	}
+	return (false);
 }
+

@@ -12,24 +12,18 @@
 
 #include "nm_otool.h"
 
-void fill_ofile(void *start, size_t size, t_ofile *ofile)
+int main(int ac, char **av)
 {
-	ft_bzero(ofile, sizeof(t_ofile));
-	ofile->start = start;
-	ofile->end = start + size;
-	ofile->ptr = start;
-}
+	(void)ac;
+	(void)av;
+	t_ofile ofile;
+	uint32_t archive = *(uint32_t *)ARMAG;
+	(void)archive;
+	bool res;
 
-// mac o not share same option that the file
-e_ret handle_maco(void *start, size_t size, int inside_fat)
-{
-	t_ofile *ofile;
+//	uint32_t magic = FAT_CIGAM_64;
+	res = handle_magic_number(&ofile, &archive);
+	printf("%d \n", res);
 
-	ofile = get_ofile();
-	fill_ofile(start, size, ofile);
-	if (KO == parse_magic_number(&ofile->ht, start))
-		return (KO);
-	if (inside_fat == 0 && ofile->ht.is_fat)
-		return (handle_fat_binaries(start, 0));
-	return (handle_ofile(ofile));
+	return (EXIT_SUCCESS);
 }
