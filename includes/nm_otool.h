@@ -81,6 +81,7 @@ typedef struct s_no
 	size_t mmap_size;
 	char *file_name;
 	bool is_ar;
+	int mode;
 } t_no;
 
 typedef struct s_stabname
@@ -91,6 +92,7 @@ typedef struct s_stabname
 
 // parse magic
 e_ret parse_magic_number(t_header_type *ht, const uint32_t *magic);
+e_ret otool_print(t_ofile *ofile, void *section);
 
 uint32_t swapby_u32(uint32_t uint_32, t_header_type *ht);
 // fat header
@@ -108,6 +110,8 @@ typedef struct ar_hdr t_ar_hdr;
 typedef struct load_command t_load_command;
 typedef struct fat_arch t_fat_arch;
 typedef struct fat_header t_fat_header;
+typedef struct section_64 t_sec_64;
+typedef struct section t_sec;
 
 // archive
 e_ret handle_archive(t_no *no);

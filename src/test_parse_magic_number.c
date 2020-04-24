@@ -83,12 +83,15 @@ e_ret parse_magic_number(t_header_type *ht, const uint32_t *magic)
 {
 	if (is_valid_magic(*magic))
 	{
-		ft_printf(
-			"/Library/Developer/CommandLineTools/usr/bin/nm: %s The file was not recognized as a valid object file\n\n",
-			get_no()->file_name);
+		if (get_no()->mode)
+			ft_printf("%s: is not an object file\n", get_no()->file_name);
+		else
+			ft_printf(
+				"/Library/Developer/CommandLineTools/usr/bin/nm: %s The file was not recognized as a valid object file\n\n",
+				get_no()->file_name);
 		return (KO);
 	}
-//	ft_printf("in magic %x\n", *magic);
+	//	ft_printf("in magic %x\n", *magic);
 	parse_magic_maco(ht, *magic);
 	return (OK);
 }

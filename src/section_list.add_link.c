@@ -46,10 +46,14 @@ e_ret add_link_section_list(t_ofile *ofile, void *start)
 	nsects = get_nsects(start);
 	if (setup_start_section(start, &section))
 		return (KO);
+
 	while (i < nsects)
 	{
 		if (NULL == (new = ft_lstnew(section, 0)))
 			return (KO);
+		if (get_no()->mode &&
+			!ft_strcmp(((struct section *)section)->sectname, SECT_TEXT))
+			return (otool_print(ofile, section));
 		new->content = section;
 		ft_lstadd(&ofile->sections, new);
 		if (get_next_section(&section))

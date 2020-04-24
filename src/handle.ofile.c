@@ -12,8 +12,6 @@
 
 #include "nm_otool.h"
 
-
-
 void free_ofile(t_ofile *ofile)
 {
 	if (ofile->sections)
@@ -28,12 +26,14 @@ e_ret handle_ofile(t_ofile *ofile)
 
 	result = OK;
 	if (build_section_list(ofile)
+		|| get_no()->mode
 		|| !ofile->symtab_command
 		|| build_sym_array(ofile, ofile->symtab_command))
 	{
-		ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
-				  " %s The file was not recognized as a valid object file\n\n",
-			get_no()->file_name);
+		if (get_no()->mode == 0)
+			ft_printf("/Library/Developer/CommandLineTools/usr/bin/nm:"
+					  " %s The file was not recognized as a valid object file\n\n",
+				get_no()->file_name);
 		result = KO;
 	}
 	else
