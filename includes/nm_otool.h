@@ -100,9 +100,15 @@ typedef struct section t_section;
 
 
 bool handle_magic_number(t_ofile *ofile, uint32_t *magic);
+e_ret handle_ofile(t_ofile *ofile, void *start, void *end);
+e_ret handle_archive(t_ofile *ofile);
+e_ret handle_fat_arch(t_ofile *ofile);
+e_ret handle_maco(t_ofile *ofile);
+e_ret dispatch_ofile(t_ofile *ofile, void *start, void *end);
 
 
-
+bool is_overflow(t_ofile *ofile, void *ptr);
+uint32_t swapif_u32(t_ofile *ofile, uint32_t uint);
 
 
 
