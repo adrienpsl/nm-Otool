@@ -25,7 +25,7 @@ static uint32_t get_nsects(void *p_command)
 
 	is_64bits() ? (result = ((struct segment_command_64 *)p_command)->nsects)
 				: (result = ((struct segment_command *)p_command)->nsects);
-	return (result);
+	return (swapif_u32(result));
 }
 
 static e_ret get_next_section(void **section)

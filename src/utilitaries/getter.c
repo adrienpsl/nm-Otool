@@ -38,7 +38,7 @@ char *get_name(void *ptr)
 	char *result;
 
 	result = get_ofile()->string_table +
-			 ((struct nlist *)ptr)->n_un.n_strx;
+			 swapif_u32(((struct nlist *)ptr)->n_un.n_strx);
 	if (no_overflow_no_goback(result, 0))
 		return ("bad string index");
 	return (result ? result : "");

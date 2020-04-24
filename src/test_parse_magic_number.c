@@ -88,6 +88,7 @@ e_ret parse_magic_number(t_header_type *ht, const uint32_t *magic)
 			get_no()->file_name);
 		return (KO);
 	}
+//	ft_printf("in magic %x\n", *magic);
 	parse_magic_maco(ht, *magic);
 	return (OK);
 }

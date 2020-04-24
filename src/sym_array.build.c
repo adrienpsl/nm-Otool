@@ -18,7 +18,7 @@ e_ret set_string_table(t_ofile *ofile)
 {
 	ofile->string_table =
 		ofile->start
-		+ ((struct symtab_command *)ofile->symtab_command)->stroff;
+		+ swapif_u32(((struct symtab_command *)ofile->symtab_command)->stroff);
 	return (no_overflow_no_goback(ofile->string_table, 0));
 }
 
@@ -44,12 +44,12 @@ int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command)
 
 	set_string_table(ofile);
 	if (NULL == (ofile->symbols = ft_memalloc(
-		sizeof(void *) * (symtab_command->nsyms + 1))))
+		sizeof(void *) * (swapif_u32(symtab_command->nsyms) + 1))))
 		return (KO);
 	i = 0;
-	while (i < symtab_command->nsyms)
+	while (i < swapif_u32(symtab_command->nsyms))
 	{
-		if (fill_array_element(ofile, symtab_command->symoff, i))
+		if (fill_array_element(ofile, swapif_u32(symtab_command->symoff), i))
 			return (KO);
 		i++;
 	}
