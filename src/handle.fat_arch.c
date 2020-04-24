@@ -42,8 +42,12 @@ void print_archive_type(t_fat_arch *p_arch, t_header_type *ht)
 		name = "ppc";
 	else
 		name = "X86_64";
-	ft_printf("\n%s (for architecture %s):\n",
-		get_no()->file_name, name);
+	if (!get_no()->is_print)
+		ft_putchar('\n');
+	ft_printf("%s (%sarchitecture %s):\n",
+		get_no()->file_name, !get_no()->mode ? "for " : "", name);
+//	ft_printf("\n%s (for architecture %s):\n",
+//		get_no()->file_name, name);
 }
 
 e_ret handle_fat_binaries(void *start, int print_all)
@@ -57,6 +61,8 @@ e_ret handle_fat_binaries(void *start, int print_all)
 	parse_magic_number(&ht, start);
 	p_arch = start + sizeof(struct fat_header);
 	i = 0;
+	if (print_all)
+		get_no()->is_print = true;
 	while (i < get_arch_nb(start, &ht))
 	{
 		if (true == no_overflow(p_arch))
