@@ -21,7 +21,7 @@ void fill_ofile(void *start, size_t size, t_ofile *ofile)
 }
 
 // mac o not share same option that the file
-e_ret handle_maco(void *start, size_t size)
+e_ret handle_maco(void *start, size_t size, int inside_fat)
 {
 	t_ofile *ofile;
 
@@ -29,7 +29,7 @@ e_ret handle_maco(void *start, size_t size)
 	fill_ofile(start, size, ofile);
 	if (KO == parse_magic_number(&ofile->ht, start))
 		return (KO);
-	if (ofile->ht.is_fat)
+	if (inside_fat == 0 && ofile->ht.is_fat)
 		return (handle_fat_binaries(start, 0));
 	return (handle_ofile(ofile));
 }

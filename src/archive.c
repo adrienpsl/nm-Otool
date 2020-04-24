@@ -46,7 +46,7 @@ e_ret handle_archive(t_no *no)
 		name_size = ar_header_size(ptr, ar_hdr->ar_name);
 		ft_printf("\n%s(%s):\n", no->file_name, ptr + sizeof(t_ar_hdr));
 		if (handle_maco(ptr + sizeof(t_ar_hdr) + name_size,
-			ft_atoi(ar_hdr->ar_size)))
+			ft_atoi(ar_hdr->ar_size), 0))
 			return (KO);
 		if (next_ar(&ptr, ptr))
 			return (KO);

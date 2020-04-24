@@ -101,7 +101,7 @@ e_ret build_section_list(t_ofile *ofile);
 char get_symbol_type(t_list *sections, struct nlist_64 *sym);
 int build_sym_array(t_ofile *ofile, struct symtab_command *symtab_command);
 
-e_ret handle_maco(void *start, size_t size);
+e_ret handle_maco(void *start, size_t size, int inside_fat);
 
 // my type
 typedef struct ar_hdr t_ar_hdr;

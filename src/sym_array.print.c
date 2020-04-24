@@ -17,8 +17,8 @@ print_local(struct nlist_64 *symbol, char *symbol_name, char type)
 {
 	if (!get_options()->a_debugger && type == '-')
 		return;
-	is_64bits() ? ft_printf("%016llx", symbol->n_value)
-				: ft_printf("%08x", symbol->n_value);
+	is_64bits() ? ft_printf("%016llx", swapif64(symbol->n_value))
+				: ft_printf("%08x", swapif_u32(symbol->n_value));
 	ft_printf(" %c", type);
 	if (type == '-' && get_options()->a_debugger)
 		ft_printf(" %02d" " %04d" " %5s",
