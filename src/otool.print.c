@@ -28,7 +28,7 @@ e_ret otool_print(t_ofile *ofile, void *section)
 						 : (uint64_t)swapif_u32(((t_sec *)section)->offset);
 	//	printf("-------- %llx \n", end);
 
-	uint64_t padding = is_64bits() ? 0x100000000 : 0;
+	uint64_t padding = is_64bits() ? 0x100000000 : 0x1000;
 	start = start - padding;
 	ptr = ofile->start + start;
 
@@ -51,8 +51,7 @@ e_ret otool_print(t_ofile *ofile, void *section)
 			y++;
 		}
 		ft_printf("\n");
-		return (OK);
-				   i += 16;
+		i += 16;
 	}
 	return (OK);
 
