@@ -33,7 +33,7 @@ int main(int ac, char **av)
 			continue;
 		}
 		if (true == is_archive(no, no->mmap_start))
-			handle_archive(no);
+			handle_archive(no, no->mmap_start);
 		else
 			handle_maco(no->mmap_start, no->mmap_size, 0);
 		munmap(no->mmap_start, no->mmap_size);

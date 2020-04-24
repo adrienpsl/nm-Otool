@@ -91,6 +91,8 @@ typedef struct s_stabname
 	char *name;
 } t_stabname;
 
+//a
+bool is_archive(t_no *no, void *ptr);
 // parse magic
 e_ret parse_magic_number(t_header_type *ht, const uint32_t *magic);
 e_ret otool_print(t_ofile *ofile, void *section);
@@ -115,7 +117,7 @@ typedef struct section_64 t_sec_64;
 typedef struct section t_sec;
 
 // archive
-e_ret handle_archive(t_no *no);
+e_ret handle_archive(t_no *no, void *ptr);
 
 // binary
 e_ret handle_ofile(t_ofile *ofile);

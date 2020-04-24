@@ -67,6 +67,8 @@ e_ret handle_fat_binaries(void *start, int print_all)
 	{
 		if (true == no_overflow(p_arch))
 			return (KO);
+		if (is_archive(get_no(), start))
+			return (handle_archive(get_no(), start));
 		if (print_all)
 		{
 			print_archive_type(p_arch, &ht);

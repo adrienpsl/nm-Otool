@@ -57,43 +57,43 @@ mkdir test
 #done
 ##
 
-for file in ./break-nm/feed_the_nm/*; do
-  echo "$file"
+#for file in ./break-nm/feed_the_nm/*; do
+#  echo "$file"
+#  otool -t "$file" > real_nm 2>&1
+  nm  "$file" > real_nm 2>&1
+#  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
+
+
+for file in ./break-nm/weird_architecture/*; do
   otool -t "$file" > real_nm 2>&1
 #  nm  "$file" > real_nm 2>&1
   ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
   res=$(diff real_nm my_nm)
-  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")
+  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_architecture\///")
   [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
 done
-#
-#
-#for file in ./break-nm/weird_architecture/*; do
-#  otool -t "$file" > real_nm 2>&1
-##  nm  "$file" > real_nm 2>&1
-#  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
-#  res=$(diff real_nm my_nm)
-#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_architecture\///")
-#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
-#done
-#
-#for file in ./break-nm/weird_archive/*; do
-#  otool -t "$file" > real_nm 2>&1
-##  nm  "$file" > real_nm 2>&1
-#  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
-#  res=$(diff real_nm my_nm)
-#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_archive\///")
-#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
-#done
-#
-#for file in ./break-nm/weird_binaries/*; do
-#  otool -t "$file" > real_nm 2>&1
-##  nm  "$file" > real_nm 2>&1
-#  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
-#  res=$(diff real_nm my_nm)
-#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_binaries\///")
-#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
-#done
+
+for file in ./break-nm/weird_archive/*; do
+  otool -t "$file" > real_nm 2>&1
+#  nm  "$file" > real_nm 2>&1
+  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
+  res=$(diff real_nm my_nm)
+  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_archive\///")
+  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+done
+
+for file in ./break-nm/weird_binaries/*; do
+  otool -t "$file" > real_nm 2>&1
+#  nm  "$file" > real_nm 2>&1
+  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
+  res=$(diff real_nm my_nm)
+  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_binaries\///")
+  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+done
 
 #for file in ./break-nm/corrupted_archive/*; do
 #  otool -t "$file" > real_nm 2>&1

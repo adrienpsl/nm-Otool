@@ -31,13 +31,13 @@ e_ret next_ar(void **p_ar, t_ar_hdr *ar_hdr)
 	return (no_overflow_no_goback(next, 0));
 }
 
-e_ret handle_archive(t_no *no)
+e_ret handle_archive(t_no *no, void *start)
 {
 	t_ar_hdr *ar_hdr;
 	void *ptr;
 	int name_size;
 
-	ptr = no->mmap_start + SARMAG;
+	ptr = start + SARMAG;
 	if (next_ar(&ptr, ptr))
 		return (KO);
 	if (no->mode)
