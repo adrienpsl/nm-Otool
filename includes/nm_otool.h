@@ -66,6 +66,7 @@ typedef struct s_ofile
 	void *start;
 	void *end;
 	void **symbols;
+	uint32_t symbols_size;
 	t_list *sections;
 	struct symtab_command symtab_command;
 	void *string_table;
@@ -133,6 +134,12 @@ bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next);
 // getter
 char *get_name(t_ofile *ofile, void *p_nlist);
 t_nm_options *get_nm_options(void);
+
+// symtab
+void
+bubble_sort_symbol_array(t_ofile *ofile, void **current, uint32_t array_size);
+
+
 
 // debug
 void print_section_list(t_list *list);

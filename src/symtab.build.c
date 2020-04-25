@@ -76,7 +76,8 @@ int build_symtab(t_ofile *ofile)
 			return (KO);
 		i = i + 1;
 	}
-	//	if (!get_nm_options()->p_no_sort)
-	//		bubble_sort_symbol_array(ofile->symbols);
+	ofile->symbols_size = i;
+	if (!get_nm_options()->p_no_sort)
+		bubble_sort_symbol_array(ofile, ofile->symbols, ofile->symbols_size);
 	return (OK);
 }
