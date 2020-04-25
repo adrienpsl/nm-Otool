@@ -14,5 +14,6 @@
 
 e_ret handle_fat_arch(t_ofile *ofile)
 {
+	(void)ofile;
 	return (OK);
 }

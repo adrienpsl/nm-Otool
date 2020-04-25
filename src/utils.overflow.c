@@ -14,5 +14,20 @@
 
 bool is_overflow(t_ofile *ofile, void *ptr)
 {
-	return (!(ptr >= ofile->start && ptr <= ofile->end));
+	bool result;
+
+	result = !(ptr >= ofile->start && ptr <= ofile->end);
+	ft_dprintf(STDERR_FILENO, "The ptr is not in the file\n");
+	return (result);
+}
+
+bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next)
+{
+	bool result;
+
+	result = is_overflow(ofile, next);
+	if (result == true)
+		return (result);
+	result = next > current;
+	return (result);
 }

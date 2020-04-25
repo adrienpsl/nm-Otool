@@ -26,7 +26,7 @@
 e_ret handle_maco(t_ofile *ofile)
 {
 
-	// create sections list
-	//
+	if (KO == build_sections(ofile))
+		return (KO);
 	return (OK);
 }

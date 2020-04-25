@@ -12,39 +12,25 @@
 
 #include "nm_otool.h"
 
-// check if I can go, and if I can go
-static e_ret get_ncmds(t_ofile *ofile, void *ptr, uint32_t *ncmds)
+static void *
+parse_header(t_ofile *ofile, void *start, uint32_t *p_ncmds)
 {
-	uint32_t result;
+	uint32_t ncmds;
 	uint32_t header_size;
 
-	header_size = ofile->x64 ? sizeof(struct mach_header_64)
-							 : sizeof(struct mach_header);
-	if (true == is_overflow(ofile, ptr + header_size))
-		return (KO);
-	result = ofile->x64 ? ((struct mach_header_64 *)ptr)->ncmds
-						: ((struct mach_header *)ptr)->ncmds;
-	*ncmds = swapif_u32(ofile, result);
-	return (OK);
-}
-
-// passe the maco header with the magic number and
-// other shit, verifie que je peux lire dans le ncmds
-static e_ret set_first_lc(t_ofile *ofile, void **p_lc)
-{
-	uint32_t header_size;
-	uint32_t load_command_size;
-	void *new_ptr;
-
-	header_size = ofile->x64 ? sizeof(struct mach_header_64)
-							 : sizeof(struct mach_header);
-	load_command_size = sizeof(struct load_command);
-	new_ptr = ofile->start + header_size;
-	if (true == is_overflow(ofile, new_ptr + load_command_size))
-		return (KO);
-	else
-		*p_lc = new_ptr;
-	return (OK);
+	{
+		header_size = ofile->x64 ? sizeof(struct mach_header_64)
+								 : sizeof(struct mach_header);
+		if (true == is_overflow(ofile, start + header_size))
+			return (NULL);
+	}
+	{
+		ncmds = ofile->x64 ? ((struct mach_header_64 *)start)->ncmds
+						   : ((struct mach_header *)start)->ncmds;
+		*p_ncmds = swapif_u32(ofile, ncmds);
+	}
+	start = start + header_size;
+	return (start);
 }
 
 static bool is_lc_segment(t_ofile *ofile, struct load_command *lc)
@@ -58,51 +44,49 @@ static bool is_lc_segment(t_ofile *ofile, struct load_command *lc)
 	return (result);
 }
 
-static e_ret next_command(t_ofile *ofile, void **p_current_lc)
+static void *
+next_command(t_ofile *ofile, void *c_lc)
 {
-	void *next;
 	uint32_t size;
 
-	size = ((t_load_command *)(*p_current_lc))->cmdsize;
+	size = ((t_load_command *)(c_lc))->cmdsize;
 	size = swapif_u32(ofile, size);
-	next = *p_current_lc + size;
+	c_lc = c_lc + size;
 	if (size == 0)
 	{
 		ft_dprintf(STDERR_FILENO, "load command == 0 ...");
-		return (KO);
+		return (NULL);
 	}
-	else if (true == is_overflow(ofile, next))
+	else if (true == is_overflow(ofile, c_lc))
 	{
 		ft_dprintf(STDERR_FILENO, "overflow load command");
-		return (KO);
+		return (NULL);
 	}
 	else
-	{
-		*p_current_lc = next;
-		return (O);
-	}
+		return (c_lc);
 }
 
 e_ret build_sections(t_ofile *ofile)
 {
-	void *current_lc;
-	uint32_t i;
+	void *c_lc;
 	uint32_t ncmds;
 
-	i = 0;
-	if (KO == get_ncmds(ofile, ofile->start, &ncmds)
-		|| KO == set_first_lc(ofile, &current_lc))
+	if (NULL ==
+		(c_lc = parse_header(ofile, ofile->start, &ncmds)))
 		return (KO);
-	while (i < ncmds)
+	while (ncmds)
 	{
-		if (true == is_lc_segment(ofile, current_lc)
-			&& add_link_section_list(ofile, current_lc))
+		if (true == is_overflow(ofile, c_lc))
 			return (KO);
-		if (swapif_u32(((t_load_command *)current_lc)->cmd) == LC_SYMTAB)
-			ofile->symtab_command = current_lc;
-		if (KO == next_command((void *)&current_lc))
+		if (true == is_lc_segment(ofile, c_lc)
+			&& add_sections(ofile, c_lc))
 			return (KO);
-		i++;
+		//		if (swapif_u32(((t_load_command *)c_lc)->cmd) == LC_SYMTAB)
+		//			ofile->symtab_command = c_lc;
+		if (NULL ==
+			(c_lc = next_command(ofile, c_lc)))
+			return (KO);
+		ncmds = ncmds - 1;
 	}
 	ft_lst_reverse(&ofile->sections);
 	return (OK);

@@ -14,6 +14,7 @@
 
 e_ret handle_archive(t_ofile *ofile)
 {
+	(void)ofile;
 
 	return (OK);
 }

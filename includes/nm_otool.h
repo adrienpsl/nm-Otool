@@ -107,8 +107,14 @@ e_ret handle_maco(t_ofile *ofile);
 e_ret dispatch_ofile(t_ofile *ofile, void *start, void *end);
 
 
+e_ret add_sections(t_ofile *ofile, void *start);
+e_ret build_sections(t_ofile *ofile);
+
+
+
 bool is_overflow(t_ofile *ofile, void *ptr);
 uint32_t swapif_u32(t_ofile *ofile, uint32_t uint);
+bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next);
 
 
 
