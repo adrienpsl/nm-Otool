@@ -17,5 +17,6 @@ e_ret handle_ofile(t_ofile *ofile, void *start, void *end)
 	ofile->start = start;
 	ofile->ptr = start;
 	ofile->end = end;
+	ofile->file_name = get_no()->file_name;
 	return (OK);
 }

@@ -12,9 +12,68 @@
 
 #include "nm_otool.h"
 
-e_ret handle_archive(t_ofile *ofile)
+int ar_header_size(void *ptr, char *ar_name)
 {
-	(void)ofile;
+	int size;
 
+	size = 0;
+	if (!ft_strncmp(ptr, AR_EFMT1, ft_strlen(AR_EFMT1)))
+		size = ft_atoi(ar_name + ft_strlen(AR_EFMT1));
+	return (size);
+}
+
+void *next_ar(void *c_ar)
+{
+	void *next;
+	int32_t size;
+
+	size = ft_atoi(((struct ar_hdr *)c_ar)->ar_size);
+	if (size <= 0)
+	{
+		ft_dprintf(STDERR_FILENO, "archive size <= 0\n");
+		return (NULL);
+	}
+	next = c_ar + size + sizeof(struct ar_hdr);
+	return (next);
+}
+
+static e_ret
+launch_dispatch(t_ofile *arch_option, struct ar_hdr *ar_hdr)
+{
+	int32_t size_name;
+	int32_t ar_size;
+	void *start;
+	void *end;
+	(void)arch_option;
+
+	size_name = ar_header_size(ar_hdr, ar_hdr->ar_name);
+	ar_size = ft_atoi(ar_hdr->ar_size);
+	if (ar_size <= 0)
+		return (KO);
+	start = (void *)ar_hdr + sizeof(struct ar_hdr) + size_name;
+	end = start + ar_size - 0x16;
+	if (true == is_overflow(arch_option, start)
+		|| true == is_overflow(arch_option, end))
+		return (KO);
+	return (dispatch(start, end));
+}
+
+e_ret handle_archive(t_ofile *arch_option, void *start, void *end)
+{
+	(void)arch_option;
+	void *c_ar;
+	int i = 0;
+
+	c_ar = start + SARMAG;
+	c_ar = next_ar(c_ar);
+	while (c_ar < end)
+	{
+		if (true == is_overflow(arch_option, c_ar))
+			return (KO);
+		ft_printf("\n%s(%s):\n", arch_option->file_name, c_ar + sizeof(struct ar_hdr));
+		launch_dispatch(arch_option, c_ar);
+		c_ar = next_ar(c_ar);
+		i = i + 1;
+	}
 	return (OK);
 }

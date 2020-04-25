@@ -70,6 +70,7 @@ typedef struct s_ofile
 	t_list *sections;
 	struct symtab_command symtab_command;
 	void *string_table;
+	char *file_name;
 } t_ofile;
 
 typedef struct s_no
@@ -87,7 +88,6 @@ typedef struct s_stabname
 	char *name;
 } t_stabname;
 
-
 /*
 **	short type
 */
@@ -98,24 +98,17 @@ typedef struct fat_header t_fat_header;
 typedef struct section_64 t_section_64;
 typedef struct section t_section;
 
-
 bool handle_magic_number(t_ofile *ofile, uint32_t *magic);
 e_ret handle_ofile(t_ofile *ofile, void *start, void *end);
-e_ret handle_archive(t_ofile *ofile);
-e_ret handle_fat_arch(t_ofile *fat_option, void *start);
+e_ret handle_archive(t_ofile *ofile, void *start, void *end);
+e_ret handle_fat_arch(t_ofile *fat_option, void *start, bool print_all);
 e_ret handle_maco(t_ofile *ofile);
 e_ret dispatch(void *start, void *end);
 
-
-
 e_ret create_mmap(char *path, t_no *no);
-
-
-
 
 e_ret add_sections(t_ofile *ofile, void *start);
 e_ret build_sections(t_ofile *ofile);
-
 
 int build_symtab(t_ofile *ofile);
 
@@ -130,20 +123,17 @@ uint32_t swapif_u32(t_ofile *ofile, uint32_t uint);
 uint64_t swapif_u64(t_ofile *ofile, uint64_t uint);
 bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next);
 
-
 // getter
 char *get_name(t_ofile *ofile, void *p_nlist);
 t_nm_options *get_nm_options(void);
+t_no *get_no(void);
 
 // symtab
 void
 bubble_sort_symbol_array(t_ofile *ofile, void **current, uint32_t array_size);
 
-
-
 // debug
 void print_section_list(t_list *list);
 void print_sym_name(t_ofile *ofile);
-
 
 #endif

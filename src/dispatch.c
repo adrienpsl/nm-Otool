@@ -23,9 +23,9 @@ e_ret dispatch(void *start, void *end)
 	}
 	handle_ofile(&ofile, start, end);
 	if (ofile.fat_header)
-		return (handle_fat_arch(&ofile, ofile.start));
+		return (handle_fat_arch(&ofile, ofile.start, 0));
 	else if (ofile.archive)
-		return (handle_archive(&ofile));
+		return (handle_archive(&ofile, ofile.start, ofile.end));
 	else
 		return (handle_maco(&ofile));
 }

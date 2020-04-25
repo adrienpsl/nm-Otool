@@ -32,3 +32,11 @@ t_nm_options *get_nm_options(void)
 
 	return (&op);
 }
+
+t_no *get_no(void)
+{
+	static t_no no = {};
+
+	return &no;
+}
+

@@ -12,9 +12,6 @@
 
 #include "nm_otool.h"
 
-// get righ
-
-// search same arch
 static void *
 parse_header(t_ofile *mode, struct fat_header *header, uint32_t *p_nfat_arch)
 {
@@ -53,7 +50,7 @@ launch_dispatch(t_ofile *fat_option, struct fat_arch *fat_arch, void *fat_start)
 	return (OK);
 }
 
-e_ret handle_fat_arch(t_ofile *fat_option, void *start)
+e_ret handle_fat_arch(t_ofile *fat_option, void *start, bool print_all)
 {
 	struct fat_arch *f_arch;
 	uint32_t nfat_arch;
@@ -65,14 +62,14 @@ e_ret handle_fat_arch(t_ofile *fat_option, void *start)
 	{
 		if (true == is_overflow(fat_option, f_arch))
 			return (KO);
-		if (swapif_u32(fat_option, f_arch->cputype) == 16777223)
-		{
+		if (print_all)
 			launch_dispatch(fat_option, f_arch, start);
-			break;
-		}
+		else if (swapif_u32(fat_option, f_arch->cputype) == 16777223)
+			return (launch_dispatch(fat_option, f_arch, start));
 		f_arch = (void *)f_arch + sizeof(struct fat_arch);
 		nfat_arch = nfat_arch - 1;
 	}
-
+	if (!print_all)
+		handle_fat_arch(fat_option, start, 1);
 	return (OK);
 }
