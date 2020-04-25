@@ -29,7 +29,7 @@ e_ret handle_maco(t_ofile *ofile)
 		return (KO);
 	if (KO == build_symtab(ofile))
 		return (KO);
-	print_nm(ofile, NULL);
+	print_nm(ofile, get_nm_options());
 
 
 

@@ -17,7 +17,6 @@ void ft_putstrnl_lim(t_ofile *ofile, char *str)
 	int i;
 
 	i = 0;
-	ft_putchar(' ');
 	while (str[i])
 	{
 		ft_putchar(str[i]);
