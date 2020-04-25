@@ -73,6 +73,9 @@ typedef struct s_ofile
 	char *file_name;
 } t_ofile;
 
+# define NM 0
+# define OTOOL 1
+
 typedef struct s_no
 {
 	void *mmap_start;

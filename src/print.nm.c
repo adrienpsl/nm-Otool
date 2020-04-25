@@ -25,7 +25,7 @@ print_extern(t_ofile *ofile, t_nm_options *options, char *name,
 		return;
 	else if (type == 'U')
 	{
-		ft_printf("%*c ", padding, type, name);
+		ft_printf("%*c ", padding, type);
 		ft_putstrnl_lim(ofile, name);
 	}
 	else if (type == 'I')
@@ -54,7 +54,7 @@ void print_address(t_ofile *ofile, void *nlist)
 	{
 		val32 = ((struct nlist *)nlist)->n_value;
 		val32 = swapif_u32(ofile, val32);
-		ft_printf("%016llx", val32);
+		ft_printf("%08x", val32);
 	}
 }
 

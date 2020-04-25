@@ -51,7 +51,7 @@ launch_dispatch(t_ofile *arch_option, struct ar_hdr *ar_hdr)
 	if (ar_size <= 0)
 		return (KO);
 	start = (void *)ar_hdr + sizeof(struct ar_hdr) + size_name;
-	end = start + ar_size - 0x16;
+	end = start + ar_size - size_name;
 	if (true == is_overflow(arch_option, start)
 		|| true == is_overflow(arch_option, end))
 		return (KO);

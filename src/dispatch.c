@@ -18,7 +18,13 @@ e_ret dispatch(void *start, void *end)
 
 	if (false == handle_magic_number(&ofile, start))
 	{
-		ft_dprintf(STDERR_FILENO, "bad magic number\n");
+		if (get_no()->mode == NM)
+			ft_dprintf(STDERR_FILENO,
+				"/Library/Developer/CommandLineTools/usr/bin/nm: %s "
+				"The file was not recognized as a valid object file\n\n",
+				get_no()->file_name);
+		else
+			ft_dprintf(STDERR_FILENO, "bad magic number\n");
 		return (KO);
 	}
 	handle_ofile(&ofile, start, end);
