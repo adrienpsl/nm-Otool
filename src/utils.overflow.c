@@ -18,7 +18,8 @@ bool is_overflow(t_ofile *ofile, void *ptr)
 
 	result = !(ptr >= ofile->start && ptr <= ofile->end);
 	if (result)
-		ft_dprintf(STDERR_FILENO, "The ptr is not in the file\n");
+		ft_dprintf(STDERR_FILENO, NM_ERROR_START"%s truncated or malformed object (load command 0 extends past end of file)\n\n",
+			ofile->file_name);
 	return (result);
 }
 

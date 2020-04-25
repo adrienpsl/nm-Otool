@@ -59,7 +59,7 @@ next_command(t_ofile *ofile, void *c_lc)
 	}
 	else if (true == is_overflow(ofile, c_lc))
 	{
-		ft_dprintf(STDERR_FILENO, "overflow load command");
+//		ft_dprintf(STDERR_FILENO, "overflow load command");
 		return (NULL);
 	}
 	else

@@ -53,6 +53,8 @@ bubble_sort_symbol_array(t_ofile *ofile, void **current, uint32_t array_size)
 	uint32_t y;
 
 	i = 0;
+	if (0 == array_size)
+		return;
 	while (i < array_size - 1)
 	{
 		y = 0;
