@@ -66,6 +66,17 @@ next_command(t_ofile *ofile, void *c_lc)
 		return (c_lc);
 }
 
+static void
+save_symtab_address(t_ofile *ofile, struct load_command *c_lc)
+{
+	uint32_t cmd;
+
+	cmd = c_lc->cmd;
+	cmd = swapif_u32(ofile, cmd);
+	if (cmd == LC_SYMTAB)
+		ofile->symtab_command = c_lc;
+}
+
 e_ret build_sections(t_ofile *ofile)
 {
 	void *c_lc;
@@ -81,8 +92,7 @@ e_ret build_sections(t_ofile *ofile)
 		if (true == is_lc_segment(ofile, c_lc)
 			&& add_sections(ofile, c_lc))
 			return (KO);
-		//		if (swapif_u32(((t_load_command *)c_lc)->cmd) == LC_SYMTAB)
-		//			ofile->symtab_command = c_lc;
+		save_symtab_address(ofile, c_lc);
 		if (NULL ==
 			(c_lc = next_command(ofile, c_lc)))
 			return (KO);
