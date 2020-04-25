@@ -49,7 +49,7 @@ next_command(t_ofile *ofile, void *c_lc)
 {
 	uint32_t size;
 
-	size = ((t_load_command *)(c_lc))->cmdsize;
+	size = ((struct load_command *)(c_lc))->cmdsize;
 	size = swapif_u32(ofile, size);
 	c_lc = c_lc + size;
 	if (size == 0)
@@ -59,7 +59,7 @@ next_command(t_ofile *ofile, void *c_lc)
 	}
 	else if (true == is_overflow(ofile, c_lc, true))
 	{
-//		ft_dprintf(STDERR_FILENO, "overflow load command");
+		//		ft_dprintf(STDERR_FILENO, "overflow load command");
 		return (NULL);
 	}
 	else

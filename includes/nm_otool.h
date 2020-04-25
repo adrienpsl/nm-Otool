@@ -91,15 +91,9 @@ typedef struct s_stabname
 	char *name;
 } t_stabname;
 
-/*
-**	short type
-*/
-typedef struct ar_hdr t_ar_hdr;
-typedef struct load_command t_load_command;
-typedef struct fat_arch t_fat_arch;
-typedef struct fat_header t_fat_header;
-typedef struct section_64 t_section_64;
-typedef struct section t_section;
+
+int option_parser(char **av, int ac);
+
 
 bool handle_magic_number(t_ofile *ofile, uint32_t *magic);
 e_ret handle_ofile(t_ofile *ofile, void *start, void *end);

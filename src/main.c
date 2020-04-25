@@ -14,14 +14,20 @@
 
 int main(int ac, char **av)
 {
-	t_no *no = get_no();
-	(void)ac;
+	t_no *no;
+	int i;
 
-	if (create_mmap(av[1], no))
-		return (EXIT_FAILURE);
-	if (KO == dispatch(no->mmap_start, no->mmap_start + no->mmap_size))
-		return (EXIT_FAILURE);
+	no = get_no();
+	i = option_parser(av, ac);
+	while (i < ac)
+	{
+		if (create_mmap(av[i], no))
+			continue;
+		dispatch(no->mmap_start, no->mmap_start + no->mmap_size);
+		munmap(no->mmap_start, no->mmap_size);
+		i++;
+	}
+
 	return (EXIT_SUCCESS);
 }
 
-// 14x

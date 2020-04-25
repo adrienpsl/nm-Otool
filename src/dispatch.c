@@ -12,9 +12,18 @@
 
 #include "nm_otool.h"
 
+void free_ofile(t_ofile *ofile)
+{
+	if (ofile->sections)
+		ft_lstdel(ofile->sections, NULL);
+	if (ofile->symbols)
+		free(ofile->symbols);
+}
+
 e_ret dispatch(void *start, void *end)
 {
 	t_ofile ofile;
+	e_ret result;
 
 	if (false == handle_magic_number(&ofile, start))
 	{
@@ -29,9 +38,11 @@ e_ret dispatch(void *start, void *end)
 	}
 	handle_ofile(&ofile, start, end);
 	if (ofile.fat_header)
-		return (handle_fat_arch(&ofile, ofile.start, 0));
+		result = handle_fat_arch(&ofile, ofile.start, 0);
 	else if (ofile.archive)
-		return (handle_archive(&ofile, ofile.start, ofile.end));
+		result = handle_archive(&ofile, ofile.start, ofile.end);
 	else
-		return (handle_maco(&ofile));
+		result = handle_maco(&ofile);
+	free_ofile(&ofile);
+	return (result);
 }
