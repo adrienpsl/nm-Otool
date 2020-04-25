@@ -27,7 +27,7 @@ e_ret handle_maco(t_ofile *ofile)
 {
 	if (KO == build_sections(ofile))
 		return (KO);
-	if(KO == build_symtab(ofile))
+	if (KO == build_symtab(ofile))
 		return (KO);
 	// if nm, break here!
 	//	if (NULL == ofile->symtab_command)
@@ -38,6 +38,6 @@ e_ret handle_maco(t_ofile *ofile)
 	// build the symtab array ?
 	// build the fucking list man!
 
-	print_section_list(ofile->sections);
+	//	print_section_list(ofile->sections);
 	return (OK);
 }

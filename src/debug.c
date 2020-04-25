@@ -27,3 +27,20 @@ void print_section_list(t_list *list)
 {
 	ft_listfunc(list, print_section, NULL);
 }
+
+void print_sym_name(t_ofile *ofile)
+{
+	void **array = ofile->symbols;
+	uint32_t i = 0;
+	struct nlist *nlist;
+	void *str_table = ofile->string_table;
+	char *result;
+
+	while (array[i])
+	{
+		nlist = array[i];
+		result = str_table + swapif_u32(ofile, nlist->n_un.n_strx);
+		printf("%s \n",result);
+		i++;
+	}
+}

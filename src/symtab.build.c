@@ -43,6 +43,11 @@ fill_array_element(t_ofile *ofile, uint32_t symoff, uint32_t i)
 	nlist_el = start_nlist + (i * get_nlist_size(ofile));
 	if (true == is_overflow(ofile, nlist_el))
 		return (KO);
+
+//	char *result;
+//	result = ofile->string_table + swapif_u32(ofile, ((struct nlist*)nlist_el)->n_un.n_strx);
+//	printf("%s \n",result);
+
 	ofile->symbols[i] = nlist_el;
 	return (OK);
 }
@@ -52,7 +57,7 @@ sym_handle_big_endian(t_ofile *ofile, struct symtab_command *sym)
 {
 	sym->nsyms = swapif_u32(ofile, sym->nsyms);
 	sym->stroff = swapif_u32(ofile, sym->stroff);
-	sym->symoff = swapif_u32(ofile, sym->stroff);
+	sym->symoff = swapif_u32(ofile, sym->symoff);
 }
 
 int build_symtab(t_ofile *ofile)

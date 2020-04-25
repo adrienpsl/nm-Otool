@@ -124,6 +124,7 @@ bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next);
 
 // debug
 void print_section_list(t_list *list);
+void print_sym_name(t_ofile *ofile);
 
 
 #endif
