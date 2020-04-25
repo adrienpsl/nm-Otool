@@ -50,6 +50,23 @@ launch_dispatch(t_ofile *fat_option, struct fat_arch *fat_arch, void *fat_start)
 	return (OK);
 }
 
+void print_fat_aim(t_ofile *ofile, struct fat_arch *p_arch, bool print_all)
+{
+	if (!print_all)
+		return;
+	char *name;
+	if (swapif_u32(ofile, p_arch->cputype) == 7)
+		name = "i386";
+	else if (swapif_u32(ofile, p_arch->cputype) == 18)
+		name = "ppc";
+	else
+		name = "(unknown)";
+	if (!get_no()->is_print)
+		ft_putchar('\n');
+	ft_printf("%s (%sarchitecture %s):\n",
+		get_no()->file_name, !get_no()->mode ? "for " : "", name);
+}
+
 e_ret handle_fat_arch(t_ofile *fat_option, void *start, bool print_all)
 {
 	struct fat_arch *f_arch;
@@ -62,6 +79,7 @@ e_ret handle_fat_arch(t_ofile *fat_option, void *start, bool print_all)
 	{
 		if (true == is_overflow(fat_option, f_arch))
 			return (KO);
+		print_fat_aim(fat_option, f_arch, print_all);
 		if (print_all)
 			launch_dispatch(fat_option, f_arch, start);
 		else if (swapif_u32(fat_option, f_arch->cputype) == 16777223)
