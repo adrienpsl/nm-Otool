@@ -23,7 +23,7 @@ e_ret dispatch(void *start, void *end)
 	}
 	handle_ofile(&ofile, start, end);
 	if (ofile.fat_header)
-		return (handle_fat_arch(&ofile));
+		return (handle_fat_arch(&ofile, ofile.start));
 	else if (ofile.archive)
 		return (handle_archive(&ofile));
 	else

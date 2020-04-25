@@ -12,8 +12,67 @@
 
 #include "nm_otool.h"
 
-e_ret handle_fat_arch(t_ofile *ofile)
+// get righ
+
+// search same arch
+static void *
+parse_header(t_ofile *mode, struct fat_header *header, uint32_t *p_nfat_arch)
 {
-	(void)ofile;
+	uint32_t nfat_arch;
+	uint32_t header_size;
+
+	{
+		header_size = sizeof(struct fat_header);
+		if (true == is_overflow(mode, (void *)header + header_size))
+			return (NULL);
+	}
+	{
+		nfat_arch = header->nfat_arch;
+		*p_nfat_arch = swapif_u32(mode, nfat_arch);
+	}
+	return ((void *)header + header_size);
+}
+
+e_ret
+launch_dispatch(t_ofile *fat_option, struct fat_arch *fat_arch, void *fat_start)
+{
+	uint32_t offset;
+	uint32_t size;
+	void *end;
+	void *start;
+
+	offset = swapif_u32(fat_option, fat_arch->offset);
+	size = swapif_u32(fat_option, fat_arch->size);
+	start = fat_start + offset;
+	end = start + size;
+	if (true == is_overflow(fat_option, start)
+		|| is_overflow(fat_option, end))
+		return (KO);
+	else
+		dispatch(start, end);
+	return (OK);
+}
+
+e_ret handle_fat_arch(t_ofile *fat_option, void *start)
+{
+	struct fat_arch *f_arch;
+	uint32_t nfat_arch;
+
+	if (NULL ==
+		(f_arch = parse_header(fat_option, start, &nfat_arch)))
+		return (KO);
+	while (nfat_arch)
+	{
+		if (true == is_overflow(fat_option, f_arch))
+			return (KO);
+		if (swapif_u32(fat_option, f_arch->cputype) == 16777223)
+		{
+			launch_dispatch(fat_option, f_arch, start);
+			break;
+		}
+		f_arch = (void *)f_arch + sizeof(struct fat_arch);
+		nfat_arch = nfat_arch - 1;
+	}
+
 	return (OK);
 }

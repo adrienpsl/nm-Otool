@@ -102,7 +102,7 @@ typedef struct section t_section;
 bool handle_magic_number(t_ofile *ofile, uint32_t *magic);
 e_ret handle_ofile(t_ofile *ofile, void *start, void *end);
 e_ret handle_archive(t_ofile *ofile);
-e_ret handle_fat_arch(t_ofile *ofile);
+e_ret handle_fat_arch(t_ofile *fat_option, void *start);
 e_ret handle_maco(t_ofile *ofile);
 e_ret dispatch(void *start, void *end);
 

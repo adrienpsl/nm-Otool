@@ -12,17 +12,6 @@
 
 #include "nm_otool.h"
 
-// setup start
-
-// get ncmds
-
-// match up function
-
-// next command
-
-
-// Decompose that to be more clear.
-
 e_ret handle_maco(t_ofile *ofile)
 {
 	if (KO == build_sections(ofile))
@@ -30,9 +19,6 @@ e_ret handle_maco(t_ofile *ofile)
 	if (KO == build_symtab(ofile))
 		return (KO);
 	print_nm(ofile, get_nm_options());
-
-
-
 	// if nm, break here!
 	//	if (NULL == ofile->symtab_command)
 	//	{

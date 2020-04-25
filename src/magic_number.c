@@ -37,6 +37,7 @@ bool handle_magic_number(t_ofile *ofile, uint32_t *magic)
 	uint8_t i;
 	static int first = 1;
 
+	// TODO : check if the file is not little that one magic
 	if (first)
 	{
 		first = 0;
