@@ -29,6 +29,10 @@ e_ret handle_maco(t_ofile *ofile)
 		return (KO);
 	if (KO == build_symtab(ofile))
 		return (KO);
+	print_nm(ofile, NULL);
+
+
+
 	// if nm, break here!
 	//	if (NULL == ofile->symtab_command)
 	//	{

@@ -12,35 +12,23 @@
 
 #include "nm_otool.h"
 
-uint16_t swapif_u16(t_ofile *ofile, uint16_t uint)
+char *get_name(t_ofile *ofile, void *p_nlist)
 {
-	if (ofile->big_endian)
-		return (ft_bswap_16(uint));
-	else
-		return (uint);
+	char *name;
+	uint32_t position;
+
+	position = ofile->x64 ? ((struct nlist_64 *)p_nlist)->n_un.n_strx
+						  : ((struct nlist *)p_nlist)->n_un.n_strx;
+	position = swapif_u32(ofile, position);
+	name = ofile->string_table + position;
+	if (is_overflow(ofile, name))
+		return ("bad string index");
+	return (name ? name : "");
 }
 
-//uint16_t swapif_u16(t_ofile *ofile, uint16_t uint)
-//{
-//	if (ofile->big_endian)
-//		return (ft_bswap_16(uint));
-//	else
-//		return (uint);
-//}
-
-
-uint32_t swapif_u32(t_ofile *ofile, uint32_t uint)
+t_nm_options *get_nm_options(void)
 {
-	if (ofile->big_endian)
-		return (ft_bswap_32(uint));
-	else
-		return (uint);
-}
+	static t_nm_options op = {};
 
-uint64_t swapif_u64(t_ofile *ofile, uint64_t uint)
-{
-	if (ofile->big_endian)
-		return (ft_bswap_64(uint));
-	else
-		return (uint);
+	return (&op);
 }

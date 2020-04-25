@@ -12,35 +12,18 @@
 
 #include "nm_otool.h"
 
-uint16_t swapif_u16(t_ofile *ofile, uint16_t uint)
+void ft_putstrnl_lim(t_ofile *ofile, char *str)
 {
-	if (ofile->big_endian)
-		return (ft_bswap_16(uint));
-	else
-		return (uint);
+	int i;
+
+	i = 0;
+	ft_putchar(' ');
+	while (str[i])
+	{
+		ft_putchar(str[i]);
+		i++;
+		if ((str + i) >= (char*)ofile->end)
+			return;
+	}
 }
 
-//uint16_t swapif_u16(t_ofile *ofile, uint16_t uint)
-//{
-//	if (ofile->big_endian)
-//		return (ft_bswap_16(uint));
-//	else
-//		return (uint);
-//}
-
-
-uint32_t swapif_u32(t_ofile *ofile, uint32_t uint)
-{
-	if (ofile->big_endian)
-		return (ft_bswap_32(uint));
-	else
-		return (uint);
-}
-
-uint64_t swapif_u64(t_ofile *ofile, uint64_t uint)
-{
-	if (ofile->big_endian)
-		return (ft_bswap_64(uint));
-	else
-		return (uint);
-}

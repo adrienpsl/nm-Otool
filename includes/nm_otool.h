@@ -54,7 +54,7 @@ typedef struct s_options
 	u_int16_t x_display_sym_hx: 1;
 	u_int16_t j_only_sym: 1;
 	u_int16_t padding: 7;
-} t_options;
+} t_nm_options;
 
 typedef struct s_ofile
 {
@@ -110,17 +110,29 @@ e_ret dispatch(void *start, void *end);
 e_ret create_mmap(char *path, t_no *no);
 
 
+
+
 e_ret add_sections(t_ofile *ofile, void *start);
 e_ret build_sections(t_ofile *ofile);
 
 
 int build_symtab(t_ofile *ofile);
 
+// print
+char get_symbol_type(t_list *sections, struct nlist_64 *sym);
+e_ret print_nm(t_ofile *ofile, t_nm_options *options);
+void print_debug(t_ofile *ofile, struct nlist *nlist);
+void ft_putstrnl_lim(t_ofile *ofile, char *str);
 
 bool is_overflow(t_ofile *ofile, void *ptr);
 uint32_t swapif_u32(t_ofile *ofile, uint32_t uint);
+uint64_t swapif_u64(t_ofile *ofile, uint64_t uint);
 bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next);
 
+
+// getter
+char *get_name(t_ofile *ofile, void *p_nlist);
+t_nm_options *get_nm_options(void);
 
 // debug
 void print_section_list(t_list *list);

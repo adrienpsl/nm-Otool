@@ -39,15 +39,11 @@ fill_array_element(t_ofile *ofile, uint32_t symoff, uint32_t i)
 {
 	void *start_nlist;
 	void *nlist_el;
+
 	start_nlist = ofile->ptr + symoff;
 	nlist_el = start_nlist + (i * get_nlist_size(ofile));
 	if (true == is_overflow(ofile, nlist_el))
 		return (KO);
-
-//	char *result;
-//	result = ofile->string_table + swapif_u32(ofile, ((struct nlist*)nlist_el)->n_un.n_strx);
-//	printf("%s \n",result);
-
 	ofile->symbols[i] = nlist_el;
 	return (OK);
 }
@@ -80,7 +76,7 @@ int build_symtab(t_ofile *ofile)
 			return (KO);
 		i = i + 1;
 	}
-	//	if (!get_options()->p_no_sort)
+	//	if (!get_nm_options()->p_no_sort)
 	//		bubble_sort_symbol_array(ofile->symbols);
 	return (OK);
 }
