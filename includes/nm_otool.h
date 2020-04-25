@@ -67,7 +67,7 @@ typedef struct s_ofile
 	void *end;
 	void **symbols;
 	t_list *sections;
-	void *symtab_command;
+	struct symtab_command symtab_command;
 	void *string_table;
 } t_ofile;
 
@@ -113,6 +113,8 @@ e_ret create_mmap(char *path, t_no *no);
 e_ret add_sections(t_ofile *ofile, void *start);
 e_ret build_sections(t_ofile *ofile);
 
+
+int build_symtab(t_ofile *ofile);
 
 
 bool is_overflow(t_ofile *ofile, void *ptr);

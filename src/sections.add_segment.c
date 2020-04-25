@@ -67,7 +67,7 @@ e_ret add_sections(t_ofile *ofile, void *start)
 		//		if (get_no()->mode &&
 		//			!ft_strcmp(((struct section *)section)->sectname, SECT_TEXT))
 		//			return (otool_print(ofile, section));
-		nsects--;
+		nsects = nsects - 1;
 	}
 	return (OK);
 }

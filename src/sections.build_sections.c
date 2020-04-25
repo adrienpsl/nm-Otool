@@ -74,7 +74,7 @@ save_symtab_address(t_ofile *ofile, struct load_command *c_lc)
 	cmd = c_lc->cmd;
 	cmd = swapif_u32(ofile, cmd);
 	if (cmd == LC_SYMTAB)
-		ofile->symtab_command = c_lc;
+		ofile->symtab_command = *(struct symtab_command *)c_lc;
 }
 
 e_ret build_sections(t_ofile *ofile)
