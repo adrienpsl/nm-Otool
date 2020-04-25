@@ -12,23 +12,18 @@
 
 #include "nm_otool.h"
 
-bool is_overflow(t_ofile *ofile, void *ptr)
+bool print_section(t_list *list, void *p)
 {
-	bool result;
+	struct section_64 *section_64;
+	(void)p;
 
-	result = !(ptr >= ofile->start && ptr <= ofile->end);
-	if (result)
-		ft_dprintf(STDERR_FILENO, "The ptr is not in the file\n");
-	return (result);
+	section_64 = list->content;
+	printf("%.16s ", section_64->segname);
+	printf("%.16s \n", section_64->sectname);
+	return (false);
 }
 
-bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next)
+void print_section_list(t_list *list)
 {
-	bool result;
-
-	result = is_overflow(ofile, next);
-	if (result == true)
-		return (result);
-	result = next > current;
-	return (result);
+	ft_listfunc(list, print_section, NULL);
 }

@@ -76,7 +76,6 @@ typedef struct s_no
 	void *mmap_start;
 	size_t mmap_size;
 	char *file_name;
-	bool is_ar;
 	int is_print;
 	int mode;
 } t_no;
@@ -104,7 +103,11 @@ e_ret handle_ofile(t_ofile *ofile, void *start, void *end);
 e_ret handle_archive(t_ofile *ofile);
 e_ret handle_fat_arch(t_ofile *ofile);
 e_ret handle_maco(t_ofile *ofile);
-e_ret dispatch_ofile(t_ofile *ofile, void *start, void *end);
+e_ret dispatch(void *start, void *end);
+
+
+
+e_ret create_mmap(char *path, t_no *no);
 
 
 e_ret add_sections(t_ofile *ofile, void *start);
@@ -117,8 +120,8 @@ uint32_t swapif_u32(t_ofile *ofile, uint32_t uint);
 bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next);
 
 
-
-
+// debug
+void print_section_list(t_list *list);
 
 
 #endif

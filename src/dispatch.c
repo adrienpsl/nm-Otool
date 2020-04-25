@@ -12,18 +12,20 @@
 
 #include "nm_otool.h"
 
-e_ret dispatch_ofile(t_ofile *ofile, void *start, void *end)
+e_ret dispatch(void *start, void *end)
 {
-	if (false == handle_magic_number(ofile, start))
+	t_ofile ofile;
+
+	if (false == handle_magic_number(&ofile, start))
 	{
 		ft_dprintf(STDERR_FILENO, "bad magic number\n");
 		return (KO);
 	}
-	handle_ofile(ofile, start, end);
-	if (ofile->fat_header)
-		return (handle_fat_arch(ofile));
-	else if (ofile->archive)
-		return (handle_archive(ofile));
+	handle_ofile(&ofile, start, end);
+	if (ofile.fat_header)
+		return (handle_fat_arch(&ofile));
+	else if (ofile.archive)
+		return (handle_archive(&ofile));
 	else
-		return (handle_maco(ofile));
+		return (handle_maco(&ofile));
 }

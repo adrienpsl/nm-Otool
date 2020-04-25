@@ -12,23 +12,28 @@
 
 #include "nm_otool.h"
 
-bool is_overflow(t_ofile *ofile, void *ptr)
+e_ret create_mmap(char *path, t_no *no)
 {
-	bool result;
+	int fd;
+	struct stat buf;
 
-	result = !(ptr >= ofile->start && ptr <= ofile->end);
-	if (result)
-		ft_dprintf(STDERR_FILENO, "The ptr is not in the file\n");
-	return (result);
-}
-
-bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next)
-{
-	bool result;
-
-	result = is_overflow(ofile, next);
-	if (result == true)
-		return (result);
-	result = next > current;
-	return (result);
+	if (0 > (fd = open(path, O_RDONLY)))
+	{
+		ft_dprintf(ERROR_FD, NM_NAME": fd open error\n");
+		return (KO);
+	}
+	if (0 > fstat(fd, &buf))
+	{
+		ft_dprintf(ERROR_FD, NM_NAME": fstats < 0\n");
+		return (KO);
+	}
+	if (MAP_FAILED ==
+		(no->mmap_start = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
+	{
+		ft_dprintf(ERROR_FD, NM_NAME": mmap failed\n");
+		return (KO);
+	}
+	no->mmap_size = buf.st_size;
+	no->file_name = path;
+	return (OK);
 }
