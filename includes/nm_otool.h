@@ -121,7 +121,7 @@ e_ret print_nm(t_ofile *ofile, t_nm_options *options);
 void print_debug(t_ofile *ofile, struct nlist *nlist);
 void ft_putstrnl_lim(t_ofile *ofile, char *str);
 
-bool is_overflow(t_ofile *ofile, void *ptr);
+bool is_overflow(t_ofile *ofile, void *ptr, bool print_error);
 uint32_t swapif_u32(t_ofile *ofile, uint32_t uint);
 uint64_t swapif_u64(t_ofile *ofile, uint64_t uint);
 bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next);

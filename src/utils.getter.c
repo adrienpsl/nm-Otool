@@ -21,7 +21,7 @@ char *get_name(t_ofile *ofile, void *p_nlist)
 						  : ((struct nlist *)p_nlist)->n_un.n_strx;
 	position = swapif_u32(ofile, position);
 	name = ofile->string_table + position;
-	if (is_overflow(ofile, name))
+	if (is_overflow(ofile, name, false))
 		return ("bad string index");
 	return (name ? name : "");
 }

@@ -21,7 +21,7 @@ parse_header(t_ofile *ofile, void *start, uint32_t *p_ncmds)
 	{
 		header_size = ofile->x64 ? sizeof(struct mach_header_64)
 								 : sizeof(struct mach_header);
-		if (true == is_overflow(ofile, start + header_size))
+		if (true == is_overflow(ofile, start + header_size, true))
 			return (NULL);
 	}
 	{
@@ -54,10 +54,10 @@ next_command(t_ofile *ofile, void *c_lc)
 	c_lc = c_lc + size;
 	if (size == 0)
 	{
-		ft_dprintf(STDERR_FILENO, "load command == 0 ...");
+		ft_dprintf(STDERR_FILENO, "load command == 0 ...\n");
 		return (NULL);
 	}
-	else if (true == is_overflow(ofile, c_lc))
+	else if (true == is_overflow(ofile, c_lc, true))
 	{
 //		ft_dprintf(STDERR_FILENO, "overflow load command");
 		return (NULL);
@@ -87,7 +87,7 @@ e_ret build_sections(t_ofile *ofile)
 		return (KO);
 	while (ncmds)
 	{
-		if (true == is_overflow(ofile, c_lc))
+		if (true == is_overflow(ofile, c_lc, true))
 			return (KO);
 		if (true == is_lc_segment(ofile, c_lc)
 			&& add_sections(ofile, c_lc))

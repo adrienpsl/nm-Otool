@@ -28,7 +28,7 @@ set_string_table(t_ofile *ofile, struct symtab_command *sym)
 	void *string_table;
 
 	string_table = ofile->start + sym->stroff;
-	if (is_overflow(ofile, string_table))
+	if (is_overflow(ofile, string_table, true))
 		return (KO);
 	ofile->string_table = string_table;
 	return (OK);
@@ -42,7 +42,7 @@ fill_array_element(t_ofile *ofile, uint32_t symoff, uint32_t i)
 
 	start_nlist = ofile->ptr + symoff;
 	nlist_el = start_nlist + (i * get_nlist_size(ofile));
-	if (true == is_overflow(ofile, nlist_el))
+	if (true == is_overflow(ofile, nlist_el, true))
 		return (KO);
 	ofile->symbols[i] = nlist_el;
 	return (OK);

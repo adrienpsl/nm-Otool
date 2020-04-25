@@ -52,8 +52,8 @@ launch_dispatch(t_ofile *arch_option, struct ar_hdr *ar_hdr)
 		return (KO);
 	start = (void *)ar_hdr + sizeof(struct ar_hdr) + size_name;
 	end = start + ar_size - size_name;
-	if (true == is_overflow(arch_option, start)
-		|| true == is_overflow(arch_option, end))
+	if (true == is_overflow(arch_option, start, true)
+		|| true == is_overflow(arch_option, end, true))
 		return (KO);
 	return (dispatch(start, end));
 }
@@ -68,7 +68,7 @@ e_ret handle_archive(t_ofile *arch_option, void *start, void *end)
 	c_ar = next_ar(c_ar);
 	while (c_ar < end)
 	{
-		if (true == is_overflow(arch_option, c_ar))
+		if (true == is_overflow(arch_option, c_ar, true))
 			return (KO);
 		ft_printf("\n%s(%s):\n", arch_option->file_name, c_ar + sizeof(struct ar_hdr));
 		launch_dispatch(arch_option, c_ar);

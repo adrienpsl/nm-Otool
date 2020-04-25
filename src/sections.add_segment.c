@@ -23,7 +23,7 @@ parse_segment_command(t_ofile *ofile,
 	{
 		header_size = ofile->x64 ? sizeof(struct segment_command_64)
 								 : sizeof(struct segment_command);
-		if (true == is_overflow(ofile, start + header_size))
+		if (true == is_overflow(ofile, start + header_size, true))
 			return (NULL);
 	}
 	{
@@ -57,7 +57,7 @@ e_ret add_sections(t_ofile *ofile, void *start)
 		return (KO);
 	while (nsects)
 	{
-		if (true == is_overflow(ofile, c_section))
+		if (true == is_overflow(ofile, c_section, true))
 			return (KO);
 		if (NULL == (new = ft_lstnew(c_section, 0)))
 			return (KO);

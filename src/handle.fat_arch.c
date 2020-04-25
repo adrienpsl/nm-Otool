@@ -20,7 +20,7 @@ parse_header(t_ofile *mode, struct fat_header *header, uint32_t *p_nfat_arch)
 
 	{
 		header_size = sizeof(struct fat_header);
-		if (true == is_overflow(mode, (void *)header + header_size))
+		if (true == is_overflow(mode, (void *)header + header_size, true))
 			return (NULL);
 	}
 	{
@@ -42,8 +42,8 @@ launch_dispatch(t_ofile *fat_option, struct fat_arch *fat_arch, void *fat_start)
 	size = swapif_u32(fat_option, fat_arch->size);
 	start = fat_start + offset;
 	end = start + size;
-	if (true == is_overflow(fat_option, start)
-		|| is_overflow(fat_option, end))
+	if (true == is_overflow(fat_option, start, true)
+		|| is_overflow(fat_option, end, true))
 		return (KO);
 	else
 		dispatch(start, end);
@@ -77,7 +77,7 @@ e_ret handle_fat_arch(t_ofile *fat_option, void *start, bool print_all)
 		return (KO);
 	while (nfat_arch)
 	{
-		if (true == is_overflow(fat_option, f_arch))
+		if (true == is_overflow(fat_option, f_arch, true))
 			return (KO);
 		print_fat_aim(fat_option, f_arch, print_all);
 		if (print_all)
