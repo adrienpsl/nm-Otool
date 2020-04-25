@@ -77,7 +77,7 @@ mkdir test
 #  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/corrupted_binaries\///")
 #  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
 #done
-
+#
 
 #for file in ./break-nm/feed_the_nm/*; do
 #  nm "$file" > real_nm 2>&1
@@ -87,7 +87,7 @@ mkdir test
 #  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")
 #  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
 #done
-
+#
 #
 for file in ./break-nm/weird_architecture/*; do
   nm "$file" > real_nm 2>&1
@@ -97,7 +97,7 @@ for file in ./break-nm/weird_architecture/*; do
   file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_architecture\///")
   [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
 done
-
+#
 for file in ./break-nm/weird_archive/*; do
   nm "$file" > real_nm 2>&1
 #  nm  "$file" > real_nm 2>&1
