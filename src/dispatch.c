@@ -33,7 +33,7 @@ e_ret dispatch(void *start, void *end)
 				"The file was not recognized as a valid object file\n\n",
 				get_no()->file_name);
 		else
-			ft_dprintf(STDERR_FILENO, "bad magic number\n");
+			ft_dprintf(STDERR_FILENO, "%s: is not an object file\n", get_no()->file_name);
 		return (KO);
 	}
 	handle_ofile(&ofile, start, end);

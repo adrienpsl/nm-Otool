@@ -16,9 +16,11 @@ e_ret handle_maco(t_ofile *ofile)
 {
 	if (KO == build_sections(ofile))
 		return (KO);
-	if (KO == build_symtab(ofile))
-		return (KO);
-	print_nm(ofile, get_nm_options());
+	otool_print(ofile, ofile->otool_section);
+	//	if (KO == build_symtab(ofile))
+	//		return (KO);
+	//	print_nm(ofile, get_nm_options());
+
 	// if nm, break here!
 	//	if (NULL == ofile->symtab_command)
 	//	{

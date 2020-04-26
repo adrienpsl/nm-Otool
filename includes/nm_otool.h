@@ -71,6 +71,7 @@ typedef struct s_ofile
 	struct symtab_command symtab_command;
 	void *string_table;
 	char *file_name;
+	void *otool_section;
 } t_ofile;
 
 # define NM 0
@@ -91,8 +92,19 @@ typedef struct s_stabname
 	char *name;
 } t_stabname;
 
+typedef struct		s_otool
+{
+
+	uint64_t start;
+	uint64_t end;
+	uint64_t offset;
+	uint64_t padding;
+	char *ptr;
+
+} 					t_otool;
 
 int option_parser(char **av, int ac);
+e_ret otool_print(t_ofile *ofile, void *section);
 
 
 bool handle_magic_number(t_ofile *ofile, uint32_t *magic);

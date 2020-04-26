@@ -10,27 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "nm_otool.h"
+#include "stdio.h"
 
 int main(int ac, char **av)
 {
-	t_no *no;
-	int i;
-
-	no = get_no();
-	i = option_parser(av, ac);
-	get_no()->mode = 1;
-	while (i < ac)
-	{
-		if (create_mmap(av[i], no))
-		{
-			i++;
-			continue;
-		}
-		dispatch(no->mmap_start, no->mmap_start + no->mmap_size);
-		munmap(no->mmap_start, no->mmap_size);
-		i++;
-	}
-	return (EXIT_SUCCESS);
+    printf("hello words\n");
+    return (1);
 }
-

@@ -17,7 +17,7 @@ mkdir test
 #done
 #ls -l ./test | wc -l
 #rm test/*
-#
+##
 ##
 #for file in ./binaire_test/*; do
 #  otool -t "$file" > real_nm 2>&1
@@ -37,14 +37,15 @@ mkdir test
 #  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
 #done
 
-#for file in /usr/lib/system/*; do
-#  otool -t "$file" | cat -e > real_nm 2>&1
-##  nm  "$file" > real_nm 2>&1
-#  ./cmake-build-debug/nm_otool "$file" | cat -e > my_nm 2>&1
-#  res=$(diff real_nm my_nm)
-#  file_res=$(echo "$file" | sed -e "s/^\/usr\/lib\/system\///")
-#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
-#done
+for file in /usr/lib/system/*; do
+  echo "$file"
+  otool -t "$file" | cat -e > real_nm 2>&1
+#  nm  "$file" > real_nm 2>&1
+  ./cmake-build-debug/nm_otool "$file" | cat -e > my_nm 2>&1
+  res=$(diff real_nm my_nm)
+  file_res=$(echo "$file" | sed -e "s/^\/usr\/lib\/system\///")
+  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+done
 #
 #
 #for file in ./objs/*; do

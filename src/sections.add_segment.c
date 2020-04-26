@@ -63,10 +63,9 @@ e_ret add_sections(t_ofile *ofile, void *start)
 			return (KO);
 		new->content = c_section;
 		ft_lstadd(&ofile->sections, new);
+		if (!ft_strcmp(((struct section_64 *)c_section)->sectname, SECT_TEXT))
+			ofile->otool_section = c_section;
 		c_section = get_next_section(ofile, c_section);
-		//		if (get_no()->mode &&
-		//			!ft_strcmp(((struct section *)section)->sectname, SECT_TEXT))
-		//			return (otool_print(ofile, section));
 		nsects = nsects - 1;
 	}
 	return (OK);
