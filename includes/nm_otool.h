@@ -95,7 +95,6 @@ typedef struct s_stabname
 
 typedef struct		s_otool
 {
-
 	uint64_t start;
 	uint64_t end;
 	uint64_t offset;
