@@ -28,7 +28,6 @@ void set_up_and_check(t_ofile *ofile, t_otool *otool, void *section)
 		: (uint64_t)swapif_u32(ofile, ((struct section *)section)->offset);
 	otool->padding = ofile->x64 ? 0x100000000 : 0x1000;
 	otool->ptr = ofile->start + otool->offset;
-	otool->start = otool->start + otool->padding;
 }
 
 void not_big_endian_arch(t_ofile *ofile, t_otool *otool)
@@ -37,7 +36,6 @@ void not_big_endian_arch(t_ofile *ofile, t_otool *otool)
 	uint64_t y;
 	i = 0;
 
-	otool->start = otool->start - otool->padding;
 	while (i < otool->end)
 	{
 		y = 0;
@@ -45,7 +43,7 @@ void not_big_endian_arch(t_ofile *ofile, t_otool *otool)
 				   : ft_printf("%08llx\t", otool->start + y + i);
 		while (y < 16 && (i + y) < otool->end)
 		{
-			if (true == is_overflow(ofile, otool->ptr + i + y, 0))
+			if (true == is_overflow(ofile, otool->ptr + i + y, true))
 				return;
 			ft_printf("%02x ", (unsigned char)(otool->ptr)[y + i]);
 			y++;
@@ -69,7 +67,7 @@ void big_endian(t_ofile *ofile, t_otool *otool)
 				   : ft_printf("%08llx\t", otool->start + y + i);
 		while (y < 16 && (i + y) < otool->end)
 		{
-			if (true == is_overflow(ofile, otool->ptr + i + y, 0))
+			if (true == is_overflow(ofile, otool->ptr + i + y, true))
 				return;
 			ft_printf("%08x ",
 				swapif_u64(ofile, *(uint64_t *)(otool->ptr + y + i)));
@@ -84,7 +82,7 @@ e_ret otool_print(t_ofile *ofile, void *section)
 {
 	t_otool otool;
 
-	if (true == is_overflow(ofile, section + sizeof(struct section_64), 0))
+	if (true == is_overflow(ofile, section + sizeof(struct section_64), true))
 		return (KO);
 	if (false == ofile->no_print_file_otool)
 		ft_printf("%s:\n", get_no()->file_name);

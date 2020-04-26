@@ -17,19 +17,10 @@ bool is_overflow(t_ofile *ofile, void *ptr, bool print_error)
 	bool result;
 
 	result = !(ptr >= ofile->start && ptr <= ofile->end);
+	if (result && print_error && get_no()->mode == OTOOL)
+		ft_putchar('\n');
 	if (result && print_error)
 		ft_dprintf(STDERR_FILENO, NM_ERROR_START"%s truncated or malformed object (load command 0 extends past end of file)\n\n",
 			ofile->file_name);
-	return (result);
-}
-
-bool is_overflow_or_come_back(t_ofile *ofile, void *current, void *next)
-{
-	bool result;
-
-	result = is_overflow(ofile, next, true);
-	if (result == true)
-		return (result);
-	result = next > current;
 	return (result);
 }
