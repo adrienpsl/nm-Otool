@@ -55,8 +55,10 @@ e_ret otool_print(t_ofile *ofile, void *section)
 {
 	t_otool otool;
 
-
-	ft_printf("%s:\n", get_no()->file_name);
+	if (true == is_overflow(ofile, section + sizeof(struct section_64), 0))
+		return (KO);
+	if (false == ofile->no_print_file_otool)
+		ft_printf("%s:\n", get_no()->file_name);
 	ft_printf("Contents of (__TEXT,__text) section\n");
 
 	set_up_and_check(ofile, &otool, section);

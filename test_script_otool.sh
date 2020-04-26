@@ -37,15 +37,14 @@ mkdir test
 #  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
 #done
 
-for file in /usr/lib/system/*; do
-  echo "$file"
-  otool -t "$file" | cat -e > real_nm 2>&1
-#  nm  "$file" > real_nm 2>&1
-  ./cmake-build-debug/nm_otool "$file" | cat -e > my_nm 2>&1
-  res=$(diff real_nm my_nm)
-  file_res=$(echo "$file" | sed -e "s/^\/usr\/lib\/system\///")
-  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
-done
+#for file in /usr/lib/system/*; do
+#  echo "$file"
+#  otool -t "$file" | cat -e > real_nm 2>&1
+#  ./cmake-build-debug/nm_otool "$file" | cat -e > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\/usr\/lib\/system\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
 #
 #
 #for file in ./objs/*; do
@@ -61,7 +60,6 @@ done
 #for file in ./break-nm/feed_the_nm/*; do
 #  echo "$file"
 #  otool -t "$file" > real_nm 2>&1
-  nm  "$file" > real_nm 2>&1
 #  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
 #  res=$(diff real_nm my_nm)
 #  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")

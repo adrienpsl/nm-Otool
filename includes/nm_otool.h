@@ -72,6 +72,8 @@ typedef struct s_ofile
 	void *string_table;
 	char *file_name;
 	void *otool_section;
+	int is_print;
+	bool no_print_file_otool;
 } t_ofile;
 
 # define NM 0
@@ -82,7 +84,6 @@ typedef struct s_no
 	void *mmap_start;
 	size_t mmap_size;
 	char *file_name;
-	int is_print;
 	int mode;
 } t_no;
 
@@ -108,11 +109,10 @@ e_ret otool_print(t_ofile *ofile, void *section);
 
 
 bool handle_magic_number(t_ofile *ofile, uint32_t *magic);
-e_ret handle_ofile(t_ofile *ofile, void *start, void *end);
 e_ret handle_archive(t_ofile *ofile, void *start, void *end);
 e_ret handle_fat_arch(t_ofile *fat_option, void *start, bool print_all);
 e_ret handle_maco(t_ofile *ofile);
-e_ret dispatch(void *start, void *end);
+e_ret dispatch(void *start, void *end, t_ofile *prev);
 
 e_ret create_mmap(char *path, t_no *no);
 

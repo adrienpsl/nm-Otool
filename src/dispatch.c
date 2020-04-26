@@ -20,7 +20,22 @@ void free_ofile(t_ofile *ofile)
 		free(ofile->symbols);
 }
 
-e_ret dispatch(void *start, void *end)
+static e_ret
+handle_ofile(t_ofile *ofile, void *start, void *end, t_ofile *prev)
+{
+	ofile->start = start;
+	ofile->ptr = start;
+	ofile->end = end;
+	ofile->file_name = get_no()->file_name;
+	if (NULL != prev)
+	{
+		ofile->no_print_file_otool = prev->no_print_file_otool;
+		ofile->is_print = prev->is_print;
+	}
+	return (OK);
+}
+
+e_ret dispatch(void *start, void *end, t_ofile *prev)
 {
 	t_ofile ofile;
 	e_ret result;
@@ -33,10 +48,11 @@ e_ret dispatch(void *start, void *end)
 				"The file was not recognized as a valid object file\n\n",
 				get_no()->file_name);
 		else
-			ft_dprintf(STDERR_FILENO, "%s: is not an object file\n", get_no()->file_name);
+			ft_dprintf(STDERR_FILENO, "%s: is not an object file\n",
+				get_no()->file_name);
 		return (KO);
 	}
-	handle_ofile(&ofile, start, end);
+	handle_ofile(&ofile, start, end, prev);
 	if (ofile.fat_header)
 		result = handle_fat_arch(&ofile, ofile.start, 0);
 	else if (ofile.archive)

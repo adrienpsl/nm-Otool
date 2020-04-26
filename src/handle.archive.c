@@ -55,7 +55,7 @@ launch_dispatch(t_ofile *arch_option, struct ar_hdr *ar_hdr)
 	if (true == is_overflow(arch_option, start, true)
 		|| true == is_overflow(arch_option, end, true))
 		return (KO);
-	return (dispatch(start, end));
+	return (dispatch(start, end, arch_option));
 }
 
 e_ret handle_archive(t_ofile *arch_option, void *start, void *end)
@@ -66,11 +66,17 @@ e_ret handle_archive(t_ofile *arch_option, void *start, void *end)
 
 	c_ar = start + SARMAG;
 	c_ar = next_ar(c_ar);
+	if (get_no()->mode != NM)
+		ft_printf("Archive : %s\n", arch_option->file_name);
+	arch_option->no_print_file_otool = true;
 	while (c_ar < end)
 	{
 		if (true == is_overflow(arch_option, c_ar, true))
 			return (KO);
-		ft_printf("\n%s(%s):\n", arch_option->file_name, c_ar + sizeof(struct ar_hdr));
+		if (get_no()->mode == NM)
+			ft_putchar('\n');
+		ft_printf("%s(%s):\n", arch_option->file_name,
+			c_ar + sizeof(struct ar_hdr));
 		launch_dispatch(arch_option, c_ar);
 		c_ar = next_ar(c_ar);
 		i = i + 1;

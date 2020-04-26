@@ -27,7 +27,7 @@ int main(int ac, char **av)
 			i++;
 			continue;
 		}
-		dispatch(no->mmap_start, no->mmap_start + no->mmap_size);
+		dispatch(no->mmap_start, no->mmap_start + no->mmap_size, NULL);
 		munmap(no->mmap_start, no->mmap_size);
 		i++;
 	}

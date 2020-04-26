@@ -46,22 +46,24 @@ launch_dispatch(t_ofile *fat_option, struct fat_arch *fat_arch, void *fat_start)
 		|| is_overflow(fat_option, end, true))
 		return (KO);
 	else
-		dispatch(start, end);
+		dispatch(start, end, fat_option);
 	return (OK);
 }
 
 void print_fat_aim(t_ofile *ofile, struct fat_arch *p_arch, bool print_all)
 {
+	char *name;
+
 	if (!print_all)
 		return;
-	char *name;
+	ofile->no_print_file_otool = true;
 	if (swapif_u32(ofile, p_arch->cputype) == 7)
 		name = "i386";
 	else if (swapif_u32(ofile, p_arch->cputype) == 18)
 		name = "ppc";
 	else
 		name = "(unknown)";
-	if (!get_no()->is_print)
+	if (NM == get_no()->mode)
 		ft_putchar('\n');
 	ft_printf("%s (%sarchitecture %s):\n",
 		get_no()->file_name, !get_no()->mode ? "for " : "", name);
