@@ -36,8 +36,8 @@ bool cmp_func(void *l1, void *l2, t_ofile *ofile)
 		res = ft_strcmp(
 			get_name(ofile, l1),
 			get_name(ofile, l2));
-//		if (res == 0)
-//			res = get_size(ofile, l1) > get_size(ofile, l2);
+		if (res == 0)
+			res = get_size(ofile, l1) > get_size(ofile, l2);
 		res = res > 0 ? true : false;
 	}
 	if (get_nm_options()->r_rev_sort)

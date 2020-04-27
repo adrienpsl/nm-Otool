@@ -90,7 +90,6 @@ e_ret otool_print(t_ofile *ofile, void *section)
 	if (false == ofile->no_print_file_otool)
 		ft_printf("%s:\n", get_no()->file_name);
 	ft_printf("Contents of (__TEXT,__text) section\n");
-
 	if (ofile->big_endian)
 		big_endian(ofile, &otool);
 	else

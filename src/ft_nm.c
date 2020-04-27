@@ -32,12 +32,19 @@ char *g_nm_usage[] = {
 
 int main(int ac, char **av)
 {
+	static char *no_argument[] = { "a.out", 0 };
 	int i;
 	get_no()->mode = NM;
 
 	i = option_parser(av, ac, NM_OPTION_STR, g_nm_usage);
 	if (i == -1)
 		exit(EXIT_FAILURE);
+	if (i == ac)
+	{
+		av = no_argument;
+		i = 0;
+		ac = 1;
+	}
 	return (start_program(ac, av, i));
 }
 

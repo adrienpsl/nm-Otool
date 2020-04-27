@@ -41,14 +41,8 @@ static e_ret create_mmap(char *path, t_no *no)
 int start_program(int ac, char **av, int i)
 {
 	t_no *no;
-	static char *no_argument[] = { "a.out", 0 };
 
 	no = get_no();
-	if (i == ac - 1)
-	{
-		av = no_argument;
-		i = ac - 2;
-	}
 	while (i < ac)
 	{
 		if (create_mmap(av[i], no))

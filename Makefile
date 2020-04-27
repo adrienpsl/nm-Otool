@@ -78,13 +78,13 @@ $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
 	$(CC) $(FLAGS_CC) -c -o $@ $< -I $(INCLUDE_PATH) -I $(LIBFT_PATH)/includes
 
 clean:
-	@make clean -C $(LIB_PATH)
+	@make clean -C $(LIBFT_PATH)
 	@rm -rf $(BUILD_PATH)
 	@echo "Clean \033[33mok\033[0m"
 
 fclean: clean
-	@make fclean -C $(LIB_PATH)
-	@#rm -f $(FT_NM) $(FT_OTOOL) $(LIB_NAME)
+	@make fclean -C $(LIBFT_PATH)
+	@rm -f $(FT_NM) $(FT_OTOOL) $(LIB_NAME)
 	@echo "Fclean \033[33mok\033[0m"
 
 re: fclean
