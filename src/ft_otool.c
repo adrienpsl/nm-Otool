@@ -12,19 +12,9 @@
 
 #include "nm_otool.h"
 
-char *g_otool_usage[] = {
-	"-t print the text section",
-	0
-};
-
 int main(int ac, char **av)
 {
-	int i;
-
 	get_no()->mode = OTOOL;
-	i = option_parser(av, ac, OTOOL_OPTION_STR, g_otool_usage);
-	if (i == -1)
-		exit(EXIT_FAILURE);
-	return (start_program(ac, av, 0));
+	return (start_program(ac, av, 1));
 }
 
