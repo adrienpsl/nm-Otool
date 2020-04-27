@@ -20,23 +20,9 @@ bool is_overflow(t_ofile *ofile, void *ptr, bool print_error)
 	if (result && print_error && get_no()->mode == OTOOL)
 		ft_putchar('\n');
 	if (result && print_error)
-		ft_dprintf(STDERR_FILENO, NM_ERROR_START"%s truncated or malformed object (load command 0 extends past end of file)\n\n",
+		ft_dprintf(STDERR_FILENO,
+			NM_ERROR_START"%s truncated or malformed "
+			"object (load command 0 extends past end of file)\n\n",
 			ofile->file_name);
 	return (result);
-}
-
-uint32_t swapif_u32(t_ofile *ofile, uint32_t uint)
-{
-	if (ofile->big_endian)
-		return (ft_bswap_32(uint));
-	else
-		return (uint);
-}
-
-uint64_t swapif_u64(t_ofile *ofile, uint64_t uint)
-{
-	if (ofile->big_endian)
-		return (ft_bswap_64(uint));
-	else
-		return (uint);
 }

@@ -11,6 +11,6 @@ add_library(${PROJECT_NAME}_lib ${project_files})
 target_include_directories(${PROJECT_NAME}_lib PUBLIC includes)
 target_include_directories(${PROJECT_NAME}_lib PUBLIC libft/includes)
 
-add_executable(${PROJECT_NAME} "src/main.c")
+add_executable(${PROJECT_NAME} "src/ft_nm.c")
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)
 target_link_libraries(${PROJECT_NAME} libft_lib)
