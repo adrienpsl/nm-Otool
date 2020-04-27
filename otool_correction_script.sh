@@ -155,13 +155,13 @@ diff a b
 #ls -l ./test | wc -l
 
 
-###############################################################################
-print_header "weird_binaries"
-for file in ./break-nm/weird_binaries/*; do
-  otool -t "$file" > real_nm 2>&1
-  ./ft_otool "$file" > my_nm 2>&1
-  res=$(diff real_nm my_nm)
-  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_binaries\///")
-  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
-done
-ls -l ./test | wc -l
+################################################################################
+#print_header "weird_binaries"
+#for file in ./break-nm/weird_binaries/*; do
+#  otool -t "$file" > real_nm 2>&1
+#  ./ft_otool "$file" > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_binaries\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
+#ls -l ./test | wc -l

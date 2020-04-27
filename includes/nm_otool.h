@@ -41,20 +41,17 @@ typedef enum
 	KO
 } e_ret;
 
-# define NM_OPTION_STR "anopruUxj"
+# define NM_OPTION_STR "anpr"
 # define OTOOL_OPTION_STR "t"
 typedef struct s_options
 {
 	u_int16_t a_debugger: 1;
 	u_int16_t n_numeric_sort: 1;
-	u_int16_t o_add_path: 1;
 	u_int16_t p_no_sort: 1;
 	u_int16_t r_rev_sort: 1;
 	u_int16_t u_only_undef: 1;
 	u_int16_t mu_only_no_undef: 1;
-	u_int16_t x_display_sym_hx: 1;
-	u_int16_t j_only_sym: 1;
-	u_int16_t padding: 7;
+	u_int16_t padding:10;
 } t_nm_options;
 
 typedef struct s_ofile
@@ -124,7 +121,7 @@ int build_symtab(t_ofile *ofile);
 // print
 char get_symbol_type(t_list *sections, struct nlist_64 *sym);
 e_ret print_nm(t_ofile *ofile, t_nm_options *options);
-void print_debug(t_ofile *ofile, struct nlist *nlist);
+void print_debug(struct nlist *nlist);
 void ft_putstrnl_lim(t_ofile *ofile, char *str);
 
 bool is_overflow(t_ofile *ofile, void *ptr, bool print_error);

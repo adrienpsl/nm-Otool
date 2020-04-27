@@ -19,10 +19,10 @@ print_extern(t_ofile *ofile, t_nm_options *options, char *name,
 	int padding;
 
 	padding = ofile->x64 ? 18 : 10;
+	if (type != 'U' && options->mu_only_no_undef)
+		return;
 	if (type == 'U' && options->u_only_undef)
 		ft_putstrnl_lim(ofile, name);
-	else if (type != 'U' && options->mu_only_no_undef)
-		return;
 	else if (type == 'U')
 	{
 		ft_printf("%*c ", padding, type);
@@ -69,7 +69,7 @@ print_intern(t_ofile *ofile, void *nlist, char *name, char type)
 	print_address(ofile, nlist);
 	ft_printf(" %c ", type);
 	if (type == '-')
-		print_debug(ofile, nlist);
+		print_debug(nlist);
 	ft_putstrnl_lim(ofile, name);
 	ft_putchar('\n');
 }
@@ -85,9 +85,7 @@ void print_sym(t_ofile *ofile, t_nm_options *options, void *symbol)
 	if (type == 'U' || type == 'I')
 		print_extern(ofile, options, name, type);
 	else
-	{
 		print_intern(ofile, symbol, name, type);
-	}
 }
 
 e_ret print_nm(t_ofile *ofile, t_nm_options *options)

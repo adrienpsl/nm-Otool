@@ -61,10 +61,9 @@ get_debug_str(uint16_t type)
 	return ("");
 }
 
-void print_debug(t_ofile *ofile, struct nlist *nlist)
+void print_debug(struct nlist *nlist)
 {
-	(void)ofile;
-	ft_printf(" %02d" " %04d" " %5s",
+	ft_printf("%02d" " %04d" " %5s ",
 		nlist->n_sect,
 		nlist->n_desc,
 		get_debug_str(nlist->n_type));

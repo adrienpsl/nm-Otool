@@ -1,12 +1,5 @@
-#!/bin/sh
-mkdir /tmp/__nm_tests 2> /dev/null
-for it in $@
-do
-	./cmake-build-debug/nm_otool $it | cat -e > /tmp/__nm_tests/our
-	nm $it | cat -e > /tmp/__nm_tests/their
-	diff /tmp/__nm_tests/our /tmp/__nm_tests/their > /tmp/__nm_tests"$it"_diff
-	if [[ -s /tmp/__nm_tests"$it"_diff ]] ;
-	then echo "$it: FAILURE" ;
-	else echo "$it: SUCCESS" ;
-	fi
-done
+####
+
+nm -u break-nm/feed_the_nm/64_exe_hard | cat -e > a
+./ft_nm -u break-nm/feed_the_nm/64_exe_hard | cat -e > b
+diff a b

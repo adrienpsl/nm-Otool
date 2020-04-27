@@ -18,15 +18,8 @@ char *g_nm_usage[] = {
 	"-a" "\t" "Display  all symbol table entries,"
 	" including those inserted for use by debuggers.",
 	"-n" "\t" "Sort numerically rather than alphabetically.",
-	"-o" "\t" "Prepend file or archive element name to each  output  line,"
-	" rather than only once.",
 	"-p" "\t" "Don't sort; display in symbol-table order.",
 	"-r" "\t" "Sort in reverse order.",
-	"-u" "\t" "Display only undefined symbols.",
-	"-U" "\t" "Don't display undefined symbols.",
-	"-x" "\t" "Display  the symbol table entry's fields in hexadecimal,"
-	" along with the name as a string",
-	"-j" "\t" "Just display the symbol names (no value or type).",
 	0
 };
 
@@ -47,4 +40,3 @@ int main(int ac, char **av)
 	}
 	return (start_program(ac, av, i));
 }
-

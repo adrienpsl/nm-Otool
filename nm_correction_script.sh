@@ -20,37 +20,37 @@ nm "$1" > a
 diff a b
 }
 
-cat -e author
-
-echo "nm test -----------------------------------------------------------------"
-
-################################################################################
-print_header "Bad options"
-./ft_nm -sanoetuh
-./ft_nm -s -s -s asasoeuth
-
-print_header "File does not exits"
-./ft_nm asnoeuth
-nm asnoeuth
-
-
-################################################################################
-print_header "No argument"
-
-touch hello.c
-echo "#include <stdio.h>
-int main(int ac, char **av)
-{
-    printf(\"hello words\");
-    return (1);
-} " > hello.c
-gcc hello.c
-
-test_and_diff
-
-################################################################################
-print_header "2 and 3 argument"
-test_and_diff a.out a.out
+#cat -e author
+#
+#echo "nm test -----------------------------------------------------------------"
+#
+#################################################################################
+#print_header "Bad options"
+#./ft_nm -sanoetuh
+#./ft_nm -s -s -s asasoeuth
+#
+#print_header "File does not exits"
+#./ft_nm asnoeuth
+#nm asnoeuth
+#
+#
+#################################################################################
+#print_header "No argument"
+#
+#touch hello.c
+#echo "#include <stdio.h>
+#int main(int ac, char **av)
+#{
+#    printf(\"hello words\");
+#    return (1);
+#} " > hello.c
+#gcc hello.c
+#
+#test_and_diff
+#
+#################################################################################
+#print_header "2 and 3 argument"
+#test_and_diff a.out a.out
 
 
 ###############################################################################
@@ -171,14 +171,67 @@ test_and_diff a.out a.out
 #ls -l ./test | wc -l
 
 
+###############################################################################
+#print_header "weird_binaries"
+#for file in ./break-nm/weird_binaries/*; do
+#  nm "$file" > real_nm 2>&1
+#  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_binaries\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
+#ls -l ./test | wc -l
+
+
+###############################################################################
+#print_header "with option -a (debug sym)"
+#
+#for file in ./break-nm/feed_the_nm/*; do
+#  nm -a "$file" > real_nm 2>&1
+#  ./ft_nm -a "$file" > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
+#ls -l ./test | wc -l
+
+
+##############################################################################
+#print_header "with option -n (sort by address)"
+#
+#for file in ./break-nm/feed_the_nm/*; do
+#  nm -n "$file" > real_nm 2>&1
+#  ./ft_nm -n "$file" > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
+#ls -l ./test | wc -l
+
+
 ################################################################################
-print_header "weird_binaries"
-for file in ./break-nm/weird_binaries/*; do
-  nm "$file" > real_nm 2>&1
-#  nm  "$file" > real_nm 2>&1
-  ./cmake-build-debug/nm_otool "$file" > my_nm 2>&1
-  res=$(diff real_nm my_nm)
-  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/weird_binaries\///")
-  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
-done
-ls -l ./test | wc -l
+#print_header "with option -p (no sort)"
+#
+#for file in ./break-nm/feed_the_nm/*; do
+#  nm -p "$file" > real_nm 2>&1
+#  ./ft_nm -p "$file" > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
+#ls -l ./test | wc -l
+#
+#
+#
+################################################################################
+#print_header "with option -r (no sort)"
+#
+#for file in ./break-nm/feed_the_nm/*; do
+#  nm -r "$file" > real_nm 2>&1
+#  ./ft_nm -r "$file" > my_nm 2>&1
+#  res=$(diff real_nm my_nm)
+#  file_res=$(echo "$file" | sed -e "s/^\.\/break-nm\/feed_the_nm\///")
+#  [ ! -z "$res" ] &&  echo "$res" > "test/$file_res"
+#done
+#ls -l ./test | wc -l
+
