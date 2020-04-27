@@ -103,7 +103,7 @@ typedef struct		s_otool
 
 } 					t_otool;
 
-int option_parser(char **av, int ac);
+int option_parser(char **av, int ac, char *options);
 e_ret otool_print(t_ofile *ofile, void *section);
 
 

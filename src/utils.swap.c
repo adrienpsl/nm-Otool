@@ -12,23 +12,6 @@
 
 #include "nm_otool.h"
 
-uint16_t swapif_u16(t_ofile *ofile, uint16_t uint)
-{
-	if (ofile->big_endian)
-		return (ft_bswap_16(uint));
-	else
-		return (uint);
-}
-
-//uint16_t swapif_u16(t_ofile *ofile, uint16_t uint)
-//{
-//	if (ofile->big_endian)
-//		return (ft_bswap_16(uint));
-//	else
-//		return (uint);
-//}
-
-
 uint32_t swapif_u32(t_ofile *ofile, uint32_t uint)
 {
 	if (ofile->big_endian)

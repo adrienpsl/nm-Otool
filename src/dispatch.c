@@ -20,6 +20,19 @@ void free_ofile(t_ofile *ofile)
 		free(ofile->symbols);
 }
 
+e_ret handle_maco(t_ofile *ofile)
+{
+	if (KO == build_sections(ofile))
+		return (KO);
+	if (get_no()->mode == OTOOL)
+		otool_print(ofile, ofile->otool_section);
+	if (KO == build_symtab(ofile))
+		return (KO);
+	if (get_no()->mode == NM)
+		print_nm(ofile, get_nm_options());
+	return (OK);
+}
+
 static e_ret
 handle_ofile(t_ofile *ofile, void *start, void *end, t_ofile *prev)
 {

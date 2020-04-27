@@ -57,7 +57,7 @@ int search_in_available_options(char *options, const char *user_input)
 	return (EXIT_SUCCESS);
 }
 
-int option_parser(char **av, int ac)
+int option_parser(char **av, int ac, char *options)
 {
 	int i;
 
@@ -68,7 +68,7 @@ int option_parser(char **av, int ac)
 			return (i);
 		if (av[i][0] != '-')
 			break;
-		if (search_in_available_options(NM_OPTION_STR, av[i] + 1))
+		if (search_in_available_options(options, av[i] + 1))
 		{
 			print_usage();
 			return (-1);
