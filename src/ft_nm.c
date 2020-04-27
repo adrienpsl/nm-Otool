@@ -12,56 +12,32 @@
 
 #include "nm_otool.h"
 
-e_ret create_mmap(char *path, t_no *no)
-{
-	int fd;
-	struct stat buf;
-
-	if (0 > (fd = open(path, O_RDONLY)))
-	{
-		ft_dprintf(ERROR_FD, NM_NAME": fd open error\n");
-		return (KO);
-	}
-	if (0 > fstat(fd, &buf))
-	{
-		ft_dprintf(ERROR_FD, NM_NAME": fstats < 0\n");
-		return (KO);
-	}
-	if (MAP_FAILED ==
-		(no->mmap_start = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
-	{
-		ft_dprintf(ERROR_FD, NM_NAME": mmap failed\n");
-		return (KO);
-	}
-	no->mmap_size = buf.st_size;
-	no->file_name = path;
-	return (OK);
-}
-
-int start_program(int ac, char **av, char *options, int mode)
-{
-	t_no *no;
-	int i;
-
-	no = get_no();
-	i = option_parser(av, ac, options);
-	get_no()->mode = mode;
-	while (i < ac)
-	{
-		if (create_mmap(av[i], no))
-		{
-			i++;
-			continue;
-		}
-		dispatch(no->mmap_start, no->mmap_start + no->mmap_size, NULL);
-		munmap(no->mmap_start, no->mmap_size);
-		i++;
-	}
-	return (EXIT_SUCCESS);
-}
+char *g_nm_usage[] = {
+	"ft_nm, look into other's stuff, you can't hide bitch!\n",
+	"USAGE: nm [options] <input files>\n\nOPTIONS:",
+	"-a" "\t" "Display  all symbol table entries,"
+	" including those inserted for use by debuggers.",
+	"-n" "\t" "Sort numerically rather than alphabetically.",
+	"-o" "\t" "Prepend file or archive element name to each  output  line,"
+	" rather than only once.",
+	"-p" "\t" "Don't sort; display in symbol-table order.",
+	"-r" "\t" "Sort in reverse order.",
+	"-u" "\t" "Display only undefined symbols.",
+	"-U" "\t" "Don't display undefined symbols.",
+	"-x" "\t" "Display  the symbol table entry's fields in hexadecimal,"
+	" along with the name as a string",
+	"-j" "\t" "Just display the symbol names (no value or type).",
+	0
+};
 
 int main(int ac, char **av)
 {
-	return (start_program(ac, av, NM_OPTION_STR, OTOOL));
+	int i;
+	get_no()->mode = NM;
+
+	i = option_parser(av, ac, NM_OPTION_STR, g_nm_usage);
+	if (i == -1)
+		exit(EXIT_FAILURE);
+	return (start_program(ac, av, i));
 }
 

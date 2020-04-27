@@ -12,49 +12,53 @@
 
 #include "nm_otool.h"
 
-void print_usage(char **usage)
+static e_ret create_mmap(char *path, t_no *no)
 {
-	while (*usage)
+	int fd;
+	struct stat buf;
+
+	if (0 > (fd = open(path, O_RDONLY)))
 	{
-		ft_printf("%s\n", *usage);
-		usage += 1;
+		ft_dprintf(ERROR_FD, NM_NAME": fd open error\n");
+		return (KO);
 	}
+	if (0 > fstat(fd, &buf))
+	{
+		ft_dprintf(ERROR_FD, NM_NAME": fstats < 0\n");
+		return (KO);
+	}
+	if (MAP_FAILED ==
+		(no->mmap_start = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)))
+	{
+		ft_dprintf(ERROR_FD, NM_NAME": mmap failed\n");
+		return (KO);
+	}
+	no->mmap_size = buf.st_size;
+	no->file_name = path;
+	return (OK);
 }
 
-int search_in_available_options(char *options, const char *user_input)
+int start_program(int ac, char **av, int i)
 {
-	char *found;
-	long int position;
+	t_no *no;
+	static char *no_argument[] = { "a.out", 0 };
 
-	while (*user_input != '\0')
+	no = get_no();
+	if (i == ac - 1)
 	{
-		found = ft_strchr(options, *user_input);
-		if (NULL == found)
-			return (EXIT_FAILURE);
-		position = found - options;
-		(*(uint16_t *)get_nm_options()) |= (uint16_t)1 << position;
-		user_input += 1;
+		av = no_argument;
+		i = ac - 2;
 	}
-	return (EXIT_SUCCESS);
-}
-
-int option_parser(char **av, int ac, char *options, char **usage)
-{
-	int i;
-
-	i = 1;
 	while (i < ac)
 	{
-		if (av[i] == NULL || av[i][0] == '\0')
-			return (i);
-		if (av[i][0] != '-')
-			break;
-		if (search_in_available_options(options, av[i] + 1))
+		if (create_mmap(av[i], no))
 		{
-			print_usage(usage);
-			return (-1);
+			i++;
+			continue;
 		}
+		dispatch(no->mmap_start, no->mmap_start + no->mmap_size, NULL);
+		munmap(no->mmap_start, no->mmap_size);
 		i++;
 	}
-	return (i);
+	return (EXIT_SUCCESS);
 }

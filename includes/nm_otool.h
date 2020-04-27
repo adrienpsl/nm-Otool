@@ -42,6 +42,7 @@ typedef enum
 } e_ret;
 
 # define NM_OPTION_STR "anopruUxj"
+# define OTOOL_OPTION_STR "t"
 typedef struct s_options
 {
 	u_int16_t a_debugger: 1;
@@ -103,9 +104,10 @@ typedef struct		s_otool
 
 } 					t_otool;
 
-int option_parser(char **av, int ac, char *options);
-e_ret otool_print(t_ofile *ofile, void *section);
+int start_program(int ac, char **av, int i);
 
+int option_parser(char **av, int ac, char *options, char **usage);
+e_ret otool_print(t_ofile *ofile, void *section);
 
 bool handle_magic_number(t_ofile *ofile, uint32_t *magic);
 e_ret handle_archive(t_ofile *ofile, void *start, void *end);
@@ -113,7 +115,6 @@ e_ret handle_fat_arch(t_ofile *fat_option, void *start, bool print_all);
 e_ret handle_maco(t_ofile *ofile);
 e_ret dispatch(void *start, void *end, t_ofile *prev);
 
-e_ret create_mmap(char *path, t_no *no);
 
 e_ret add_sections(t_ofile *ofile, void *start);
 e_ret build_sections(t_ofile *ofile);
