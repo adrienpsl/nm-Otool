@@ -84,32 +84,16 @@ e_ret otool_print(t_ofile *ofile, void *section)
 
 	if (true == is_overflow(ofile, section + sizeof(struct section_64), true))
 		return (KO);
+	set_up_and_check(ofile, &otool, section);
+	if (true == is_overflow(ofile, otool.ptr + otool.end + sizeof(uint64_t), true))
+		return (KO);
 	if (false == ofile->no_print_file_otool)
 		ft_printf("%s:\n", get_no()->file_name);
 	ft_printf("Contents of (__TEXT,__text) section\n");
 
-	set_up_and_check(ofile, &otool, section);
 	if (ofile->big_endian)
 		big_endian(ofile, &otool);
 	else
 		not_big_endian_arch(ofile, &otool);
-
-
-
-	//	if (ofile->ht.is_big)
-
-	//	printf("start File %10p \n", ofile->start);
-	//	printf("end File   %10p \n", ofile->end);
-	//	printf("ptr        %10p \n", otool.ptr);
-	//	printf("addr %016llx    \n", otool.start);
-	//	printf("offset %016llx    \n", otool.offset);
-	//	if (!get_no()->is_ar && !get_no()->is_print)
-
 	return (OK);
 }
-//	else
-//	{
-//	}
-//return (OK);
-//}
-//
